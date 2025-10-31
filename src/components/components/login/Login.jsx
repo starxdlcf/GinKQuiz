@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import styles from "./Login.module.css";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import GinKQuizLogo from "../../../../public/Logotipo-GinKQuiz.png"
 
 export const Login = () => {
   return (
@@ -13,7 +14,7 @@ export const Login = () => {
           <div className={styles.textArea}>
             <div className={styles.title}>
               <h2>Bem vindo ao...</h2>
-              <h1>GinKQuiz</h1>
+              <GinKQuizLogo/>
             </div>
             <div className={styles.description}>
               <p>
@@ -59,51 +60,6 @@ export const Login = () => {
           </div>
         </div>
       </div>
-
-      {/* <div className={styles.container}>
-        <div className={styles.areaContainer}>
-
-        <div className={styles.textBox}>
-          <div className={styles.textArea}>
-            <div className={styles.title}>
-              <h2>Bem vindo ao...</h2>
-              <h1>GinKQuiz</h1>
-            </div>
-
-            <div className={styles.description}>
-              <p>
-                O GinKQuiz reúne perguntas sobre matérias escolares e a gincana.{" "}
-                <br />
-                Cada resposta certa vale pontos para sua você ou sua equipe!
-                Aproveite nossos modos single player, global ranking e team
-                play!
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div className={styles.loginBox}>
-            <div className={styles.loginArea}>
-
-            <form action="" className={styles.form}>
-
-            <TextField id="filled-basic" label="Email" variant="filled" />
-            <TextField id="filled-basic" label="Senha" variant="filled" />
-
-            </form>
-            </div>
-             <Button variant="contained">Login</Button> 
-         </div>
-          </div> 
-                 
-     <Stack spacing={2} direction="row">
-     <Button variant="text">Text</Button>
-     <Button variant="contained">Contained</Button>
-     <Button variant="outlined">Outlined</Button>
-     </Stack> 
-      </div>
-     </div> */}
     </>
   );
 };
