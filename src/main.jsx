@@ -6,6 +6,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { Login } from "./components/components/login/Login.jsx"
 import { Cadastro } from './components/components/cadastro/Cadastro.jsx'
+import { MenuInicial } from './components/components/menuInicial/MenuInicial.jsx'
 const router = createBrowserRouter([
   
   {
