@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import styles from "./Login.module.css";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import GinKQuizLogo from "../../../../public/Logotipo-GinKQuiz.png"
+// import GinKQuizLogo from "../../../../public/Logotipo-GinKQuiz.png"
 
 export const Login = () => {
   return (
