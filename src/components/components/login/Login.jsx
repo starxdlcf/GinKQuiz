@@ -14,7 +14,7 @@ export const Login = () => {
           <div className={styles.textArea}>
             <div className={styles.title}>
               <h2>Bem vindo ao...</h2>
-              <GinKQuizLogo/>
+              {/* <GinKQuizLogo/> */}
             </div>
             <div className={styles.description}>
               <p>
