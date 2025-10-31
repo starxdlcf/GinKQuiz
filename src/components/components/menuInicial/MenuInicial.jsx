@@ -2,6 +2,8 @@ import React from 'react'
 
 export const MenuInicial = () => {
   return (
-    <div>MenuInicial</div>
+    <div>
+      <h1>Menu</h1>
+    </div>
   )
 }
