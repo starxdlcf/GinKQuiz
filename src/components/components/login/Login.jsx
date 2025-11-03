@@ -8,6 +8,7 @@ import GinKQuizLogo from "../../../assets/icons/LogotipoGinKQuiz.png";
 import MeuProgresso from "../../../assets/icons/MeuProgressoGinKQuiz.png";
 import RankingClas from "../../../assets/icons/RankingDeClasGinKQuiz.png";
 import Google from "../../../assets/icons/GoogleLogo.png";
+import { Link } from "react-router-dom";
 
 
 export const Login = () => {
@@ -67,7 +68,7 @@ export const Login = () => {
             </div>
             <p className={styles.cadastroText}>
               Não tem cadastro? {""}
-              <span className={styles.hyperlink}>Crie sua conta</span>
+              <span className={styles.hyperlink}><Link to="cadastro">Crie sua conta</Link></span>
             </p>
           </div>
         </div>
