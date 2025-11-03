@@ -23,27 +23,27 @@ const router = createBrowserRouter([
   },
   {
     path:'/entrarcla',
-    element:<EntrarCla/>
+    element:<Cadastro/>
   },
   {
     path:'/cla',
-    element:<Cla/>
+    element:<Cadastro/>
   },
   {
     path:'/iniciar',
-    element:<Iniciar/>
+    element:<Cadastro/>
   },
   {
     path:'/jogar',
-    element:<Jogar/>
+    element:<Cadastro/>
   },
   {
     path:'/concluido',
-    element:<Concluido/>
+    element:<Cadastro/>
   },
   {
     path:'/ranking',
-    element:<Ranking/>
+    element:<Cadastro/>
   }
 ]);
 
