@@ -20,6 +20,30 @@ const router = createBrowserRouter([
   {
     path:'cadastro',
     element:<Cadastro/>
+  },
+  {
+    path:'/entrarcla',
+    element:<Cadastro/>
+  },
+  {
+    path:'/cla',
+    element:<Cadastro/>
+  },
+  {
+    path:'/iniciar',
+    element:<Cadastro/>
+  },
+  {
+    path:'/jogar',
+    element:<Cadastro/>
+  },
+  {
+    path:'/concluido',
+    element:<Cadastro/>
+  },
+  {
+    path:'/ranking',
+    element:<Cadastro/>
   }
 ]);
 
