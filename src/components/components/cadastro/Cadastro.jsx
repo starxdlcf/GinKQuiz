@@ -31,7 +31,7 @@ export const Cadastro = () => {
               <input className={styles.input} type="text" />
             </div>
             <div style={{display: "flex", justifyContent:"space-between", alignItems:"center"}}>
-              <div style={{display: "flex" , }}>
+              <div >
               <label htmlFor="">Data de nascimento</label>
               <input className={styles.input} type="date" />
               </div>
