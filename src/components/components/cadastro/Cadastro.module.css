@@ -10,12 +10,13 @@
 
 .formulario{
     padding: 30px;
-    background-color: #40C057;
-    width: 30%;
-    height: 60%;
+    background-color: #ffffff;
+    width: 40%;
+    border-radius: 10px;
+    height: auto;
     display: flex;
     justify-content: center;
-    /* align-items: center; */
+    
 }
 
 .form{
