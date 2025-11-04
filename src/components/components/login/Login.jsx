@@ -9,9 +9,18 @@ import MeuProgresso from "../../../assets/icons/MeuProgressoGinKQuiz.png";
 import RankingClas from "../../../assets/icons/RankingDeClasGinKQuiz.png";
 import Google from "../../../assets/icons/GoogleLogo.png";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 export const Login = () => {
+  const navigate = useNavigate();
+
+
+  const handleNavigate = () => {
+    navigate("/cadastro");
+  }
+
+
   return (
     <>
       <div className={styles.pageContainer}>
@@ -62,7 +71,7 @@ export const Login = () => {
               <p id={styles.botaoGoogle} variant="contained" className={styles.p}> <img className={styles.googleLogo} src={Google} alt="Google Logo" />
                 Entrar com o Google
               </p>
-              <Button variant="contained" className={styles.Button}>
+              <Button variant="contained" className={styles.Button} onClick={handleNavigate} >
                 Entrar
               </Button>
             </div>
