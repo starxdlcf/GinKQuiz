@@ -5,11 +5,13 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import { Login } from "./components/components/login/Login.jsx"
 import { Cadastro } from './components/components/cadastro/Cadastro.jsx'
+import { Error } from './components/components/error/Error.jsx'
 import { MenuInicial } from './components/components/menuInicial/MenuInicial.jsx'
 const router = createBrowserRouter([
   
   {
-    path: "/", 
+    path: "/",
+    errorElement: <Error/>, 
     element: <Login />
   },
   {

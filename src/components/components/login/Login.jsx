@@ -18,6 +18,7 @@ export const Login = () => {
 
   const handleNavigate = () => {
     navigate("/cadastro");
+    
   }
 
 
