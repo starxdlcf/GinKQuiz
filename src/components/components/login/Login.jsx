@@ -1,40 +1,53 @@
 import * as React from "react";
-import Stack from "@mui/material/Stack";
 import styles from "./Login.module.css";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../../../Supabase";
+
+import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import TextField from "@mui/material/TextField";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+
 import GinKQuizLogo from "../../../assets/icons/LogotipoGinKQuiz.png";
 import MeuProgresso from "../../../assets/icons/MeuProgressoGinKQuiz.png";
 import RankingClas from "../../../assets/icons/RankingDeClasGinKQuiz.png";
 import Google from "../../../assets/icons/GoogleLogo.png";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-
 
 export const Login = () => {
-  const [email,setEmail] = useState("")
-  const [senha,setSenha] = useState("")
+  const [email,setEmail] = React.useState("")
+  const [senha,setSenha] = React.useState("")
   
-  const navigate = useNavigate();
-  const handleNavigate = async() => {
-    try{
-
-<<<<<<< HEAD
-      navigate("/menu");
-    } catch{
-
-    }
-=======
   const [visivel, setVisivel] = React.useState(false);
+  const navigate = useNavigate();
+  const handleNavigate = ()=>{
+    NavigateToMenu(email, senha)
+  } 
+  
+  const NavigateToMenu = async(senha, email) => {
+    try{
+      const {data, error} = await supabase
+      .from("usuarios")
+      .select("*")
+      .eq("senha", senha)
+      .eq("email", email);
 
-  const handleNavigate = () => {
-    navigate("/menu");
-    
->>>>>>> 8dc6639a990e5ddcd909a35fe0073fff4c3c3899
+      if( data !="" ){
+        navigate("/menu");
+        alert(data)
+      } else{
+        alert("email ou senha incorretos")
+        alert(data)
+      }
+
+      if (error) throw error;
+    } catch(error){
+
+      alert(error.message);
+    }
+
   }
 
 
@@ -75,12 +88,14 @@ export const Login = () => {
                   className={styles.inputField}
                   type="email"
                   placeholder="Email"
+                  onChange={(e)=>{setEmail(e)}}
                 />
                 <div style={{display:"flex", alignItems:"center"}}>
                 <input
                   className={styles.inputField}
                   type={ visivel ? "text" : "password" }
                   placeholder="Senha"
+                  onChange={(e)=>{setSenha(e)}}
                   />
                   {
                     visivel ? <VisibilityIcon className={styles.visibilityIcon} onClick={ () => setVisivel(false) } />
