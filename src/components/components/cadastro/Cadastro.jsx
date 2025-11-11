@@ -143,6 +143,7 @@ export const Cadastro = () => {
             </div>
               <button type="submit">Cadastrar</button>
           </form>
+          
         </section>
       </div>
     </>

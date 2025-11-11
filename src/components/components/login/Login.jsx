@@ -8,6 +8,8 @@ import GinKQuizLogo from "../../../assets/icons/LogotipoGinKQuiz.png";
 import MeuProgresso from "../../../assets/icons/MeuProgressoGinKQuiz.png";
 import RankingClas from "../../../assets/icons/RankingDeClasGinKQuiz.png";
 import Google from "../../../assets/icons/GoogleLogo.png";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -21,10 +23,18 @@ export const Login = () => {
   const handleNavigate = async() => {
     try{
 
+<<<<<<< HEAD
       navigate("/menu");
     } catch{
 
     }
+=======
+  const [visivel, setVisivel] = React.useState(false);
+
+  const handleNavigate = () => {
+    navigate("/menu");
+    
+>>>>>>> 8dc6639a990e5ddcd909a35fe0073fff4c3c3899
   }
 
 
@@ -66,11 +76,18 @@ export const Login = () => {
                   type="email"
                   placeholder="Email"
                 />
+                <div style={{display:"flex", alignItems:"center"}}>
                 <input
                   className={styles.inputField}
-                  type="password"
+                  type={ visivel ? "text" : "password" }
                   placeholder="Senha"
-                />
+                  />
+                  {
+                    visivel ? <VisibilityIcon className={styles.visibilityIcon} onClick={ () => setVisivel(false) } />
+                    :
+                    <VisibilityOff className={styles.visibilityIcon} onClick={ () => setVisivel(true) } />
+                  }
+                  </div>
               </Box>
             </form>
             <div className={styles.box}>
