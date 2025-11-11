@@ -10,15 +10,21 @@ import RankingClas from "../../../assets/icons/RankingDeClasGinKQuiz.png";
 import Google from "../../../assets/icons/GoogleLogo.png";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 
 export const Login = () => {
+  const [email,setEmail] = useState("")
+  const [senha,setSenha] = useState("")
+  
   const navigate = useNavigate();
+  const handleNavigate = async() => {
+    try{
 
+      navigate("/menu");
+    } catch{
 
-  const handleNavigate = () => {
-    navigate("/cadastro");
-    
+    }
   }
 
 

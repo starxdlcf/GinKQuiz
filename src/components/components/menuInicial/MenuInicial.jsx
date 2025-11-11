@@ -2,6 +2,9 @@ import React from "react";
 import styles from "./MenuInicial.module.css";
 
 export const MenuInicial = () => {
+
+  
+
   return (
     <div className={styles.container}>
       <div className={styles.box1}>

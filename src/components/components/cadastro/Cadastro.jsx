@@ -10,32 +10,12 @@ import { supabase } from "../../../Supabase";
 
 export const Cadastro = () => {
   const [passwordVisible, setPasswordVisible] = React.useState(false);
-
   const [genero, setGenero] = useState("homem");
-
   const [nomeUsuario, setNomeUsuario] = useState("");
-
   const [email, setEmail] = useState("");
-
   const [dataNascimento, setDataNascimento] = useState("");
-
   const [senha, setSenha] = useState("");
-
   const [confirmarSenha, setConfirmarSenha] = useState("");
-
-  const [info, setInfo] = useState([]);
-
-  const handleShow = async (e) => {
-    e.preventDefault();
-    const { data, error } = await supabase
-      .from("usuarios")
-      .select("*")
-      .order("created_at", { ascending: true });
-
-    setInfo(data);
-
-    console.log(info);
-  };
 
   const handleSubmit = async (e) => {
     if(senha!==confirmarSenha){
@@ -163,7 +143,6 @@ export const Cadastro = () => {
             </div>
               <button type="submit">Cadastrar</button>
           </form>
-          {/* <button onClick={handleShow}>mostrar</button> */}
         </section>
       </div>
     </>
