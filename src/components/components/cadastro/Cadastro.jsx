@@ -163,7 +163,7 @@ export const Cadastro = () => {
             </div>
               <button type="submit">Cadastrar</button>
           </form>
-          {/* <button onClick={handleShow}>mostrar</button> */}
+          <button onClick={handleShow}>mostrar</button>
         </section>
       </div>
     </>
