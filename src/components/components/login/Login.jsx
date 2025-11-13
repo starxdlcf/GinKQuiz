@@ -26,7 +26,7 @@ export const Login = () => {
     NavigateToMenu(email, senha)
   } 
   
-  const NavigateToMenu = async(senha, email) => {
+  const NavigateToMenu = async(email, senha) => {
     try{
       const {data, error} = await supabase
       .from("usuarios")
@@ -36,10 +36,8 @@ export const Login = () => {
 
       if( data !="" ){
         navigate("/menu");
-        alert(data)
       } else{
         alert("email ou senha incorretos")
-        alert(data)
       }
 
       if (error) throw error;
@@ -88,14 +86,16 @@ export const Login = () => {
                   className={styles.inputField}
                   type="email"
                   placeholder="Email"
-                  onChange={(e)=>{setEmail(e)}}
+                  value={email}
+                  onChange={(e)=>{setEmail(e.target.value)}}
                 />
                 <div style={{display:"flex", alignItems:"center"}}>
                 <input
                   className={styles.inputField}
                   type={ visivel ? "text" : "password" }
                   placeholder="Senha"
-                  onChange={(e)=>{setSenha(e)}}
+                  value={senha}
+                  onChange={(e)=>{setSenha(e.target.value)}}
                   />
                   {
                     visivel ? <VisibilityIcon className={styles.visibilityIcon} onClick={ () => setVisivel(false) } />
