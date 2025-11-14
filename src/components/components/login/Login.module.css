@@ -93,7 +93,7 @@ span{
     /* background-color: #ffe785; */
     gap: 20px;
     /* border: 1px solid black; */
-    flex-direction: column;
+    flex-direction: row;
     /* justify-content: space-around; */
     align-items: center;
 }
@@ -142,6 +142,7 @@ h2{
 }
 
 #inputBox{
+    flex-direction: column;
     margin-top: 30px;
     margin-bottom: -5px;
 
