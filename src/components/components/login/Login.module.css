@@ -77,7 +77,7 @@ span{
 }
 
 .loginBox{
-    background-color: var(--pink);
+    background-color: #ff99c9;
     width: 55%;
     height: 60%;
     display: flex;
