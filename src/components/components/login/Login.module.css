@@ -164,7 +164,7 @@ h2{
 }
 
 .botaoGoogle{
-    background-color: var(--red);
+    background-color: var(--blue);
 }
 
 .googleLogo{
@@ -204,4 +204,10 @@ h2{
 Link{
     text-decoration: none;
     color: inherit;
+}
+
+.visivel{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 }

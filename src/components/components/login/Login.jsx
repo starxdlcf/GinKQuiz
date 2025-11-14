@@ -96,13 +96,15 @@ export const Login = () => {
                   value={senha}
                   onChange={(e)=>{setSenha(e.target.value)}}
                   />
-                  {
+                  </div>
+              </Box>
+              <div className={styles.visivel}>
+                 {
                     visivel ? <VisibilityIcon className={styles.visibilityIcon} onClick={ () => setVisivel(false) } />
                     :
                     <VisibilityOff className={styles.visibilityIcon} onClick={ () => setVisivel(true) } />
                   }
-                  </div>
-              </Box>
+              </div>
             </form>
             <div className={styles.box}>
               <p className={styles.ou}>ou</p>
