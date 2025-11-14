@@ -13,7 +13,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import GinKQuizLogo from "../../../assets/icons/LogotipoGinKQuiz.png";
 import MeuProgresso from "../../../assets/icons/MeuProgressoGinKQuiz.png";
-import RankingClas from "../../../assets/icons/RankingDeClasGinKQuiz.png";
+import RankingClas from "../../../assets/icons/RankingGlobalGinKQuiz.png";
 import Google from "../../../assets/icons/GoogleLogo.png";
 
 export const Login = () => {
@@ -72,7 +72,6 @@ export const Login = () => {
 
             </div>
             <div className={styles.routes}>
-              <img className={styles.icon} src={MeuProgresso} alt="Meu Progresso" />
               <img className={styles.icon} src={RankingClas} alt="Ranking de Classificação" />
             </div>
           </div>
