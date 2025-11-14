@@ -1,9 +1,22 @@
-import React from "react";
+import React, { use } from "react";
 import styles from "./MenuInicial.module.css";
+import {supabase} from "../../../Supabase";
 
 export const MenuInicial = () => {
 
-  
+  const [data,setData] = React.useState(null);
+
+  React.useEffect(() => {
+    showClanInfo();
+  }, []); 
+
+  const showClanInfo = async() => {
+    const {data,error} = await supabase
+    .from('cla')
+    .select('*')
+    console.log(data);
+    setData(data);
+  }
 
   return (
     <div className={styles.container}>
@@ -29,21 +42,13 @@ export const MenuInicial = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Megamentes #1222</td>
-              <td>46/55</td>
-              <td>30</td>
-            </tr>
-            <tr>
-              <td>UTFPR #1</td>
-              <td>40/55</td>
-              <td>100</td>
-            </tr>
-            <tr>
-              <td>Equipe Rocket #15</td>
-              <td>32/55</td>
-              <td>0</td>
-            </tr>
+            {data && data.map((clan) => (
+              <tr key={clan.id}>
+                <td key={clan.nome_cla}>{clan.nome_cla}</td>
+                <td key={clan.}>{clan.membros}</td>
+                <td>{clan.pontuacao_minima}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
 

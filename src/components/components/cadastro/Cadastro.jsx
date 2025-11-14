@@ -20,7 +20,12 @@ export const Cadastro = () => {
   const handleSubmit = async (e) => {
     if(senha!==confirmarSenha){
       alert("As senhas não coincidem!");
-      return;
+      return
+    }
+    if(email.includes('@')===false){
+      alert("Email inválido!");
+      setEmail('')
+      return
     }
     e.preventDefault();
     console.log("Form submitted");

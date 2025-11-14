@@ -43,7 +43,7 @@ let palavraAleatoria =
 arrayPalavras[Math.floor(Math.random() * arrayPalavras.length)];
 
 export const Error = () => {
-  const TEMPO_INICIAL = 5;
+  const TEMPO_INICIAL = 7;
   
   const [game,setGame] = React.useState(false);
 
