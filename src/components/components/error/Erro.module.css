@@ -22,16 +22,31 @@
 
 .boxContent{
     height: 60%;
-    background-color: aqua;
+    background-color: #ffe785;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
+    border-radius: 8px;
+    padding: 30px;
 }
 
 .input{
+
+    text-align: center;
     outline: none;
     border: none;
     border-bottom:1px solid black ;
-    background-color: aqua;
+    background-color: #ffe785;
+}
+
+.bounce {
+  animation: bounce 0.3s ease;
+}
+
+@keyframes bounce {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.1); }
+  60%  { transform: scale(0.95); }
+  100% { transform: scale(1); }
 }
