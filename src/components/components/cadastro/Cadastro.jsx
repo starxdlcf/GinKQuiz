@@ -76,6 +76,7 @@ export const Cadastro = () => {
               </div>
               <div>
                 <button
+                  className={styles.genero}
                   onChange={(e) => setGenero(e.target.value)}
                   value={genero}
                   onClick={(e) => {
@@ -99,7 +100,6 @@ export const Cadastro = () => {
                   )}
                 </button>
 
-                <IconButton aria-label="Male"></IconButton>
               </div>
             </div>
             <div>
@@ -141,7 +141,7 @@ export const Cadastro = () => {
               />
 
             </div>
-              <button type="submit">Cadastrar</button>
+              <button className={styles.cadastrar} type="submit">Cadastrar</button>
           </form>
           
         </section>
