@@ -5,6 +5,7 @@ import { Login } from "./components/components/login/Login.jsx"
 import { Cadastro } from './components/components/cadastro/Cadastro.jsx'
 import { Error } from './components/components/error/Error.jsx'
 import { MenuInicial } from './components/components/menuInicial/MenuInicial.jsx'
+import { Jogar } from './components/components/jogar/Jogar.jsx'
 const router = createBrowserRouter([
   
   {
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
   },
   {
     path:'/jogar',
-    element:<Cadastro/>
+    element:<Jogar/>
   },
   {
     path:'/concluido',

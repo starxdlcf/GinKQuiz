@@ -1,7 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root{
+  --fancy: 'Cormorant Garamond', serif;
+  --simple: 'Host Grotesk', sans-serif;
+  --red: #ff5757;
+  --yellow: #ffe785;
+  --gray: #737373;
+  --pink: #ff99c9;
+  --white: #ffffff;
+  --green: #8de969;
+  --blue: #5d91e8;
+  --purple: #5d2e8c;
+}
+
 .container{
     width: 100vw;
     height: 100vh;
-    background-color: #ffe785;
+    background-color: var(--green);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -19,6 +35,13 @@
     
 }
 
+label{
+    font-family: 'Host Grotesk', sans-serif;
+    font-size: 1rem;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+
 .form{
     display: flex;
     flex-direction: column;
@@ -26,6 +49,58 @@
     
 }
 .input{
-    outline: none;
-    padding: 5px;
+    height: 30px;
+    border-radius: 15px;
+    border: 1px solid var(--gray);
+    padding: 10px;
+    font-size: 1rem;
+    font-family: 'Host Grotesk', sans-serif;
+}
+
+.cadastrar{
+    width: 100px;
+    height: 35px;
+    border-radius: 20px;
+    border: none;
+    background-color: var(--red);
+    color: var(--white);
+    font-family: 'Host Grotesk', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.generofem{
+    width: 100px;
+    height: 35px;
+    border-radius: 20px;
+    border: none;
+    color: var(--white);
+    font-family: 'Host Grotesk', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: var(--pink);
+}
+.generomasc{
+    width: 100px;
+    height: 35px;
+    border-radius: 20px;
+    border: none;
+    color: var(--white);
+    font-family: 'Host Grotesk', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: var(--blue);
+
+}
+.generonone{
+    width: 100px;
+    height: 35px;
+    border-radius: 20px;
+    border: none;
+    color: var(--white);
+    font-family: 'Host Grotesk', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: var(--gray);
+
 }
