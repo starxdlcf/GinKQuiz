@@ -7,7 +7,10 @@ import { Cadastro } from "./components/components/cadastro/Cadastro.jsx";
 import { Error } from "./components/components/error/Error.jsx";
 import { MenuInicial } from "./components/components/menuInicial/MenuInicial.jsx";
 import { Jogar } from "./components/components/jogar/Jogar.jsx";
+import Perfil from "./components/components/perfil/Perfil.jsx";
 import { GlobalProvider } from "./context/GlobalContext.jsx";
+
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -34,6 +37,10 @@ const router = createBrowserRouter([
     path: "/concluido",
     element: <Cadastro />,
   },
+  {
+    path: "menu/perfil",
+    element: <Perfil />,
+  }
 ]);
 
 createRoot(document.getElementById("root")).render(

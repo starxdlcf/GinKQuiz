@@ -5,6 +5,7 @@ import {supabase} from "../../../Supabase";
 import { GlobalContext } from "../../../context/GlobalContext";
 import { useContext } from "react";
 
+import PerfilIcon from "../perfil/PerfilIcon";
 
 export const MenuInicial = () => {
 
@@ -27,7 +28,7 @@ export const MenuInicial = () => {
       console.log(error);
     }
   }
-
+ 
   const handleFilter = async (e) => {
     // const filter = e.target.value;
     // const filteredData = data.filter((clan) =>
@@ -55,6 +56,7 @@ const showId = () => {
   return (
     <div className={styles.container}>
       <div className={styles.box1}>
+    <PerfilIcon />
         <h1>GinKQuiz</h1>
 
         <button>Jogar</button>
@@ -70,7 +72,7 @@ const showId = () => {
 
         <table className={styles.tabela}>
           <thead>
-            <tr>
+              <tr>
               <th>Clã</th>
               <th>Membros</th>
               <th>Pontuação</th>
