@@ -16,6 +16,30 @@ export const MenuInicial = () => {
     .select('*')
     console.log(data);
     setData(data);
+
+    if(error){
+      console.log(error);
+    }
+  }
+
+  const handleFilter = async (e) => {
+    // const filter = e.target.value;
+    // const filteredData = data.filter((clan) =>
+    //   clan.nome_equipe.toLowerCase().includes(filter.toLowerCase())
+    // );
+    // setData(filteredData);
+
+    console.log(e.target.value);
+
+    const {data , error} = await supabase
+    .from('cla')
+    .select('*')
+    .ilike('nome_equipe', `${e.target.value}%`)
+    setData(data);
+
+    if(error){
+      console.log(error);
+    }
   }
 
   return (
@@ -29,24 +53,25 @@ export const MenuInicial = () => {
       <div className={styles.box2}>
         <h1>Entre em um Clã</h1>
         <div>
-          <input type="text" placeholder="Pesquisar por um Clã" />
+          <input type="text" placeholder="Pesquisar por um Clã"
+          onChange={handleFilter} />
           <input type="text" placeholder="#0000" />
         </div>
 
-        <table>
+        <table className={styles.tabela}>
           <thead>
             <tr>
               <th>Clã</th>
               <th>Membros</th>
-              <th>Pontuação minima</th>
+              <th>Pontuação</th>
             </tr>
           </thead>
           <tbody>
             {data && data.map((clan) => (
               <tr key={clan.id}>
-                <td key={clan.nome_cla}>{clan.nome_cla}</td>
-                <td key={clan.}>{clan.membros}</td>
-                <td>{clan.pontuacao_minima}</td>
+                <td key={clan.nome_equipe}>{clan.nome_equipe}</td>
+                <td key={clan.quantidade_atual_equipe}>{clan.quantidade_atual_equipe}/{clan.quantidade_limite_equipe}</td>
+                <td key={clan.pontuacao_equipe}>{clan.pontuacao_equipe}</td>
               </tr>
             ))}
           </tbody>

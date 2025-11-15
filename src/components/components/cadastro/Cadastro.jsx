@@ -105,6 +105,10 @@ export const Cadastro = () => {
                   )}
                 </button>
 
+<<<<<<< Updated upstream
+=======
+                
+>>>>>>> Stashed changes
               </div>
             </div>
             <div>
