@@ -104,15 +104,6 @@ export const Cadastro = () => {
                     <HorizontalRuleIcon></HorizontalRuleIcon>
                   )}
                 </button>
-
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-                
->>>>>>> Stashed changes
-=======
-                
->>>>>>> Stashed changes
               </div>
             </div>
             <div>

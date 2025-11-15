@@ -2,9 +2,15 @@ import React, { use } from "react";
 import styles from "./MenuInicial.module.css";
 import {supabase} from "../../../Supabase";
 
+import { GlobalContext } from "../../../context/GlobalContext";
+import { useContext } from "react";
+
+
 export const MenuInicial = () => {
 
   const [data,setData] = React.useState(null);
+
+  const { id, setId } = useContext(GlobalContext);
 
   React.useEffect(() => {
     showClanInfo();
@@ -42,6 +48,10 @@ export const MenuInicial = () => {
     }
   }
 
+const showId = () => {
+  console.log(id);
+}
+
   return (
     <div className={styles.container}>
       <div className={styles.box1}>
@@ -78,7 +88,7 @@ export const MenuInicial = () => {
         </table>
 
         <div>
-          <button>Entrar</button>
+          <button  onClick={showId}>Entrar</button>
           <button>Visitar Clã</button>
         </div>
       </div>
