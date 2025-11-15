@@ -31,7 +31,7 @@ const Perfil = () => {
     <div>Perfil</div>
 
     {data && data.map((user) => (
-      <div key={user.id}>
+      <div key={user.id_usuario}>
         <h2>Nome: {user.nome_usuario}</h2>
         <p>Email: {user.email}</p>
         <p>Clã:{user.equipe}</p>

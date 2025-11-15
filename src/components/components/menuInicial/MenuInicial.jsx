@@ -80,7 +80,7 @@ const showId = () => {
           </thead>
           <tbody>
             {data && data.map((clan) => (
-              <tr key={clan.id}>
+              <tr key={clan.id_equipe}>
                 <td key={clan.nome_equipe}>{clan.nome_equipe}</td>
                 <td key={clan.quantidade_atual_equipe}>{clan.quantidade_atual_equipe}/{clan.quantidade_limite_equipe}</td>
                 <td key={clan.pontuacao_equipe}>{clan.pontuacao_equipe}</td>
