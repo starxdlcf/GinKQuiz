@@ -41,7 +41,7 @@ const Perfil = () => {
       <div key={user.id_usuario}>
         <h2>Nome: {user.nome_usuario}</h2>
         <p>Email: {user.email}</p>
-        <p>Clã:{user.cla.nome_equipe}</p>
+        {user.equipe && <p>Clã:{user.cla.nome_equipe}</p>}
       </div>
     ))}   
     </>

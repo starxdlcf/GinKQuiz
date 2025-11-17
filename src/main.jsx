@@ -9,6 +9,7 @@ import { MenuInicial } from "./components/components/menuInicial/MenuInicial.jsx
 import { Jogar } from "./components/components/jogar/Jogar.jsx";
 import Perfil from "./components/components/perfil/Perfil.jsx";
 import { GlobalProvider } from "./context/GlobalContext.jsx";
+import CriarCla from "./components/components/criarCla/CriarCla.jsx";
 
 
 const router = createBrowserRouter([
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: "menu/perfil",
     element: <Perfil />,
+  },
+  {
+    path:"menu/criarCla",
+    element:<CriarCla/>,
   }
 ]);
 
