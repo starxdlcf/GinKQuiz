@@ -53,14 +53,14 @@ export const MenuInicial = () => {
     const { data, error } = await supabase
       .from("usuarios")
       .select("*")
-      .eq("id_usuario", id);
+      // .eq("id_usuario", id);
     console.log(data);
   };
 
   const ClaDescrition = () => {
     console.log("entrou");
     console.log(descripition);
-    setDescription(true);
+    setDescription(!descripition);
   };
 
   const EnterCla = async (x) => {
@@ -77,7 +77,13 @@ export const MenuInicial = () => {
       console.log('vc e burro')
     } else {
       alert("Você entrou no Clã com sucesso!");
-      // console.log(data);
+      const { data } = await supabase
+      .from('cla')
+      .select('*')
+      .eq('id_equipe', x)
+      .single();
+      
+      data.quantidade_atual_equipe += 1;
     }
   };
 
@@ -101,7 +107,7 @@ export const MenuInicial = () => {
           <input type="text" placeholder="#0000" />
         </div>
 
-        <table className={styles.tabela}>
+        <table className={styles.tabela} >
           <thead>
             <tr>
               <th>Clã</th>
@@ -112,14 +118,14 @@ export const MenuInicial = () => {
           <tbody>
             {data &&
               data.map((clan) => (
-                <tr key={clan.id_equipe}>
-                  <td key={clan.nome_equipe}>{clan.nome_equipe}</td>
+                <tr key={clan.id_equipe} onClick={ClaDescrition} >
+                  <td key={clan.nome_equipe} >{clan.nome_equipe}</td>
                   <td key={clan.quantidade_atual_equipe}>
                     {clan.quantidade_atual_equipe}/
                     {clan.quantidade_limite_equipe}
                   </td>
                   <td key={clan.pontuacao_equipe}>{clan.pontuacao_equipe}</td>
-                  {/* {descripition && <td key={clan.descricao_equipe}>{clan.descricao_equipe}</td>} */}
+                  {descripition && <td key={clan.descricao_equipe}>{clan.descricao_equipe}</td>}
                   <td key={clan.created_at}>
                     <button
                       onClick={() => {
