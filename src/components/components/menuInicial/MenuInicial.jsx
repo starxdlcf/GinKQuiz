@@ -1,6 +1,8 @@
 import React, { use } from "react";
 import styles from "./MenuInicial.module.css";
 import { supabase } from "../../../Supabase";
+import { EntrarCla }  from "../../../components/components/EntrarCla/EntrarCla.jsx";
+import MeuCla from "../../../components/components/MeuCla/MeuCla.jsx";
 
 import { GlobalContext } from "../../../context/GlobalContext";
 import GinKQuizLogo from "../../../assets/icons/LogotipoGinKQuiz.png";
@@ -61,19 +63,46 @@ export const MenuInicial = () => {
     console.log(data);
   };
 
-  const hasTeam = async () => {
-    console.log("Usuario tem cla?", id);
-    const { data } = await supabase
+  // const hasTeam = async () => {
+  //   console.log("Usuario tem cla?", id);
+  //   const { data } = await supabase
+  //     .from("usuarios")
+  //     .select("*")
+  //     .eq("id_usuario", id);
+  //     setHasCla(data)
+  //     if (data.equipe_usuario != null) {
+  //       setHasCla(true);
+  //       hasTeam = true;
+  //       return <EntrarCla/>;
+  //     } else {
+  //       setHasCla(false);
+  //       hasTeam = false;
+  //       <MeuCla/>;
+  //     }
+  //   console.log(data);
+  // };
+
+  const checkHasTeam = async () => {
+    if (!id) return;
+    console.log("Verificando se usuário tem clã. id:", id);
+    const { data, error } = await supabase
       .from("usuarios")
       .select("*")
       .eq("id_usuario", id);
-      setHasCla(data)
-      if (data.equipe_usuario != null) {
-        setHasCla(true)
-      } else {
-        setHasCla(false)
-      }
-    console.log(data);
+
+    if (error) {
+      console.log("erro ao buscar usuário:", error);
+      setHasCla(false);
+      return;
+    }
+
+    const user = Array.isArray(data) ? data[0] : data;
+    if (user && user.equipe_usuario != null) {
+      setHasCla(true);
+    } else {
+      setHasCla(false);
+    }
+    console.log("usuario retornado:", user);
   };
 
   const ClaDescription = () => {
@@ -117,13 +146,7 @@ export const MenuInicial = () => {
         </div>
       </div>
       <div className={styles.box2}>
-        <script>
-          
-
-          if () {
-            
-          }
-        </script>
+        {hasCla ? <MeuCla/> : <EntrarCla />}
       </div>
     </div>
   );

@@ -1,7 +1,16 @@
 
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./EntrarCla.module.css";
+import PerfilIcon from "../perfil/PerfilIcon";
+import { supabase } from "../../../Supabase";
+
+const [data, setData] = React.useState(null);
+
+const { id, setId } = useContext(GlobalContext);
+
+const [descripition, setDescription] = React.useState(false);
 
 export const EntrarCla = () => {
   const handleFilter = async (e) => {
@@ -10,6 +19,29 @@ export const EntrarCla = () => {
       //   clan.nome_equipe.toLowerCase().includes(filter.toLowerCase())
       // );
       // setData(filteredData);
+
+  const EnterCla = async (x) => {
+      // alert("Solicitação de entrada enviada ao líder do Clã!");
+      console.log(x);
+      const { error } = await supabase
+        .from("usuarios")
+        .update({"equipe_usuario": x})
+        .eq("id_usuario", id);
+      // console.log(data);
+  
+      if (error) {
+        console.log(error);
+        console.log('vc e burro')
+      } else {
+        alert("Você entrou no Clã com sucesso!");
+        const { data } = await supabase
+        .from('cla')
+        .select('*')
+        .eq('id_equipe', x)
+        .single();
+        
+        data.quantidade_atual_equipe += 1;
+      }
       
   return (
     <div>
@@ -70,25 +102,4 @@ export const EntrarCla = () => {
         </div>
     </div>
   )
-}}
-
-// import { Box, Button } from "@mui/material";
-// import VisibilityIcon from "@mui/icons-material/Visibility";
-// import VisibilityOff from "@mui/icons-material/VisibilityOff";
-
-// import RankingClas from "../../../assets/icons/rankingclasicon.png";
-// import Google from "../../../assets/icons/googleicon.png";
-
-// import { supabase } from "../../../supabaseClient";
-// import { GlobalContext } from "../../../context/GlobalContext";
-
-// export const EntrarCla = () => {
-//   const navigate = useNavigate();
-
-//   const [email, setEmail] = useState("");
-//   const [senha, setSenha] = useState("");
-//   const [visivel, setVisivel] = useState(false);
-
-//   const handleNavigate = () => {
-//     navigate("/menuinicial");
-//   };}}
+}}}
