@@ -1,9 +1,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import styles from './PerfilIcon.module.css'
+
+import Narci from "../../../assets/icons/narciicon.png";
 
 const PerfilIcon = () => {
   return (
-     <Link to="perfil">Perfil</Link>
+     <Link to="perfil"><img src={Narci} alt="Perfil" /></Link>
   )
 }
 

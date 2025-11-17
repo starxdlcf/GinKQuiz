@@ -3,6 +3,8 @@ import styles from "./MenuInicial.module.css";
 import { supabase } from "../../../Supabase";
 
 import { GlobalContext } from "../../../context/GlobalContext";
+import GinKQuizLogo from "../../../assets/icons/LogotipoGinKQuiz.png";
+import { Link } from "react-router-dom";
 import { useContext } from "react";
 
 import PerfilIcon from "../perfil/PerfilIcon";
@@ -13,6 +15,8 @@ export const MenuInicial = () => {
   const { id, setId } = useContext(GlobalContext);
 
   const [descripition, setDescription] = React.useState(false);
+
+  const [hasCla, setHasCla] = React.useState(false);
 
   React.useEffect(() => {
     showClanInfo();
@@ -57,7 +61,22 @@ export const MenuInicial = () => {
     console.log(data);
   };
 
-  const ClaDescrition = () => {
+  const hasTeam = async () => {
+    console.log("Usuario tem cla?", id);
+    const { data } = await supabase
+      .from("usuarios")
+      .select("*")
+      .eq("id_usuario", id);
+      setHasCla(data)
+      if (data.equipe_usuario != null) {
+        setHasCla(true)
+      } else {
+        setHasCla(false)
+      }
+    console.log(data);
+  };
+
+  const ClaDescription = () => {
     console.log("entrou");
     console.log(descripition);
     setDescription(!descripition);
@@ -90,60 +109,21 @@ export const MenuInicial = () => {
   return (
     <div className={styles.container}>
       <div className={styles.box1}>
-        <PerfilIcon />
-        <h1>GinKQuiz</h1>
+        <img className={styles.logo} src={GinKQuizLogo} alt="Logotipo GinKQuiz" />
 
-        <button>Jogar</button>
-        <button>Rankings</button>
+        <div className={styles.botoes}>
+          <button className={styles.jogar}>Jogar</button>
+          <button className={styles.rankings}>Rankings</button>
+        </div>
       </div>
       <div className={styles.box2}>
-        <h1>Entre em um Clã</h1>
-        <div>
-          <input
-            type="text"
-            placeholder="Pesquisar por um Clã"
-            onChange={handleFilter}
-          />
-          <input type="text" placeholder="#0000" />
-        </div>
+        <script>
+          
 
-        <table className={styles.tabela} >
-          <thead>
-            <tr>
-              <th>Clã</th>
-              <th>Membros</th>
-              <th>Pontuação</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data &&
-              data.map((clan) => (
-                <tr key={clan.id_equipe} onClick={ClaDescrition} >
-                  <td key={clan.nome_equipe} >{clan.nome_equipe}</td>
-                  <td key={clan.quantidade_atual_equipe}>
-                    {clan.quantidade_atual_equipe}/
-                    {clan.quantidade_limite_equipe}
-                  </td>
-                  <td key={clan.pontuacao_equipe}>{clan.pontuacao_equipe}</td>
-                  {descripition && <td key={clan.descricao_equipe}>{clan.descricao_equipe}</td>}
-                  <td key={clan.created_at}>
-                    <button
-                      onClick={() => {
-                        EnterCla(clan.id_equipe);
-                      }}
-                    >
-                      +
-                    </button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-
-        <div>
-          <button onClick={showId}>Entrar</button>
-          <button>Visitar Clã</button>
-        </div>
+          if () {
+            
+          }
+        </script>
       </div>
     </div>
   );

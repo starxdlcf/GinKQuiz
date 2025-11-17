@@ -1,0 +1,9 @@
+Link{
+    display: flex;
+    justify-content: right;
+}
+
+img{
+    width: 40px;
+    height: auto;
+}
