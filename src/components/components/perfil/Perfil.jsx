@@ -6,17 +6,24 @@ import { useContext } from 'react';
 const Perfil = () => {
   const { id, setId } = useContext(GlobalContext);
 
-  const [data,setData] = React.useState(null);
+  const [data,setData] = React.useState(null);  
 
   React.useEffect(() => {
     showProfile();
     console.log(id);
   }, []);
 
+
+
+
   const showProfile = async() => {
     const {data,error} = await supabase
     .from('usuarios')
-    .select('*')
+    .select(`  id_usuario,
+    nome_usuario,
+    email,
+    equipe_usuario,
+    cla: equipe_usuario ( nome_equipe )`)
     .eq("id_usuario",id)
     console.log(data);
     setData(data);
@@ -34,7 +41,7 @@ const Perfil = () => {
       <div key={user.id_usuario}>
         <h2>Nome: {user.nome_usuario}</h2>
         <p>Email: {user.email}</p>
-        <p>Clã:{user.equipe}</p>
+        <p>Clã:{user.cla.nome_equipe}</p>
       </div>
     ))}   
     </>
