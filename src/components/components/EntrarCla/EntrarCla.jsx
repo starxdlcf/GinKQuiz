@@ -5,14 +5,19 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./EntrarCla.module.css";
 import PerfilIcon from "../perfil/PerfilIcon";
 import { supabase } from "../../../Supabase";
+import { useContext } from "react";
+import { GlobalContext } from "../../../context/GlobalContext.jsx";
 
-const [data, setData] = React.useState(null);
-
-const { id, setId } = useContext(GlobalContext);
-
-const [descripition, setDescription] = React.useState(false);
 
 export const EntrarCla = () => {
+
+  const [data, setData] = React.useState(null);
+  
+  const { id, setId } = useContext(GlobalContext);
+  
+  const [descripition, setDescription] = React.useState(false);
+
+
   const handleFilter = async (e) => {
       // const filter = e.target.value;
       // const filteredData = data.filter((clan) =>
@@ -73,7 +78,7 @@ export const EntrarCla = () => {
             <tbody className={`${styles.scrollableTable}`}>
             {data &&
               data.map((clan) => (
-                <tr key={clan.id_equipe} onClick={ClaDescription} >
+                <tr key={clan.id_equipe} >
                   <td className={styles.nome_equipe} key={clan.nome_equipe} >{clan.nome_equipe}</td>
                   <td key={clan.id_equipe}>{`#${clan.id_equipe}`}</td>
                   <td key={clan.quantidade_atual_equipe}>

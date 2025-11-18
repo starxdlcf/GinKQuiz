@@ -2,13 +2,14 @@ import React from 'react'
 import { supabase } from '../../../Supabase';
 import { GlobalContext } from "../../../context/GlobalContext";
 import { useContext } from 'react';
+import { useState } from 'react';
 
 const CriarCla = () => {
 
-    const [nome_equipe,setNome_equipe] = React.useState('');
-    const [descricao_equipe,setDescricao_equipe] = React.useState('');
-    const [quantidade_limite_equipe,setQuantidade_limite_equipe] = React.useState(0);
-    const [pontuacao_min_equipe,setPontuacao_min_equipe] = React.useState(0);
+    const [nome_equipe,setNome_equipe] = useState('');
+    const [descricao_equipe,setDescricao_equipe] = useState('');
+    const [quantidade_limite_equipe,setQuantidade_limite_equipe] = useState(0);
+    const [pontuacao_min_equipe,setPontuacao_min_equipe] = useState(0);
 
     const { id, setId } = useContext(GlobalContext);
 

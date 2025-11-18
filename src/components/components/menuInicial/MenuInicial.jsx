@@ -4,14 +4,14 @@ import { supabase } from "../../../Supabase";
 import { EntrarCla }  from "../../../components/components/EntrarCla/EntrarCla.jsx";
 import MeuCla from "../../../components/components/MeuCla/MeuCla.jsx";
 
-import { GlobalContext } from "../../../context/GlobalContext";
+import { GlobalContext } from "../../../context/GlobalContext.jsx";
 import GinKQuizLogo from "../../../assets/icons/LogotipoGinKQuiz.png";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 
-import PerfilIcon from "../perfil/PerfilIcon";
-
 export const MenuInicial = () => {
+  const [dataclan, setDataclan] = React.useState(null);
+
   const [data, setData] = React.useState(null);
 
   const { id, setId } = useContext(GlobalContext);
@@ -21,7 +21,8 @@ export const MenuInicial = () => {
   const [hasCla, setHasCla] = React.useState(false);
 
   React.useEffect(() => {
-    showClanInfo();
+    // showClanInfo();
+    ClaCheck()
   }, []);
 
   const showClanInfo = async () => {
@@ -105,6 +106,22 @@ export const MenuInicial = () => {
     console.log("usuario retornado:", user);
   };
 
+  const ClaCheck = async (x) => {
+    const { data, error } = await supabase
+      .from("usuarios")
+      .select("*")
+      .eq("id_usuario", id)
+      .single();
+
+      console.log("Dados do usuário para verificação de clã:", data);
+    if (data.equipe_usuario != null) {
+      setHasCla(true);
+    } else {
+      setHasCla(false);
+    }
+
+  }
+
   const ClaDescription = () => {
     console.log("entrou");
     console.log(descripition);
@@ -141,12 +158,12 @@ export const MenuInicial = () => {
         <img className={styles.logo} src={GinKQuizLogo} alt="Logotipo GinKQuiz" />
 
         <div className={styles.botoes}>
-          <button className={styles.jogar}>Jogar</button>
+          <button className={styles.jogar} onClick={()=>console.log(id)}>Jogar</button>
           <button className={styles.rankings}>Rankings</button>
         </div>
       </div>
       <div className={styles.box2}>
-        {hasCla ? <MeuCla/> : <EntrarCla />}
+        {hasCla === true ?  <MeuCla/> : <EntrarCla/>}
       </div>
     </div>
   );

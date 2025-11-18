@@ -29,7 +29,7 @@ export const Login = () => {
    const { id, setId } = useContext(GlobalContext);
 
    React.useEffect(() => {
-    console.log("ID no Login:", id);
+    // console.log("ID no Login:", id);
    }, [id]);
   
   const [visivel, setVisivel] = React.useState(false);
