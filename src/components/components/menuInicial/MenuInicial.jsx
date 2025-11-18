@@ -36,11 +36,11 @@ export const MenuInicial = () => {
   };
 
   const handleFilter = async (e) => {
-    // const filter = e.target.value;
-    // const filteredData = data.filter((clan) =>
-    //   clan.nome_equipe.toLowerCase().includes(filter.toLowerCase())
-    // );
-    // setData(filteredData);
+    const filter = e.target.value;
+    const filteredData = data.filter((clan) =>
+      clan.nome_equipe.toLowerCase().includes(filter.toLowerCase())
+    );
+    setData(filteredData);
 
     console.log(e.target.value);
 
@@ -64,47 +64,43 @@ export const MenuInicial = () => {
     console.log(data);
   };
 
-  // const hasTeam = async () => {
-  //   console.log("Usuario tem cla?", id);
-  //   const { data } = await supabase
+  const hasTeam = async () => {
+    console.log("Usuario tem cla?", id);
+    const { data } = await supabase
+      .from("usuarios")
+      .select("equipe_usuario")
+      .eq("id_usuario", id);
+      setHasCla(data)
+      if (data.equipe_usuario != null) {
+        setHasCla(true);
+      } else {
+        setHasCla(false);
+      }
+    console.log(data);
+  };
+
+  // const checkHasTeam = async () => {
+  //   if (!id) return;
+  //   console.log("Verificando se usuário tem clã. id:", id);
+  //   const { data, error } = await supabase
   //     .from("usuarios")
   //     .select("*")
   //     .eq("id_usuario", id);
-  //     setHasCla(data)
-  //     if (data.equipe_usuario != null) {
-  //       setHasCla(true);
-  //       hasTeam = true;
-  //       return <EntrarCla/>;
-  //     } else {
-  //       setHasCla(false);
-  //       hasTeam = false;
-  //       <MeuCla/>;
-  //     }
-  //   console.log(data);
+
+  //   if (error) {
+  //     console.log("erro ao buscar usuário:", error);
+  //     setHasCla(false);
+  //     return;
+  //   }
+
+  //   const user = Array.isArray(data) ? data[0] : data;
+  //   if (user && user.equipe_usuario != null) {
+  //     setHasCla(true);
+  //   } else {
+  //     setHasCla(false);
+  //   }
+  //   console.log("usuario retornado:", user);
   // };
-
-  const checkHasTeam = async () => {
-    if (!id) return;
-    console.log("Verificando se usuário tem clã. id:", id);
-    const { data, error } = await supabase
-      .from("usuarios")
-      .select("*")
-      .eq("id_usuario", id);
-
-    if (error) {
-      console.log("erro ao buscar usuário:", error);
-      setHasCla(false);
-      return;
-    }
-
-    const user = Array.isArray(data) ? data[0] : data;
-    if (user && user.equipe_usuario != null) {
-      setHasCla(true);
-    } else {
-      setHasCla(false);
-    }
-    console.log("usuario retornado:", user);
-  };
 
   const ClaCheck = async (x) => {
     const { data, error } = await supabase
@@ -158,12 +154,12 @@ export const MenuInicial = () => {
         <img className={styles.logo} src={GinKQuizLogo} alt="Logotipo GinKQuiz" />
 
         <div className={styles.botoes}>
-          <button className={styles.jogar} onClick={()=>console.log(id)}>Jogar</button>
-          <button className={styles.rankings}>Rankings</button>
+          <Link to="/jogar"><button className={styles.jogar} onClick={()=>console.log(id)}>Jogar</button></Link>
+          <Link to="/rankings"><button className={styles.rankings}>Rankings</button></Link>
         </div>
       </div>
       <div className={styles.box2}>
-        {hasCla === true ?  <MeuCla/> : <EntrarCla/>}
+        {hasCla === true ?  (<MeuCla/>) : (<EntrarCla/>)}
       </div>
     </div>
   );

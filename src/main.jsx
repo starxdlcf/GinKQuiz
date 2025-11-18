@@ -45,6 +45,10 @@ const router = createBrowserRouter([
   {
     path:"menu/criarCla",
     element:<CriarCla/>,
+  },
+  {
+    path:"menu/rankings",
+    element:<Cadastro/>,
   }
 ]);
 
