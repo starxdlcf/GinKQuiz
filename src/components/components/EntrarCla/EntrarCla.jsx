@@ -106,9 +106,9 @@ export const EntrarCla = () => {
       </table>
 
       <div>
-        <button className={styles.criarButton}>
-          <Link to="criarcla">Criar Meu Clã</Link>
-        </button>
+        <Link to="criarcla">
+          <button className={styles.criarButton}>Criar meu Clã</button>
+        </Link>
       </div>
     </div>
   );
