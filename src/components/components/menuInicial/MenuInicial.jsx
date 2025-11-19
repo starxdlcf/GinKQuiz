@@ -1,7 +1,7 @@
 import React, { use } from "react";
 import styles from "./MenuInicial.module.css";
 import { supabase } from "../../../Supabase";
-import { EntrarCla }  from "../../../components/components/entrarCla/EntrarCla.jsx";
+import { EntrarCla } from "../../../components/components/EntrarCla/EntrarCla.jsx";
 import MeuCla from "../../../components/components/MeuCla/MeuCla.jsx";
 
 import { GlobalContext } from "../../../context/GlobalContext.jsx";
