@@ -1,7 +1,7 @@
 import React, { use } from "react";
 import styles from "./MenuInicial.module.css";
 import { supabase } from "../../../Supabase";
-import { EntrarCla }  from "../../../components/components/EntrarCla/EntrarCla.jsx";
+import { EntrarCla }  from "../../../components/components/entrarCla/EntrarCla.jsx";
 import MeuCla from "../../../components/components/MeuCla/MeuCla.jsx";
 
 import { GlobalContext } from "../../../context/GlobalContext.jsx";
@@ -35,25 +35,6 @@ export const MenuInicial = () => {
     }
   };
 
-  const handleFilter = async (e) => {
-    const filter = e.target.value;
-    const filteredData = data.filter((clan) =>
-      clan.nome_equipe.toLowerCase().includes(filter.toLowerCase())
-    );
-    setData(filteredData);
-
-    console.log(e.target.value);
-
-    const { data, error } = await supabase
-      .from("cla")
-      .select("*")
-      .ilike("nome_equipe", `${e.target.value}%`);
-    setData(data);
-
-    if (error) {
-      console.log(error);
-    }
-  };
 
   const showId = async () => {
     console.log("Id do usuario", id);
@@ -68,10 +49,10 @@ export const MenuInicial = () => {
     console.log("Usuario tem cla?", id);
     const { data } = await supabase
       .from("usuarios")
-      .select("equipe_usuario")
+      .select("cla_usuario")
       .eq("id_usuario", id);
       setHasCla(data)
-      if (data.equipe_usuario != null) {
+      if (data.cla_usuario != null) {
         setHasCla(true);
       } else {
         setHasCla(false);
@@ -102,18 +83,25 @@ export const MenuInicial = () => {
   //   console.log("usuario retornado:", user);
   // };
 
-  const ClaCheck = async (x) => {
-    const { data, error } = await supabase
-      .from("usuarios")
-      .select("*")
-      .eq("id_usuario", id)
-      .single();
+  const ClaCheck = async () => {
+    try{
+      let { data, error } = await supabase
+        .from("usuarios")
+        .select("*")
+        .eq("id_usuario", id)
+        .single();
 
-      console.log("Dados do usuário para verificação de clã:", data);
-    if (data.equipe_usuario != null) {
-      setHasCla(true);
-    } else {
-      setHasCla(false);
+        if (error) return error;
+  
+        console.log("Dados do usuário para verificação de clã:", data);
+        if (data.cla_usuario != null) {
+          setHasCla(true);
+        } else {
+          setHasCla(false);
+        }
+    }
+    catch(error){
+      alert(error.message)
     }
 
   }
@@ -124,30 +112,7 @@ export const MenuInicial = () => {
     setDescription(!descripition);
   };
 
-  const EnterCla = async (x) => {
-    // alert("Solicitação de entrada enviada ao líder do Clã!");
-    console.log(x);
-    const { error } = await supabase
-      .from("usuarios")
-      .update({"equipe_usuario": x})
-      .eq("id_usuario", id);
-    // console.log(data);
-
-    if (error) {
-      console.log(error);
-      console.log('vc e burro')
-    } else {
-      alert("Você entrou no Clã com sucesso!");
-      const { data } = await supabase
-      .from('cla')
-      .select('*')
-      .eq('id_equipe', x)
-      .single();
-      
-      data.quantidade_atual_equipe += 1;
-    }
-  };
-
+  
   return (
     <div className={styles.container}>
       <div className={styles.box1}>

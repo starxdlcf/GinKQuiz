@@ -1,56 +1,70 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./EntrarCla.module.css";
-import PerfilIcon from "../perfil/PerfilIcon";
-import { supabase } from "../../../Supabase";
+import PerfilIcon from "../perfil/PerfilIcon.jsx";
+import { supabase } from "../../../Supabase.jsx";
 import { useContext } from "react";
 import { GlobalContext } from "../../../context/GlobalContext.jsx";
 
 export const EntrarCla = () => {
-  const [data, setData] = React.useState([]);
+  const [clas, setClas] = React.useState([]);
   const { id } = useContext(GlobalContext);
-  const [description, setDescription] = React.useState(false);
+  const [description, setDescription] = React.useState(false); // oque é isso? ass:Allan
+  const [buscarCla, setBuscarCla] = React.useState("");
+  const [carregando, setCarregando] = React.useState(true);
 
   React.useEffect(() => {
-    const fetchClans = async () => {
-      const { data: clans, error } = await supabase.from("cla").select("*");
-      if (!error && clans) setData(clans);
-    };
     fetchClans();
   }, []);
 
-  const handleFilter = async (e) => {
-      const filter = e.target.value;
-      const filteredData = data.filter((clan) =>
-        clan.nome_equipe.toLowerCase().includes(filter.toLowerCase())
-      );
-      setData(filteredData);
-    }
-  const EnterCla = async (x) => {
-      // alert("Solicitação de entrada enviada ao líder do Clã!");
-      console.log(x);
-      const { error } = await supabase
-        .from("usuarios")
-        .update({"equipe_usuario": x})
-        .eq("id_usuario", id);
-      // console.log(data);
-  
-      if (error) {
-        console.error(error);
-        return;
-      }
+  const fetchClans = async () => {
+    try {
+      setCarregando(true);
 
-      alert("Você entrou no Clã com sucesso!");
-      const { data: teamData } = await supabase
-        .from("cla")
-        .select("*")
-        .eq("id_equipe", x)
-        .single();
-        
-        data.quantidade_atual_equipe += 1;
-      }
-      
+      let { data: clans, error } = await supabase.from("cla").select("*");
+
+      if (error) throw error;
+      setClas(clans);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setCarregando(false);
+    }
+  };
+
+  const handleBuscarCla = (e) => setBuscarCla(e.target.value);
+
+  const resultado = React.useMemo(() => {
+    const pesquisa = (buscarCla || "").trim().toLowerCase();
+    if (!pesquisa) return clas || [];
+    return (clas || []).filter((cla) =>
+      (cla.nome_cla || "").toLowerCase().includes(pesquisa)
+    );
+  }, [clas, buscarCla]);
+
+  const enterCla = async (idCla) => {
+    console.log(idCla);
+    const { error } = await supabase
+      .from("usuarios")
+      .update({ cla_usuario: idCla })
+      .eq("id_usuario", id);
+    // console.log(data);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    alert("Você entrou no Clã com sucesso!");
+    const { data } = await supabase
+      .from("cla")
+      .select("*")
+      .eq("id_cla", idCla)
+      .single();
+
+    data.quantidade_atual_cla += 1;
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.headbox2}>
@@ -64,37 +78,39 @@ export const EntrarCla = () => {
         <input
           type="text"
           placeholder="Pesquisar por um Clã"
-          onChange={handleFilter}
+          onChange={handleBuscarCla}
           style={{ marginRight: "30px" }}
         />
         <input style={{ width: "130px" }} type="text" placeholder="#0000" />
       </div>
 
-      <table className={`${styles.tabela}`}>
-        <thead>
-          <tr>
-            <th>Clã</th>
-            <th>Id</th>
-            <th>Membros</th>
-            <th>Pontuação</th>
-          </tr>
-        </thead>
-        <tbody className={`${styles.scrollableTable}`}>
-          {data &&
-            data.map((clan) => (
-              <tr key={clan.id_equipe}>
-                <td className={styles.nome_equipe}>{clan.nome_equipe}</td>
-                <td>{`#${clan.id_equipe}`}</td>
+      {carregando ? (
+        <p>Carregando Clãs...</p>
+      ) : (
+        <table className={`${styles.tabela}`}>
+          <thead>
+            <tr>
+              <th>Clã</th>
+              <th>Id</th>
+              <th>Membros</th>
+              <th>Pontuação</th>
+            </tr>
+          </thead>
+          <tbody className={`${styles.scrollableTable}`}>
+            {resultado.map((clan) => (
+              <tr key={clan.id_cla}>
+                <td className={styles.nome_cla}>{clan.nome_cla}</td>
+                <td>{`#${clan.id_cla}`}</td>
                 <td>
-                  {clan.quantidade_atual_equipe}/{clan.quantidade_limite_equipe}
+                  {clan.quantidade_atual_cla}/{clan.quantidade_limite_cla}
                 </td>
-                <td>{clan.pontuacao_equipe}</td>
-                {description && <td>{clan.descricao_equipe}</td>}
+                <td>{clan.pontuacao_cla}</td>
+                {description && <td>{clan.descricao_cla}</td>}
                 <td style={{ backgroundColor: "var(--yellow)" }}>
                   <button
                     className={styles.entrarButton}
                     onClick={() => {
-                      EnterCla(clan.id_equipe);
+                      enterCla(clan.id_cla);
                     }}
                   >
                     +
@@ -102,8 +118,9 @@ export const EntrarCla = () => {
                 </td>
               </tr>
             ))}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      )}
 
       <div>
         <Link to="criarcla">
