@@ -1,10 +1,13 @@
+//eu sei que não está funcionando, a noite eu mexo
+
+
 import React from 'react'
 import {supabase} from '../../../Supabase';
 import { GlobalContext } from '../../../context/GlobalContext';
 import { useContext } from 'react';
 
 const Perfil = () => {
-  const { id, setId } = useContext(GlobalContext);
+  const id = useContext(GlobalContext);
 
   const [data,setData] = React.useState(null);  
 
@@ -22,8 +25,8 @@ const Perfil = () => {
     .select(`  id_usuario,
     nome_usuario,
     email,
-    equipe_usuario,
-    cla: equipe_usuario ( nome_equipe )`)
+    cla_usuario,
+    cla: cla_usuario ( nome_cla )`)
     .eq("id_usuario",id)
     console.log(data);
     setData(data);

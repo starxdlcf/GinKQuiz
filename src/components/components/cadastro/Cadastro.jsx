@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styles from "./Cadastro.module.css";
-import IconButton from "@mui/material/IconButton";
 import MaleIcon from "@mui/icons-material/Male";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import FemaleIcon from "@mui/icons-material/Female";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { supabase } from "../../../Supabase";
+import { useNavigate } from "react-router-dom";
 
 export const Cadastro = () => {
   const [passwordVisible, setPasswordVisible] = React.useState(false);
@@ -16,6 +16,7 @@ export const Cadastro = () => {
   const [dataNascimento, setDataNascimento] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     if(senha!==confirmarSenha){
@@ -28,23 +29,29 @@ export const Cadastro = () => {
       return
     }
     e.preventDefault();
-    console.log("Form submitted");
-    const { error } = await supabase
-      .from("usuarios")
-      .insert([
-        {
-          nome_usuario: `${nomeUsuario}`,
-          email: `${email}`,
-          nascimento: `${dataNascimento}`,
-          senha: `${senha}`,
-          genero: `${genero}`,
-        },
-      ]);
-      if (error) {
-        console.log(error);
-        alert("Erro ao inserir dados: ", error.message);
-      }
+    try{
 
+      const { error } = await supabase
+        .from("usuarios")
+        .insert([
+          {
+            nome_usuario: `${nomeUsuario}`,
+            email: `${email}`,
+            nascimento: `${dataNascimento}`,
+            senha: `${senha}`,
+            genero: `${genero}`,
+          },
+        ]);
+        if (error) throw error;
+    }
+    catch (error){ 
+      console.log(error);
+      alert("Erro ao inserir dados: ", error.message);
+    }
+    finally{
+      navigate("/");
+      alert("Cadastro Realizado com Sucesso!");
+    }
   };
 
   return (

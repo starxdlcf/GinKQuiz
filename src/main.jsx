@@ -1,6 +1,5 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { useState } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Login } from "./components/components/login/Login.jsx";
 import { Cadastro } from "./components/components/cadastro/Cadastro.jsx";
