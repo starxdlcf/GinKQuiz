@@ -7,8 +7,7 @@ import { GlobalContext } from '../../../context/GlobalContext';
 import { useContext } from 'react';
 
 const Perfil = () => {
-  const id = useContext(GlobalContext);
-
+  const {id} = useContext(GlobalContext);
   const [data,setData] = React.useState(null);  
 
   React.useEffect(() => {
@@ -44,7 +43,7 @@ const Perfil = () => {
       <div key={user.id_usuario}>
         <h2>Nome: {user.nome_usuario}</h2>
         <p>Email: {user.email}</p>
-        {user.equipe && <p>Clã:{user.cla.nome_equipe}</p>}
+        {user.cla && <p>Clã:{user.cla.nome_cla}</p>}
       </div>
     ))}   
     </>

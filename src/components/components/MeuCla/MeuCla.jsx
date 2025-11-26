@@ -1,21 +1,22 @@
 import { supabase } from "../../../Supabase";
 import React from "react";
 import { GlobalContext } from "../../../context/GlobalContext";
+import PerfilIcon from "../perfil/PerfilIcon";
 
 export default function MeuCla() {
-  const [idCla, setIdCla] = React.useState("");
-  const [infoCla, setInfoCla] = React.useState({});
-  const { idUsuario } = React.useContext(GlobalContext);
+  const [idCla, setIdCla] = React.useState(null);
+  const [infoCla, setInfoCla] = React.useState(undefined);
+  const [loading, setLoading] = React.useState(true);
+  const { id } = React.useContext(GlobalContext);
 
   React.useEffect(() => {
-    if (idUsuario) {
-      catchIdCla(idUsuario);
-    }
-  }, [idUsuario]);
+    setLoading(true);
+    catchIdCla(id);
+  }, []);
 
   React.useEffect(() => {
-    if (idCla) {
-      catchInfoCla(idCla);
+    if (idCla){
+      catchInfoCla(idCla)
     }
   }, [idCla]);
 
@@ -23,19 +24,16 @@ export default function MeuCla() {
     try {
       const { data, error } = await supabase
         .from("usuarios")
-        .select("cla_usuario")
-        .eq("id_usuario", idUser);
+        .select("*")
+        .eq("id_usuario", idUser)
+        .single();
 
       if (error) throw error;
 
-      if (data && data.length > 0) {
-        setIdCla(data[0].cla_usuario); // Acesse o primeiro elemento do array
-      } else {
-        throw new Error("No cla_usuario found for the given id_usuario");
-      }
+      setIdCla(data.cla_usuario);
+      
     } catch (error) {
-      console.error("Error fetching idCla:", error.message);
-      alert("Failed to fetch idCla. Please try again.");
+      alert(error.message);
     }
   };
 
@@ -44,25 +42,31 @@ export default function MeuCla() {
       const { data, error } = await supabase
         .from("cla")
         .select("*")
-        .eq("id_cla", id_cla);
+        .eq("id_cla", id_cla)
+        .single()
 
       if (error) throw error;
 
-      if (data && data.length > 0) {
-        setInfoCla(data[0]); // Acesse o primeiro elemento do array
-      } else {
-        throw new Error("No data found for the given id_cla");
-      }
+      setInfoCla(data);
+      
     } catch (error) {
-      console.error("Error fetching infoCla:", error.message);
-      alert("Failed to fetch infoCla. Please try again.");
+      alert(error.message);
     }
+    finally{
+      setLoading(false)
+    }
+
   };
 
   return (
     <>
-      {infoCla.nome_cla ? (
+      {loading ? (
+        <p>Carregando...</p>
+      ) : (
         <>
+          <div >
+          <PerfilIcon />
+          </div>
           <h1>{infoCla.nome_cla}</h1>
           <div>
             <h2>{infoCla.descricao_cla}</h2>
@@ -74,9 +78,7 @@ export default function MeuCla() {
             </div>
           </div>
         </>
-      ) : (
-        <p>Carregando...</p> // Mostra um estado de carregamento enquanto infoCla não está disponível
-      )}
+      ) }
     </>
   );
 }

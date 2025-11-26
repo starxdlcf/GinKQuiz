@@ -90,8 +90,8 @@ export const EntrarCla = () => {
         <table className={`${styles.tabela}`}>
           <thead>
             <tr>
-              <th>Clã</th>
               <th>Id</th>
+              <th>Clã</th>
               <th>Membros</th>
               <th>Pontuação</th>
             </tr>
@@ -99,13 +99,12 @@ export const EntrarCla = () => {
           <tbody className={`${styles.scrollableTable}`}>
             {resultado.map((clan) => (
               <tr key={clan.id_cla}>
-                <td className={styles.nome_cla}>{clan.nome_cla}</td>
                 <td>{`#${clan.id_cla}`}</td>
+                <td className={styles.nome_cla}>{clan.nome_cla}</td>
                 <td>
                   {clan.quantidade_atual_cla}/{clan.quantidade_limite_cla}
                 </td>
                 <td>{clan.pontuacao_cla}</td>
-                {description && <td>{clan.descricao_cla}</td>}
                 <td style={{ backgroundColor: "var(--yellow)" }}>
                   <button
                     className={styles.entrarButton}

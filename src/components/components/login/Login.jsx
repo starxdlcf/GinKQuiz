@@ -49,8 +49,6 @@ export const Login = () => {
       if( data && data.length > 0 ){
         setId(data[0].id_usuario);
         navigate("/menu");
-        console.log("ID do usuário:",data[0].id);
-
       } else{
         alert("email ou senha incorretos")
       }
