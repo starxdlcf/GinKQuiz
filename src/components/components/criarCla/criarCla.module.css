@@ -13,7 +13,115 @@
   --muted-green: #87bba2;
   --blue: #5d91e8;
   --purple: #5d2e8c;
+  --vivid-purple: #8156f6;
   --wheat: #fff4e3;
   --orange: #ffd699;
 }
 
+html{
+  width: 100vw;
+  height: 100vh;
+}
+
+.criarClaContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  font-family: var(--simple);
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--wheat);
+}
+
+.ContainerNovoCla{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 35rem;
+  height: 25rem;
+  gap: .63rem;
+  background-color: var(--vivid-purple);
+  border-radius: 50px;
+}
+
+form{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+}
+
+h1{
+  color: var(--white);
+}
+
+label{
+  display: flex;
+  align-items: center;
+  color: var(--wheat);
+  margin-top: .8rem;
+}
+
+input{
+  width: 19rem;
+  margin-left: 1rem;
+  margin-top: .8rem;
+  border: 2px solid var(--pink);
+}
+
+input:focus{
+  border: 2px solid var(--pink) !important;
+  outline: none;
+}
+
+option{
+  border: none;
+  background-color: var(--green);
+}
+option:focus{
+  border: none !important;
+  outline: none !important;
+  background-color: var(--green);
+}
+
+select{
+  display: flex;
+  align-items: center;
+  width: 4.5rem;
+  height: 2rem;
+  border: solid 2px var(--blue);
+  color: var(--blue);
+  border-radius: 20px;
+  margin-left: 1rem;
+  margin-top: .8rem;
+}
+
+select:focus{
+  border-color: var(--yellow) !important;
+}
+
+#buttonCriarCla{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 41%;
+  margin-top: .8rem;
+  width: 5.8rem;
+  height: 3rem;
+  border-radius: 1.25rem;
+  background-color: var(--yellow);
+  color: var(--vivid-purple);
+  outline: none;
+  border: none;
+  text-align: center;
+  font-size: 1.2rem;
+}

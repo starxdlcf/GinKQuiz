@@ -3,6 +3,7 @@ import { supabase } from '../../../Supabase';
 import { GlobalContext } from "../../../context/GlobalContext";
 import { useContext } from 'react';
 import { useState } from 'react';
+import styles from "../criarCla/CriarCla.module.css"
 
 const CriarCla = () => {
 
@@ -15,14 +16,16 @@ const CriarCla = () => {
 
     const CadastroCla = async (e) => {
         e.preventDefault();
-        const {error} = await supabase
+
+        if (nome_equipe.length>0 && nome_equipe.length<=25 && descricao_equipe.length>0 && descricao_equipe.length<=100){
+            const {error} = await supabase
         .from('cla')
         .insert([
             {
-                nome_equipe: `${nome_equipe}`,
-                descricao_equipe: `${descricao_equipe}`,
-                quantidade_limite_equipe: `${quantidade_limite_equipe}`,
-                pontuacao_equipe: `${pontuacao_min_equipe}`,
+                nome_cla: `${nome_equipe}`,
+                descricao_cla: `${descricao_equipe}`,
+                quantidade_limite_cla: `${quantidade_limite_equipe}`,
+                min_pontos_entrar: `${pontuacao_min_equipe}`,
             }
             ]);        
             console.log(nome_equipe,descricao_equipe,quantidade_limite_equipe,pontuacao_min_equipe);
@@ -30,6 +33,11 @@ const CriarCla = () => {
             console.log(error);
             alert("Erro ao criar clã: ", error.message);
         }
+        } else{
+            alert("Nome do clã deve ter entre 1 e 15 caracteres. Descrição deve ter no máximo 100 caracteres.");
+        }
+
+        
     }
         
     const ShowId = () => {
@@ -37,31 +45,59 @@ const CriarCla = () => {
     }
     
     return (
-    <>
-    <h1>criar um cla</h1>
+    <div className={styles.criarClaContainer}>
+    <div className={styles.ContainerNovoCla}>
+    <h1>Criar um clã</h1>
+    <form  action="" onSubmit={CadastroCla}>
+        <div className={styles.row}>
+            <label htmlFor="">Nome do clã</label>
+            <input type="text" onChange={(e)=> setNome_equipe(e.target.value)} />
+        </div>
 
-    <div>
-    <form action="" style={{display:'flex',flexDirection:"column", width:"300px", gap:"10px"}} onSubmit={CadastroCla}>
-        <label htmlFor="">Nome do cla</label>
-        <input type="text" onChange={(e)=> setNome_equipe(e.target.value)} />
+        <div className={styles.row}>
+            <label htmlFor="">Descrição do clã</label>
+            <input type="text" onChange={(e)=> {setDescricao_equipe(e.target.value)}} />
+        </div>
 
-        <label htmlFor="">Descrição do cla</label>
-        <input type="text" onChange={(e)=> {setDescricao_equipe(e.target.value)}} />
+        <div className={styles.row}>
+            <label htmlFor="">Número máximo de participantes</label>
+            <select name="" id="" onChange={(e)=> setQuantidade_limite_equipe(e.target.value)}>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+            </select>
+        </div>
 
-        <label htmlFor="">Numero maximo de participantes</label>
-        <input type="number" onChange={(e)=> setQuantidade_limite_equipe(e.target.value)} />
+        <div className={styles.row}>
+            <label htmlFor="">Mínimo de pontos</label>
+            {/* <input type="number" name="" id="" onChange={(e)=> setPontuacao_min_equipe(e.target.value)} /> */}
+            <select name="" id="">
+                <option value="0">0</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+                <option value="300">300</option>
+                <option value="400">400</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+                <option value="1500">1500</option>
+                <option value="2000">2000</option>
+                <option value="2500">2500</option>
+                <option value="3000">3000</option>
+            </select>
+        </div>
 
-        <label htmlFor="">Minimo de pontos</label>
-        <input type="number" name="" id="" onChange={(e)=> setPontuacao_min_equipe(e.target.value)} />
-
-        <button type='submit'>Criar Clã</button>
+        <button id={styles.buttonCriarCla} type='submit'>Criar Clã</button>
 
 
     </form>
 
-        <button onClick={ShowId}>mostrar id</button>
+        {/* <button onClick={ShowId}>mostrar id</button> */}
     </div>
-    </>
+    </div>
   )
 }
 export default CriarCla
