@@ -7,6 +7,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { supabase } from "../../../Supabase";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const Cadastro = () => {
   const [passwordVisible, setPasswordVisible] = React.useState(false);
@@ -17,6 +18,8 @@ export const Cadastro = () => {
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const navigate = useNavigate()
+  const [checkbox, setCheckbox] = useState(false);
+  const [checkbox2, setCheckbox2] = useState(false);
 
   const handleSubmit = async (e) => {
     if(senha!==confirmarSenha){
@@ -26,6 +29,10 @@ export const Cadastro = () => {
     if(email.includes('@')===false){
       alert("Email inválido!");
       setEmail('')
+      return
+    }
+    if(checkbox===false){
+      alert("Você deve concordar com os termos de uso para se cadastrar!");
       return
     }
     e.preventDefault();
@@ -54,6 +61,13 @@ export const Cadastro = () => {
     }
   };
 
+  const handleCheckboxChange = (e) => {
+    setCheckbox(e.target.checked);
+    if (checkbox) {
+      console.log("Checkbox está marcado");
+  }
+  };
+
   return (
     <>
       <div className={styles.container}>
@@ -65,6 +79,7 @@ export const Cadastro = () => {
               <label htmlFor="">Nome de Usuário</label>
               <input
                 className={styles.input}
+                id={styles.UsuarioNome}
                 type="text"
                 onChange={(e) => setNomeUsuario(e.target.value)}
                 value={nomeUsuario}
@@ -81,14 +96,21 @@ export const Cadastro = () => {
                 <label htmlFor="">Data de nascimento</label>
                 <input
                   className={styles.input}
+                  id={styles.UsuarioDataNascimento}
                   type="date"
                   onChange={(e) => setDataNascimento(e.target.value)}
                   value={dataNascimento}
                 />
               </div>
-              <div>
+              <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginLeft: "2rem" }}>
+                <label htmlFor="">Gênero</label>
                 <button
-                  className={styles.genero}
+                  className={`
+                    ${styles.genero}
+                    ${genero === "homem" ? styles.homem : ""}
+                    ${genero === "mulher" ? styles.mulher : ""}
+                    ${genero === "nbin"   ? styles.neutro : ""}
+                  `}
                   onChange={(e) => setGenero(e.target.value)}
                   value={genero}
                   onClick={(e) => {
@@ -103,13 +125,7 @@ export const Cadastro = () => {
                     console.log(genero);
                   }}
                 >
-                  {genero === "homem" ? (
-                    <MaleIcon></MaleIcon>
-                  ) : genero === "mulher" ? (
-                    <FemaleIcon></FemaleIcon>
-                  ) : (
-                    <HorizontalRuleIcon></HorizontalRuleIcon>
-                  )}
+                  {genero === "homem" ? (<MaleIcon></MaleIcon>) : genero === "mulher" ? (<FemaleIcon></FemaleIcon>) : (<HorizontalRuleIcon></HorizontalRuleIcon>)}
                 </button>
               </div>
             </div>
@@ -117,6 +133,7 @@ export const Cadastro = () => {
               <label htmlFor="">Email</label>
               <input
                 className={styles.input}
+                id={styles.UsuarioEmail}
                 type="text"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
@@ -128,6 +145,7 @@ export const Cadastro = () => {
                 onChange={(e) => setSenha(e.target.value)}
                 value={senha}
                 className={styles.input}
+                id={styles.UsuarioSenha}
                 type={passwordVisible ? "password" : "text"}
               />{" "}
               {passwordVisible ? (
@@ -148,10 +166,33 @@ export const Cadastro = () => {
                 onChange={(e) => setConfirmarSenha(e.target.value)}
                 value={confirmarSenha}
                 className={styles.input}
+                id={styles.UsuarioConfirmarSenha}
                 type={passwordVisible ? "password" : "text"}
               />
 
             </div>
+
+            <div className={styles.termosMaisEmail}>
+                <div className={styles.linha}>
+                  <input
+                  className={`${styles.checkbox} ${checkbox ? styles.checkboxAtivo : ''}`}
+                  onChange={(e) => setCheckbox(e.target.checked)}
+                  checked={checkbox}
+                  type="checkbox" name="" id="" />
+                  <label className={styles.terminho} htmlFor="">Concordo com os termos do site <Link to="/termos">acesse aqui os termos e condições de uso do GinKQuiz</Link></label>
+                </div>
+              
+                <div className={styles.linha}>
+                  <input
+                  className={`${styles.checkbox} ${checkbox2 ? styles.checkboxAtivo : ''}`}
+                  onChange={(e) => setCheckbox2(e.target.checked)}
+                  checked={checkbox2}
+                  type="checkbox" name="" id="" />
+                  <label className={styles.terminho} htmlFor="">Aceito receber informações sobre atualizações e resultados por email</label>
+                </div>
+            
+            </div>  
+
               <button className={styles.cadastrar} type="submit">Cadastrar</button>
           </form>
           

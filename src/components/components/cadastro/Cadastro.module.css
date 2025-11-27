@@ -10,8 +10,11 @@
   --pink: #ff99c9;
   --white: #ffffff;
   --green: #8de969;
+  --muted-green: #87bba2;
   --blue: #5d91e8;
   --purple: #5d2e8c;
+  --wheat: #fff4e3;
+  --orange: #ffd699;
 }
 
 .container{
@@ -55,6 +58,60 @@ label{
     padding: 10px;
     font-size: 1rem;
     font-family: 'Host Grotesk', sans-serif;
+    background-color: var(--white);
+}
+
+#UsuarioNome{
+    border: solid 2px var(--pink);
+    color: var(--pink);
+}
+#UsuarioNome:focus{
+    border-color: var(--pink) !important;
+    color: var(--pink);
+    outline: none;
+}
+
+#UsuarioEmail{
+    border: solid 2px var(--red);
+    color: var(--red);
+}
+#UsuarioEmail:focus{
+    border-color: var(--red) !important;
+    color: var(--red);
+    outline: none;
+}
+
+#UsuarioSenha{
+    border: solid 2px var(--orange);
+    width: 200px;
+    color: var(--orange);
+}
+#UsuarioSenha:focus{
+    border-color: var(--orange) !important;
+    color: var(--orange);
+    outline: none;
+}
+
+#UsuarioConfirmarSenha{
+    border: solid 2px var(--purple);
+    width: 200px;
+    color: var(--purple);
+}
+#UsuarioConfirmarSenha:focus{
+    border-color: var(--purple) !important;
+    color: var(--purple);
+    outline: none;
+}
+
+#UsuarioDataNascimento{
+    border: solid 2px var(--blue);
+    width: 150px;
+    color: var(--blue);
+}
+#UsuarioDataNascimento:focus{
+    border-color: var(--blue) !important;
+    color: var(--blue);
+    outline: none;
 }
 
 .cadastrar{
@@ -62,45 +119,67 @@ label{
     height: 35px;
     border-radius: 20px;
     border: none;
-    background-color: var(--red);
+    background-color: var(--muted-green);
     color: var(--white);
     font-family: 'Host Grotesk', sans-serif;
     font-size: 1rem;
     cursor: pointer;
 }
 
-.generofem{
-    width: 100px;
+.genero {
+    margin-left: .9rem;
+    width: 35px;
     height: 35px;
-    border-radius: 20px;
-    border: none;
-    color: var(--white);
-    font-family: 'Host Grotesk', sans-serif;
-    font-size: 1rem;
+    border-radius: 25px;
     cursor: pointer;
-    background-color: var(--pink);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    padding-left: 1px;
 }
-.generomasc{
-    width: 100px;
-    height: 35px;
-    border-radius: 20px;
-    border: none;
-    color: var(--white);
-    font-family: 'Host Grotesk', sans-serif;
-    font-size: 1rem;
-    cursor: pointer;
+
+.homem {
     background-color: var(--blue);
-
-}
-.generonone{
-    width: 100px;
-    height: 35px;
-    border-radius: 20px;
-    border: none;
     color: var(--white);
-    font-family: 'Host Grotesk', sans-serif;
-    font-size: 1rem;
-    cursor: pointer;
-    background-color: var(--gray);
+    border: none;
+}
+.mulher {
+    background-color: var(--pink);
+    color: var(--white);
+    border: none;
+}
+.neutro {
+    background-color: var(--orange);
+    color: var(--white);
+    border: none;
+}
 
+.termosMaisEmail{
+    display: flex;
+    flex-direction: column;
+}
+
+.checkbox{
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--gray);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.checkboxAtivo{
+    background-color: var(--green);
+    border: none;
+}
+
+.linha{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.terminho{
+    font-size: 0.8rem;
 }

@@ -9,6 +9,7 @@ import { Jogar } from "./components/components/jogar/Jogar.jsx";
 import Perfil from "./components/components/perfil/Perfil.jsx";
 import { GlobalProvider } from "./context/GlobalContext.jsx";
 import CriarCla from "./components/components/criarCla/CriarCla.jsx";
+import Termos from "./components/components/TermosDeUso/Termos.jsx";
 
 
 const router = createBrowserRouter([
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
   {
     path:"menu/rankings",
     element:<Cadastro/>,
+  },
+  {
+    path:"termos",
+    element:<Termos/>,
   }
 ]);
 
