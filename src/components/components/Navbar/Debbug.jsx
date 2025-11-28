@@ -30,7 +30,7 @@ const Debbug = () => {
 
   return (
     <> 
-    <div style={{backgroundColor:'green',display:'flex'}}>
+    <div style={{backgroundColor:'green',display:'flex', position: 'fixed'}}>
       <button onClick={BackPage}>Voltar</button>
         <label htmlFor="">Selecione um id</label>
         <select name="" id="" value={id} onChange={(e)=> {setId(e.target.value), console.log(id)}}>

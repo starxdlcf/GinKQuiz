@@ -87,19 +87,27 @@ export default function MeuCla() {
       ) : (
         <>
           <div className={styles.perfilbar}>
+          <p id={styles.bar}></p>
           <PerfilIcon id={styles.perfil} />
-          <hr id={styles.bar} />
           </div>
           <div className={styles.header}>
             <div className={styles.namedesc}>
               <h1>{infoCla?.nome_cla || ""}</h1>
-              <h2>{infoCla?.descricao_cla || ""}</h2>
+              <p>Descrição:</p>
+              <h2>{`${infoCla?.descricao_cla || ""}`}</h2>
             </div>
-            <p>
+            <p id={styles.howmanymembers}>
                 {infoCla?.quantidade_atual_cla || 0}/{infoCla?.quantidade_limite_cla || 0}
               </p>
           </div>
             <div className={styles.body}>
+              
+              <div className={styles.points}>
+                <p>Pontuação do Clã</p>
+                <p>{`${infoCla.pontuacao_cla}`}</p>
+              </div>
+
+
               <table className={`${styles.tabela}`}>
                 <thead>
                   <tr>
@@ -113,17 +121,13 @@ export default function MeuCla() {
                     <tr key={member.created_at}>
                       <td>{`#${member.nome_usuario}`}</td>
                       <td>{member.pontuacao_usuario}</td>
-                      <td>
-                        {/* foguinho */}
-                      </td>
+                      {/* <td>
+                        foguinho
+                      </td> */}
                     </tr>
                   ))}
                 </tbody>
               </table>
-
-              <div className={styles.points}>
-                <p>{infoCla.pontuacao_cla}</p>
-              </div>
 
             </div>
         </>
