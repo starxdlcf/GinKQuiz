@@ -21,12 +21,17 @@
 .box{
     height: 100%;
     width: 100%;
+    font-family: var(--simple);
 }
 
 .perfilbar{
     display: flex;
     flex-direction: row;
 }
+        img{
+            margin-top: 1rem;
+            margin-left: 2rem;
+        }
         #perfil{
             display: flex;
             height: 3rem;
@@ -35,7 +40,12 @@
 
         #bar{
             display: flex;
-            flex-direction: column;
+            border: solid 3px black;
+            height: 5px;
+            width: 58rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            margin-left: 2rem;
         }
 
 .header{
@@ -43,15 +53,60 @@
     justify-content: space-between;
 }        
 
-        .namedesc{
+        .namedesc h1{
             align-items: flex-start;
+            margin-left: 2rem;
+            color: black;
+            font-size: 4.5rem;
+            font-family: var(--fancy);
+
         }
 
-.scrollableTable{
-    max-height: 12.5rem;
-    overflow-y: scroll;
+        p{
+            align-items: flex-start;
+            margin-left: 2rem;
+            color: black;
+            font-size: 1.8rem;
+            font-weight: bolder;
+            font-family: var(--fancy);
+            margin-top: 1rem;
+        }
+        
+        .namedesc h2{
+            align-items: flex-start;
+            margin-left: 2rem;
+            color: black;
+            font-size: 1.8rem;
+            font-weight: bolder;
+            font-family: var(--fancy);
+            margin-top: .5rem;
+        }
+
+        #howmanymembers{
+            display: flex;
+            align-items: flex-start;
+            margin-right: 7rem;
+            margin-top: -0.5rem;
+            font-size: 1.3rem;
+            font-weight: bolder;
+        }
+
+.body{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
 }
 
-.points{
-    display: flex;
-}
+        .scrollableTable{
+            max-height: 10rem;
+            overflow-y: scroll;
+        }
+
+        .points{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* margin-right: 40rem; */
+            margin-top: 6rem;
+        }
