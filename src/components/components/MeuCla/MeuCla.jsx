@@ -1,13 +1,12 @@
 import { supabase } from "../../../Supabase";
 import React from "react";
-import { GlobalContext } from "../../../context/GlobalContext";
 import PerfilIcon from "../perfil/PerfilIcon";
 
 export default function MeuCla() {
   const [idCla, setIdCla] = React.useState(null);
   const [infoCla, setInfoCla] = React.useState(undefined);
   const [loading, setLoading] = React.useState(true);
-  const { id } = React.useContext(GlobalContext);
+  const id = localStorage.getItem("userId");
 
   React.useEffect(() => {
     setLoading(true);
