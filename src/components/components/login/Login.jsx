@@ -21,10 +21,6 @@ import Google from "../../../assets/icons/GoogleLogo.png";
 export const Login = () => {
   const [email,setEmail] = React.useState("")
   const [senha,setSenha] = React.useState("")
-
-   React.useEffect(() => {
-    // console.log("ID no Login:", id);
-   }, [id]);
   
   const [visivel, setVisivel] = React.useState(false);
   const navigate = useNavigate();
@@ -41,8 +37,10 @@ export const Login = () => {
       .eq("email", email);
 
       if( data && data.length > 0 ){
-        localStorage.setItem("userId",id_usuario);
+        localStorage.setItem("userId",data[0].id_usuario);
         navigate("/menu");
+        console.log(data[0].id_usuario);
+        console.log(localStorage.getItem("userId"));
       } else{
         alert("email ou senha incorretos")
       }

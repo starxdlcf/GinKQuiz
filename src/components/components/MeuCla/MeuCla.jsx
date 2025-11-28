@@ -6,6 +6,7 @@ import styles from "../MeuCla/MeuCla.module.css"
 export default function MeuCla() {
   const [idCla, setIdCla] = React.useState(null);
   const [infoCla, setInfoCla] = React.useState(undefined);
+  const [infoMembersCla, setInfoMembersCla] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const id = localStorage.getItem("userId");
 
@@ -91,11 +92,11 @@ export default function MeuCla() {
           </div>
           <div className={styles.header}>
             <div className={styles.namedesc}>
-              <h1>{infoCla.nome_cla}</h1>
-              <h2>{infoCla.descricao_cla}</h2>
+              <h1>{infoCla?.nome_cla || ""}</h1>
+              <h2>{infoCla?.descricao_cla || ""}</h2>
             </div>
             <p>
-                {infoCla.quantidade_atual_cla}/{infoCla.quantidade_limite_cla}
+                {infoCla?.quantidade_atual_cla || 0}/{infoCla?.quantidade_limite_cla || 0}
               </p>
           </div>
             <div className={styles.body}>

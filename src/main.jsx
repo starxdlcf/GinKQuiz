@@ -7,7 +7,7 @@ import { Error } from "./components/components/error/Error.jsx";
 import { MenuInicial } from "./components/components/menuInicial/MenuInicial.jsx";
 import { Jogar } from "./components/components/jogar/Jogar.jsx";
 import Perfil from "./components/components/perfil/Perfil.jsx";
-import { GlobalProvider } from "./context/GlobalContext.jsx";
+// import { GlobalProvider } from "./context/GlobalContext.jsx";
 import CriarCla from "./components/components/criarCla/CriarCla.jsx";
 import Termos from "./components/components/TermosDeUso/Termos.jsx";
 import Debbug from "./components/components/Navbar/Debbug.jsx";
@@ -76,8 +76,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <GlobalProvider>
-      <RouterProvider router={router} />
-    </GlobalProvider>
+    {/* <GlobalProvider>
+    </GlobalProvider> */}
+    <RouterProvider router={router} />
   </StrictMode>
 );

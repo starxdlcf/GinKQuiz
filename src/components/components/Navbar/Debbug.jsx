@@ -2,7 +2,6 @@ import React, { use } from 'react'
 import { supabase } from '../../../Supabase'
 import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import {GlobalContext} from '../../../context/GlobalContext'
 import { useEffect } from 'react'
 
 const Debbug = () => {
@@ -13,7 +12,7 @@ const Debbug = () => {
   }, []);
 
 
-    const {id, setId} = React.useContext(GlobalContext);
+    const id = localStorage.getItem('userId');
     const [selectedId, setSelectedId] = useState(null);
     const [data, setData] = useState(null);
 
