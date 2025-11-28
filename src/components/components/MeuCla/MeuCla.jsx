@@ -110,7 +110,7 @@ export default function MeuCla() {
                 </thead>
                 <tbody className={`${styles.scrollableTable}`}>
                   {infoMembersCla.map((member) => (
-                    <tr key={member.id_claUsuario}>
+                    <tr key={member.created_at}>
                       <td>{`#${member.nome_usuario}`}</td>
                       <td>{member.pontuacao_usuario}</td>
                       <td>
