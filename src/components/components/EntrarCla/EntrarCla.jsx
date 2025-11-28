@@ -3,12 +3,10 @@ import { Link } from "react-router-dom";
 import styles from "./EntrarCla.module.css";
 import PerfilIcon from "../perfil/PerfilIcon.jsx";
 import { supabase } from "../../../Supabase.jsx";
-import { useContext } from "react";
-import { GlobalContext } from "../../../context/GlobalContext.jsx";
 
 export const EntrarCla = () => {
   const [clas, setClas] = React.useState([]);
-  const { id } = useContext(GlobalContext);
+  const id = localStorage.getItem("userId");
   const [description, setDescription] = React.useState(false); // oque é isso? ass:Allan
   const [buscarCla, setBuscarCla] = React.useState("");
   const [carregando, setCarregando] = React.useState(true);

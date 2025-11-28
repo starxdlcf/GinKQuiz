@@ -1,9 +1,7 @@
 import React from 'react'
 import { supabase } from '../../../Supabase';
-import { GlobalContext } from "../../../context/GlobalContext";
-import { useContext } from 'react';
 import { useState } from 'react';
-import styles from "../criarCla/CriarCla.module.css"
+import styles from "../criarCla/criarCla.module.css"
 
 const CriarCla = () => {
 
@@ -12,23 +10,24 @@ const CriarCla = () => {
     const [quantidade_limite_equipe,setQuantidade_limite_equipe] = useState(0);
     const [pontuacao_min_equipe,setPontuacao_min_equipe] = useState(0);
 
-    const { id, setId } = useContext(GlobalContext);
+    const id = localStorage.getItem("userId");
 
     const CadastroCla = async (e) => {
         e.preventDefault();
 
-        if (nome_equipe.length>0 && nome_equipe.length<=25 && descricao_equipe.length>0 && descricao_equipe.length<=100){
+        if (nome_cla.length>0 && nome_cla.length<=25 && descricao_cla.length>0 && descricao_cla.length<=100){
             const {error} = await supabase
-        .from('cla')
-        .insert([
-            {
-                nome_cla: `${nome_equipe}`,
-                descricao_cla: `${descricao_equipe}`,
-                quantidade_limite_cla: `${quantidade_limite_equipe}`,
-                min_pontos_entrar: `${pontuacao_min_equipe}`,
-            }
-            ]);        
-            console.log(nome_equipe,descricao_equipe,quantidade_limite_equipe,pontuacao_min_equipe);
+            .from('cla')
+            .insert([
+                {
+                    nome_cla: `${nome_cla}`,
+                    descricao_cla: `${descricao_cla}`,
+                    quantidade_limite_cla: `${quantidade_limite_cla}`,
+                    min_pontos_entrar: `${pontuacao_min_cla}`,
+                }
+            ])
+                    
+            console.log(nome_cla,descricao_cla,quantidade_limite_cla,pontuacao_min_cla);
         if(error){  
             console.log(error);
             alert("Erro ao criar clã: ", error.message);
@@ -38,10 +37,6 @@ const CriarCla = () => {
         }
 
         
-    }
-        
-    const ShowId = () => {
-        console.log("Id do usuario", id);
     }
     
     return (

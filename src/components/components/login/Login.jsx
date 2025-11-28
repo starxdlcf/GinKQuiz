@@ -16,17 +16,11 @@ import MeuProgresso from "../../../assets/icons/MeuProgressoGinKQuiz.png";
 import RankingClas from "../../../assets/icons/RankingGlobalGinKQuiz.png";
 import Google from "../../../assets/icons/GoogleLogo.png";
 
-import { GlobalContext } from "../../../context/GlobalContext";
-import { useContext } from "react";
-
 
 
 export const Login = () => {
   const [email,setEmail] = React.useState("")
   const [senha,setSenha] = React.useState("")
-  
-
-   const { id, setId } = useContext(GlobalContext);
 
    React.useEffect(() => {
     // console.log("ID no Login:", id);
@@ -47,7 +41,7 @@ export const Login = () => {
       .eq("email", email);
 
       if( data && data.length > 0 ){
-        setId(data[0].id_usuario);
+        localStorage.setItem("userId",id_usuario);
         navigate("/menu");
       } else{
         alert("email ou senha incorretos")

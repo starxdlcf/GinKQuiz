@@ -3,11 +3,9 @@
 
 import React from 'react'
 import {supabase} from '../../../Supabase';
-import { GlobalContext } from '../../../context/GlobalContext';
-import { useContext } from 'react';
 
 const Perfil = () => {
-  const {id} = useContext(GlobalContext);
+  const id = LocalStorage.getItem("userId");
   const [data,setData] = React.useState(null);  
 
   React.useEffect(() => {
@@ -42,15 +40,16 @@ const Perfil = () => {
   }
   return (
     <>
-    <div>Perfil</div>
+      <h1>Perfil</h1>
 
-    {data && data.map((user) => (
-      <div key={user.id_usuario}>
-        <h2>Nome: {user.nome_usuario}</h2>
-        <p>Email: {user.email}</p>
-        {user.cla && <p>Clã:{user.cla.nome_cla}</p>}
-      </div>
-    ))}   
+      {data && data.map((user) => (
+        <div key={user.id_usuario}>
+          <h2>Nome: {user.nome_usuario}</h2>
+          <p>Email: {user.email}</p>
+          {user.cla && <p>Clã:{user.cla.nome_cla}</p>}
+        </div>
+      ))}
+
     </>
   )
 }

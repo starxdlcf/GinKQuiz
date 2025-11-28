@@ -4,17 +4,15 @@ import { supabase } from "../../../Supabase";
 import { EntrarCla } from "../../../components/components/EntrarCla/EntrarCla.jsx";
 import MeuCla from "../../../components/components/MeuCla/MeuCla.jsx";
 
-import { GlobalContext } from "../../../context/GlobalContext.jsx";
 import GinKQuizLogo from "../../../assets/icons/LogotipoGinKQuiz.png";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
 
 export const MenuInicial = () => {
   const [dataclan, setDataclan] = React.useState(null);
 
   const [data, setData] = React.useState(null);
 
-  const { id, setId } = useContext(GlobalContext);
+  const id = localStorage.getItem("userId");
 
   const [descripition, setDescription] = React.useState(false);
 
