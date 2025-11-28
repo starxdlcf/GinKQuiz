@@ -1,6 +1,9 @@
+<<<<<<< Updated upstream
 import { supabase } from "../../../Supabase";
 import React from "react";
 import { GlobalContext } from "../../../context/GlobalContext";
+=======
+>>>>>>> Stashed changes
 import PerfilIcon from "../perfil/PerfilIcon";
 
 export default function MeuCla() {
@@ -60,6 +63,7 @@ export default function MeuCla() {
 
   return (
     <>
+<<<<<<< Updated upstream
       {loading ? (
         <p>Carregando...</p>
       ) : (
@@ -79,6 +83,17 @@ export default function MeuCla() {
           </div>
         </>
       ) }
+=======
+    <PerfilIcon></PerfilIcon>
+
+    <h1>brr brr patapim</h1>
+    <div>
+      <h2>Meu Clã</h2>
+      <div>
+        <p>Informações do clã aqui</p>
+      </div>
+    </div>
+>>>>>>> Stashed changes
     </>
   );
 }

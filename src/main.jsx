@@ -18,6 +18,7 @@ const router = createBrowserRouter([
     errorElement: <Error />,
     element: <Login />,
   },
+  
   {
     path: "/menu",
     element: <MenuInicial />,

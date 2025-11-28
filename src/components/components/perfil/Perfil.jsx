@@ -12,7 +12,7 @@ const Perfil = () => {
 
   React.useEffect(() => {
     showProfile();
-    console.log(id);
+    console.log("Esse é seu id para mostrar o perfil",id);
   }, []);
 
 
