@@ -10,7 +10,8 @@ import Perfil from "./components/components/perfil/Perfil.jsx";
 import { GlobalProvider } from "./context/GlobalContext.jsx";
 import CriarCla from "./components/components/criarCla/CriarCla.jsx";
 import Termos from "./components/components/TermosDeUso/Termos.jsx";
-
+import Debbug from "./components/components/Navbar/Debbug.jsx";
+import Gerenciamento from "./components/components/gerenciamento/Gerenciamento.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,9 +21,25 @@ const router = createBrowserRouter([
   },
   
   {
-    path: "/menu",
-    element: <MenuInicial />,
-  },
+    path: "menu",
+    element: <Debbug/>,
+    children: [
+      {
+        
+     path: "perfil",
+    element: <Perfil />,
+   },
+   {
+    path:"/menu",
+    element:<MenuInicial/>,
+   },
+      
+  ]
+},
+{
+  path:"gerenciamento",
+  element:<Gerenciamento/>,
+},
   {
     path: "cadastro",
     element: <Cadastro />,
@@ -39,18 +56,18 @@ const router = createBrowserRouter([
     path: "/concluido",
     element: <Cadastro />,
   },
-  {
-    path: "menu/perfil",
-    element: <Perfil />,
-  },
-  {
-    path:"menu/criarCla",
-    element:<CriarCla/>,
-  },
-  {
-    path:"menu/rankings",
-    element:<Cadastro/>,
-  },
+  // {
+  //   path: "menu/perfil",
+  //   element: <Perfil />,
+  // },
+  // {
+  //   path:"menu/criarCla",
+  //   element:<CriarCla/>,
+  // },
+  // {
+  //   path:"menu/rankings",
+  //   element:<Cadastro/>,
+  // },
   {
     path:"termos",
     element:<Termos/>,
