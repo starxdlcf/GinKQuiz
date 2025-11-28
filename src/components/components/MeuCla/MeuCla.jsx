@@ -1,6 +1,7 @@
 import { supabase } from "../../../Supabase";
 import React from "react";
 import PerfilIcon from "../perfil/PerfilIcon";
+import styles from "../MeuCla/MeuCla.module.css"
 
 export default function MeuCla() {
   const [idCla, setIdCla] = React.useState(null);
@@ -10,14 +11,16 @@ export default function MeuCla() {
 
   React.useEffect(() => {
     setLoading(true);
-    catchIdCla(id);
-  }, []);
+    if (id) catchIdCla(id);
+  }, [id]);
 
   React.useEffect(() => {
     if (idCla){
-      catchInfoCla(idCla)
+      catchInfoCla(idCla);
+      catchInfoMembersCla(idCla)
     }
   }, [idCla]);
+
 
   const catchIdCla = async (idUser) => {
     try {
@@ -57,27 +60,73 @@ export default function MeuCla() {
 
   };
 
+  const catchInfoMembersCla = async (id_claUsuario) => {
+    try {
+      const { data, error } = await supabase
+        .from("usuarios")
+        .select("*")
+        .eq("cla_usuario", id_claUsuario)
+
+      if (error) throw error;
+
+      setInfoMembersCla(data || []);
+    
+    } catch (error) {
+      alert(error.message);
+    }
+    finally{
+      setLoading(false)
+    }
+  }
+
   return (
-    <>
+    <div className={styles.box}>
       {loading ? (
         <p>Carregando...</p>
       ) : (
         <>
-          <div >
-          <PerfilIcon />
+          <div className={styles.perfilbar}>
+          <PerfilIcon id={styles.perfil} />
+          <hr id={styles.bar} />
           </div>
-          <h1>{infoCla.nome_cla}</h1>
-          <div>
-            <h2>{infoCla.descricao_cla}</h2>
-            <div>
-              <p>
+          <div className={styles.header}>
+            <div className={styles.namedesc}>
+              <h1>{infoCla.nome_cla}</h1>
+              <h2>{infoCla.descricao_cla}</h2>
+            </div>
+            <p>
                 {infoCla.quantidade_atual_cla}/{infoCla.quantidade_limite_cla}
               </p>
-              <p>{infoCla.pontuacao_cla}</p>
-            </div>
           </div>
+            <div className={styles.body}>
+              <table className={`${styles.tabela}`}>
+                <thead>
+                  <tr>
+                    <th>Membro</th>
+                    <th>Pontuação</th>
+                    {/* <th>Streak</th> implementar foguinho ass: anna*/}
+                  </tr>
+                </thead>
+                <tbody className={`${styles.scrollableTable}`}>
+                  {infoMembersCla.map((member) => (
+                    <tr key={member.id_claUsuario}>
+                      <td>{`#${member.nome_usuario}`}</td>
+                      <td>{member.pontuacao_usuario}</td>
+                      <td>
+                        {/* foguinho */}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div className={styles.points}>
+                <p>{infoCla.pontuacao_cla}</p>
+              </div>
+
+            </div>
         </>
       ) }
-    </>
+    </div>
   );
 }

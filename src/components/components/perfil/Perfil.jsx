@@ -13,6 +13,11 @@ const Perfil = () => {
     console.log("Esse é seu id para mostrar o perfil",id);
   }, []);
 
+  React.useEffect(() => {
+    showProfile();
+    console.log("Esse é seu id para mostrar o perfil",id);
+  }, [id]);
+
 
 
 

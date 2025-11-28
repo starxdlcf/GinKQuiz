@@ -18,10 +18,16 @@ export const MenuInicial = () => {
 
   const [hasCla, setHasCla] = React.useState(false);
 
+  const [isAdmin, setIsAdmin] = React.useState(false);
+
   React.useEffect(() => {
     // showClanInfo();
     ClaCheck()
   }, []);
+  React.useEffect(() => {
+    // showClanInfo();
+    ClaCheck()
+  }, [id]);
 
   const showClanInfo = async () => {
     const { data, error } = await supabase.from("cla").select("*");
@@ -50,6 +56,7 @@ export const MenuInicial = () => {
       .select("cla_usuario")
       .eq("id_usuario", id);
       setHasCla(data)
+
       if (data.cla_usuario != null) {
         setHasCla(true);
       } else {
@@ -81,6 +88,7 @@ export const MenuInicial = () => {
   //   console.log("usuario retornado:", user);
   // };
 
+
   const ClaCheck = async () => {
     try{
       let { data, error } = await supabase
@@ -90,8 +98,13 @@ export const MenuInicial = () => {
         .single();
 
         if (error) return error;
-  
         console.log("Dados do usuário para verificação de clã:", data);
+        if (data.adm == true) {
+          setIsAdmin(true);
+        }
+        else {
+          setIsAdmin(false);
+        }
         if (data.cla_usuario != null) {
           setHasCla(true);
         } else {
@@ -119,6 +132,7 @@ export const MenuInicial = () => {
         <div className={styles.botoes}>
           <Link to="/jogar"><button className={styles.jogar} onClick={()=>console.log(id)}>Jogar</button></Link>
           <Link to="/rankings"><button className={styles.rankings}>Rankings</button></Link>
+          {isAdmin === true ? (<Link to='/gerenciamento'>Gerenciar Perguntas</Link>):(<></>)}
         </div>
       </div>
       <div className={styles.box2}>

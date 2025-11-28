@@ -10,8 +10,12 @@
   --pink: #ff99c9;
   --white: #ffffff;
   --green: #8de969;
+  --muted-green: #87bba2;
   --blue: #5d91e8;
   --purple: #5d2e8c;
+  --vivid-purple: #8156f6;
+  --wheat: #fff4e3;
+  --orange: #ffd699;
 }
 
 *{

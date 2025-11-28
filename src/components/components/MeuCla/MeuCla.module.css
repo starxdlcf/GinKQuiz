@@ -1,4 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root{
+  --fancy: 'Cormorant Garamond', serif;
+  --simple: 'Host Grotesk', sans-serif;
+  --red: #ff5757;
+  --yellow: #ffe785;
+  --gray: #737373;
+  --pink: #ff99c9;
+  --white: #ffffff;
+  --green: #8de969;
+  --muted-green: #87bba2;
+  --blue: #5d91e8;
+  --purple: #5d2e8c;
+  --vivid-purple: #8156f6;
+  --wheat: #fff4e3;
+  --orange: #ffd699;
+}
+
 .box{
     height: 100%;
     width: 100%;
+}
+
+.perfilbar{
+    display: flex;
+    flex-direction: row;
+}
+        #perfil{
+            display: flex;
+            height: 3rem;
+            width: 3rem;
+        }
+
+        #bar{
+            display: flex;
+            flex-direction: column;
+        }
+
+.header{
+    display: flex;
+    justify-content: space-between;
+}        
+
+        .namedesc{
+            align-items: flex-start;
+        }
+
+.scrollableTable{
+    max-height: 12.5rem;
+    overflow-y: scroll;
+}
+
+.points{
+    display: flex;
 }
