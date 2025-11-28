@@ -12,7 +12,7 @@ const Debbug = () => {
   }, []);
 
 
-    const id = localStorage.getItem('userId');
+    const idUsuario = localStorage.getItem('userId');
     const [selectedId, setSelectedId] = useState(null);
     const [data, setData] = useState(null);
 
@@ -33,7 +33,7 @@ const Debbug = () => {
     <div style={{backgroundColor:'green',display:'flex'}}>
       <button onClick={BackPage}>Voltar</button>
         <label htmlFor="">Selecione um id</label>
-        <select name="" id="" value={id} onChange={(e)=> {setId(e.target.value), console.log(id)}}>
+        <select name="" id="" value={idUsuario} onChange={(e)=> {localStorage.setItem('userId',e.target.value), console.log(id)}}>
           {data && data.map((user) => (
             <option key={user.id_usuario} value={user.id_usuario}>{user.id_usuario} - {user.nome_usuario}</option>
           ))}

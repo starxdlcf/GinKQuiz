@@ -5,7 +5,7 @@ import React from 'react'
 import {supabase} from '../../../Supabase';
 
 const Perfil = () => {
-  const id = LocalStorage.getItem("userId");
+  const id = localStorage.getItem("userId");
   const [data,setData] = React.useState(null);  
 
   React.useEffect(() => {
