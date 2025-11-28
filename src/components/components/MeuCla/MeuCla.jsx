@@ -5,7 +5,7 @@ import styles from "../MeuCla/MeuCla.module.css"
 
 export default function MeuCla() {
   const [idCla, setIdCla] = React.useState(null);
-  const [infoCla, setInfoCla] = React.useState(undefined);
+  const [infoCla, setInfoCla] = React.useState([]);
   const [infoMembersCla, setInfoMembersCla] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const id = localStorage.getItem("userId");
