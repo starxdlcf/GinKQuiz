@@ -7,8 +7,8 @@ import { supabase } from "../../../Supabase.jsx";
 export const EntrarCla = () => {
   const [clas, setClas] = React.useState([]);
   const id = localStorage.getItem("userId");
-  const [description, setDescription] = React.useState(false); // oque é isso? ass:Allan
-  const [buscarCla, setBuscarCla] = React.useState("");
+  const [buscarClaNome, setBuscarClaNome] = React.useState("");
+  const [buscarClaId, setBuscarClaId] = React.useState("");
   const [carregando, setCarregando] = React.useState(true);
 
   React.useEffect(() => {
@@ -30,15 +30,23 @@ export const EntrarCla = () => {
     }
   };
 
-  const handleBuscarCla = (e) => setBuscarCla(e.target.value);
+  const handleBuscarClaNome = (e) => setBuscarClaNome(e.target.value);
 
-  const resultado = React.useMemo(() => {
-    const pesquisa = (buscarCla || "").trim().toLowerCase();
+  const handleBuscarClaId = (e) => setBuscarClaId(e.target.value);
+
+  const resultadoNome = React.useMemo(() => {
+    const pesquisa = (buscarClaNome || "").trim().toLowerCase();
     if (!pesquisa) return clas || [];
     return (clas || []).filter((cla) =>
       (cla.nome_cla || "").toLowerCase().includes(pesquisa)
     );
-  }, [clas, buscarCla]);
+  }, [clas, buscarClaNome]);
+
+  const resultadoId = React.useMemo(() => {
+    const pesquisa = parseInt(buscarClaId.trim(), 10); // Converte para número
+    if (isNaN(pesquisa)) return clas || []; // Se não for um número, retorna todos os clãs
+    return (clas || []).filter((cla) => cla.id_cla === pesquisa); // Compara diretamente como número
+  }, [clas, buscarClaId]);
 
   const enterCla = async (idCla) => {
     console.log(idCla);
@@ -76,10 +84,13 @@ export const EntrarCla = () => {
         <input
           type="text"
           placeholder="Pesquisar por um Clã"
-          onChange={handleBuscarCla}
+          onChange={handleBuscarClaNome}
           style={{ marginRight: "30px" }}
         />
-        <input style={{ width: "130px" }} type="text" placeholder="#0000" />
+        <input style={{ width: "130px" }} 
+        type="text" 
+        onChange={handleBuscarClaId} 
+        placeholder="#0000" />
       </div>
 
       {carregando ? (
@@ -95,26 +106,30 @@ export const EntrarCla = () => {
             </tr>
           </thead>
           <tbody className={`${styles.scrollableTable}`}>
-            {resultado.map((clan) => (
-              <tr key={clan.id_cla}>
-                <td>{`#${clan.id_cla}`}</td>
-                <td className={styles.nome_cla}>{clan.nome_cla}</td>
-                <td>
-                  {clan.quantidade_atual_cla}/{clan.quantidade_limite_cla}
-                </td>
-                <td>{clan.pontuacao_cla}</td>
-                <td style={{ backgroundColor: "var(--yellow)" }}>
-                  <button
-                    className={styles.entrarButton}
-                    onClick={() => {
-                      enterCla(clan.id_cla);
-                    }}
-                  >
-                    +
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {(buscarClaNome ? resultadoNome : resultadoId).length > 0 ? (
+              (buscarClaNome ? resultadoNome : resultadoId).map((clan) => (
+                <tr key={clan.id_cla}>
+                  <td>{`#${clan.id_cla}`}</td>
+                  <td className={styles.nome_cla}>{clan.nome_cla}</td>
+                  <td>
+                    {clan.quantidade_atual_cla}/{clan.quantidade_limite_cla}
+                  </td>
+                  <td>{clan.pontuacao_cla}</td>
+                  <td style={{ backgroundColor: "var(--yellow)" }}>
+                    <button
+                      className={styles.entrarButton}
+                      onClick={() => {
+                        enterCla(clan.id_cla);
+                      }}
+                    >
+                      +
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <p>Nenhum resultado encontrado</p>
+            )}
           </tbody>
         </table>
       )}
