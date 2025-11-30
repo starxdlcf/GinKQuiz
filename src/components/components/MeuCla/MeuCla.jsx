@@ -103,31 +103,37 @@ export default function MeuCla() {
             <div className={styles.body}>
               
               <div className={styles.points}>
-                <p>Pontuação do Clã</p>
-                <p>{`${infoCla.pontuacao_cla}`}</p>
+                <h2>Pontuação do Clã</h2>
+                <p id={styles.pontoscla}>{`${infoCla.pontuacao_cla}`}</p>
               </div>
 
 
-              <table className={`${styles.tabela}`}>
-                <thead>
-                  <tr>
-                    <th>Membro</th>
-                    <th>Pontuação</th>
-                    {/* <th>Streak</th> implementar foguinho ass: anna*/}
-                  </tr>
-                </thead>
-                <tbody className={`${styles.scrollableTable}`}>
-                  {infoMembersCla.map((member) => (
-                    <tr key={member.created_at}>
-                      <td>{`#${member.nome_usuario}`}</td>
-                      <td>{member.pontuacao_usuario}</td>
-                      {/* <td>
-                        foguinho
-                      </td> */}
+              <div className={styles.tableuser}>
+                
+                <div className={styles.infouser}></div>
+
+
+                <table className={`${styles.tabela}`}>
+                  <thead>
+                    <tr>
+                      <th className={styles.member}>Membro</th>
+                      <th>Pontuação</th>
+                      {/* <th>Streak</th> implementar foguinho ass: anna*/}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className={`${styles.scrollableTable}`}>
+                    {infoMembersCla.map((member) => (
+                      <tr key={member.created_at}>
+                        <td  >{`#${member.nome_usuario}`}</td>
+                        <td>{member.pontuacao_usuario}</td>
+                        {/* <td>
+                          foguinho
+                        </td> */}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
             </div>
         </>

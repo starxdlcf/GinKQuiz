@@ -98,10 +98,24 @@
     justify-content: space-around;
 }
 
-        .scrollableTable{
-            max-height: 10rem;
-            overflow-y: scroll;
+        .tableuser{
+            display: flex;
+            flex-direction: column;
         }
+                .infouser{
+                    display: flex;
+                    flex-direction: row;
+
+                }
+                .scrollableTable{
+                    max-height: 10rem;
+                    overflow-y: scroll;
+                }
+
+                .member{
+                    width: 250px;
+                }
+                
 
         .points{
             display: flex;
@@ -109,4 +123,7 @@
             align-items: center;
             /* margin-right: 40rem; */
             margin-top: 6rem;
+        }
+        .points p{
+            font-size: 4rem;
         }
