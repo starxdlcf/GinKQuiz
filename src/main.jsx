@@ -12,6 +12,8 @@ import CriarCla from "./components/components/criarCla/CriarCla.jsx";
 import Termos from "./components/components/TermosDeUso/Termos.jsx";
 import Debbug from "./components/components/Navbar/Debbug.jsx";
 import Gerenciamento from "./components/components/gerenciamento/Gerenciamento.jsx";
+import Rankings from "./components/components/rankings/Rankings.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const router = createBrowserRouter([
   {
@@ -64,10 +66,10 @@ const router = createBrowserRouter([
   //   path:"menu/criarCla",
   //   element:<CriarCla/>,
   // },
-  // {
-  //   path:"menu/rankings",
-  //   element:<Cadastro/>,
-  // },
+  {
+    path:"/rankings",
+    element:<Rankings/>,
+  },
   {
     path:"termos",
     element:<Termos/>,
@@ -75,9 +77,9 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    {/* <GlobalProvider>
-    </GlobalProvider> */}
-    <RouterProvider router={router} />
-  </StrictMode>
+  <GoogleOAuthProvider clientId="89096649826-sp14cdkef28o7ign6tta2musnvftvbmj.apps.googleusercontent.com">
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>
+  </GoogleOAuthProvider>
 );

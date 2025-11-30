@@ -3,6 +3,7 @@ import styles from "./Login.module.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../../Supabase";
+import { GoogleLogin } from "@react-oauth/google";
 
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
@@ -16,43 +17,60 @@ import MeuProgresso from "../../../assets/icons/MeuProgressoGinKQuiz.png";
 import RankingClas from "../../../assets/icons/RankingGlobalGinKQuiz.png";
 import Google from "../../../assets/icons/GoogleLogo.png";
 
-
-
 export const Login = () => {
-  const [email,setEmail] = React.useState("")
-  const [senha,setSenha] = React.useState("")
-  
+  const [email, setEmail] = React.useState("");
+  const [senha, setSenha] = React.useState("");
+
   const [visivel, setVisivel] = React.useState(false);
   const navigate = useNavigate();
-  const handleNavigate = ()=>{
-    NavigateToMenu(email, senha)
-  } 
-  
-  const NavigateToMenu = async(email, senha) => {
-    try{
-      const {data, error} = await supabase
-      .from("usuarios")
-      .select("*")
-      .eq("senha", senha)
-      .eq("email", email);
+  const handleNavigate = () => {
+    NavigateToMenu(email, senha);
+  };
 
-      if( data && data.length > 0 ){
-        localStorage.setItem("userId",data[0].id_usuario);
+  const NavigateToMenu = async (email, senha) => {
+    try {
+      const { data, error } = await supabase
+        .from("usuarios")
+        .select("*")
+        .eq("senha", senha)
+        .eq("email", email);
+
+      if (data && data.length > 0) {
+        localStorage.setItem("userId", data[0].id_usuario);
         navigate("/menu");
-        console.log(data[0].id_usuario);
-        console.log(localStorage.getItem("userId"));
-      } else{
-        alert("email ou senha incorretos")
+      } else {
+        alert("email ou senha incorretos");
       }
 
       if (error) throw error;
-    } catch(error){
-
+    } catch (error) {
       alert(error.message);
     }
+  };
 
+  const handleSucess = async (resposta)=>{
+    
+    const credencial = resposta.credential
+    console.log(credencial)
+
+    // try{
+    //   const { data, error } = await supabase
+    //     .from("usuarios")
+    //     .select("id_usuario")
+
+    //   for (i in data ){
+    //     if (credencial == data[i]){
+    //       localStorage.setItem("userId", credencial);
+    //       navigate("/menu");
+    //     } else{
+
+    //     }
+    //   }
+    // }
+    // catch{
+
+    // }
   }
-
 
   return (
     <>
@@ -61,28 +79,34 @@ export const Login = () => {
           <div className={styles.textArea}>
             <div className={styles.title}>
               <h2>Bem vindo ao...</h2>
-              <img className={styles.logo}
+              <img
+                className={styles.logo}
                 src={GinKQuizLogo}
                 alt="Logotipo GinKQuiz"
               />
             </div>
             <div className={styles.description}>
               <p>
-                O <span>GinKQuiz</span> reúne perguntas sobre matérias escolares e a gincana.{" "}
-                <br />
+                O <span>GinKQuiz</span> reúne perguntas sobre matérias escolares
+                e a gincana. <br />
                 Cada resposta certa vale pontos para sua você ou sua equipe!
                 Aproveite nossos modos single player, global ranking e team
                 play!
               </p>
-
             </div>
             <div className={styles.routes}>
-              <img className={styles.icon} src={RankingClas} alt="Ranking de Classificação" />
+              <Link to="rankings">
+                <img
+                  className={styles.icon}
+                  src={RankingClas}
+                  alt="Ranking de Classificação"
+                />
+              </Link>
             </div>
           </div>
         </div>
         <div className={styles.formContainer}>
-            <h1 className={styles.titleBox}>Faça seu Login</h1>
+          <h1 className={styles.titleBox}>Faça seu Login</h1>
           <div className={styles.loginBox}>
             <form action="" className={styles.form}>
               <Box className={styles.box} id={styles.inputBox}>
@@ -91,38 +115,60 @@ export const Login = () => {
                   type="email"
                   placeholder="Email"
                   value={email}
-                  onChange={(e)=>{setEmail(e.target.value)}}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                 />
-                <div style={{display:"flex", alignItems:"center"}}>
-                <input
-                  className={styles.inputField}
-                  type={ visivel ? "text" : "password" }
-                  placeholder="Senha"
-                  value={senha}
-                  onChange={(e)=>{setSenha(e.target.value)}}
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <input
+                    className={styles.inputField}
+                    type={visivel ? "text" : "password"}
+                    placeholder="Senha"
+                    value={senha}
+                    onChange={(e) => {
+                      setSenha(e.target.value);
+                    }}
                   />
-                  </div>
+                </div>
               </Box>
               <div className={styles.visivel}>
-                 {
-                    visivel ? <VisibilityIcon className={styles.visibilityIcon} onClick={ () => setVisivel(false) } />
-                    :
-                    <VisibilityOff className={styles.visibilityIcon} onClick={ () => setVisivel(true) } />
-                  }
+                {visivel ? (
+                  <VisibilityIcon
+                    className={styles.visibilityIcon}
+                    onClick={() => setVisivel(false)}
+                  />
+                ) : (
+                  <VisibilityOff
+                    className={styles.visibilityIcon}
+                    onClick={() => setVisivel(true)}
+                  />
+                )}
               </div>
             </form>
             <div className={styles.box}>
               <p className={styles.ou}>ou</p>
-              <p id={styles.botaoGoogle} variant="contained" className={styles.p}> <img className={styles.googleLogo} src={Google} alt="Google Logo" />
-                Entrar com o Google
-              </p>
-              <Button variant="contained" className={styles.Button} onClick={handleNavigate} >
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  handleSucess(credentialResponse);
+                }}
+                onError={() => {
+                  alert("Login Failed");
+                }}
+                useOneTap
+              />
+              <Button
+                variant="contained"
+                className={styles.Button}
+                onClick={handleNavigate}
+              >
                 Entrar
               </Button>
             </div>
             <p className={styles.cadastroText}>
               Não tem cadastro? {""}
-              <span className={styles.hyperlink}><Link to="cadastro">Crie sua conta</Link></span>
+              <span className={styles.hyperlink}>
+                <Link to="cadastro">Crie sua conta</Link>
+              </span>
             </p>
           </div>
         </div>
