@@ -15,6 +15,8 @@ import Gerenciamento from "./components/components/gerenciamento/Gerenciamento.j
 import Rankings from "./components/components/rankings/Rankings.jsx";
 import { LoginGoogle } from "./components/components/loginGoogle/LoginGoogle.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import CriarPergunta from "./components/components/criarPergunta/CriarPergunta.jsx";
+
 
 const router = createBrowserRouter([
   {
@@ -78,6 +80,10 @@ const router = createBrowserRouter([
   {
     path:"loginGoogle",
     element:<LoginGoogle/>,
+  },
+  {
+    path:'CriarPergunta',
+    element:<CriarPergunta/>,
   }
 ]);
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { supabase } from "../../../Supabase";
+import { Link } from "react-router-dom";
 
 const Gerenciamento = () => {
   const id = localStorage.getItem("userId");
@@ -50,12 +51,12 @@ const Gerenciamento = () => {
               perguntas.map((pergunta) => (
                 <tr key={pergunta.id_pergunta}>
                   <td>{pergunta.enunciado_pergunta}</td>
-                  <td>atualizar</td>
+                  <td><Link to=''>Atualizar</Link></td>
                   <td>deletar</td>
                 </tr>
               ))}
             <tr>
-              <td>criar uma nova</td>
+              <td><Link to='/CriarPergunta'>criar uma nova</Link></td>
             </tr>
           </tbody>
         </table>
