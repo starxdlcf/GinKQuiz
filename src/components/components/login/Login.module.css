@@ -36,9 +36,14 @@
 }
 
 .icon{
-    height: 120px;
+    height: 110px;
     width: auto;
     cursor: pointer;
+}
+
+.title h2{
+    text-align: center;
+    padding-left: .6rem;
 }
 
 .pageContainer{
@@ -83,8 +88,14 @@
     overflow-wrap: break-word;
     text-align: center;
     font-size: large;
-    font-family: 'Host Grotesk', sans-serif;
-    /* font-family: var(--simple); */
+    font-family: var(--simple);
+    font-weight: 400;
+} 
+.description p{
+    text-align: center;
+    font-size: large;
+    font-family: var(--simple);
+    font-weight: 400;
 }
 
 span{
