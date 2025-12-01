@@ -5,6 +5,8 @@ import styles from "../MeuCla/MeuCla.module.css"
 
 export default function MeuCla() {
   const [idCla, setIdCla] = React.useState(null);
+  const [nomeUser, setNomeUser] = React.useState("");
+  const [pontosUser, setPontosUser] = React.useState(null);
   const [infoCla, setInfoCla] = React.useState([]);
   const [infoMembersCla, setInfoMembersCla] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -34,6 +36,8 @@ export default function MeuCla() {
       if (error) throw error;
 
       setIdCla(data.cla_usuario);
+      setNomeUser(data.nome_usuario);
+      setPontosUser(data.pontuacao_usuario);
       
     } catch (error) {
       alert(error.message);
@@ -105,19 +109,32 @@ export default function MeuCla() {
               <div className={styles.points}>
                 <h2>Pontuação do Clã</h2>
                 <p id={styles.pontoscla}>{`${infoCla.pontuacao_cla}`}</p>
+                <button id={styles.rankposition}>Posição no Ranking</button>
               </div>
 
 
               <div className={styles.tableuser}>
                 
-                <div className={styles.infouser}></div>
+                <div className={styles.infouser}>
+
+                  <div className={styles.user}>
+                    <p>{`${nomeUser} (você)`}</p>
+                    <p>{`${pontosUser}`}</p>
+                  </div>
+
+                  <div className={styles.botoes}>
+                    <button id={styles.graph}>Gráfico</button>
+                    <button id={styles.quit}>Sair do Clã</button>
+                  </div>
+
+                </div>
 
 
                 <table className={`${styles.tabela}`}>
                   <thead>
                     <tr>
                       <th className={styles.member}>Membro</th>
-                      <th>Pontuação</th>
+                      <th className={styles.pointsbymember}>Pontuação</th>
                       {/* <th>Streak</th> implementar foguinho ass: anna*/}
                     </tr>
                   </thead>
@@ -126,9 +143,7 @@ export default function MeuCla() {
                       <tr key={member.created_at}>
                         <td  >{`#${member.nome_usuario}`}</td>
                         <td>{member.pontuacao_usuario}</td>
-                        {/* <td>
-                          foguinho
-                        </td> */}
+                        {/* <td>foguinho</td> */}
                       </tr>
                     ))}
                   </tbody>
