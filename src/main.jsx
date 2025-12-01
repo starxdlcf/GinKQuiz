@@ -13,6 +13,7 @@ import Termos from "./components/components/TermosDeUso/Termos.jsx";
 import Debbug from "./components/components/Navbar/Debbug.jsx";
 import Gerenciamento from "./components/components/gerenciamento/Gerenciamento.jsx";
 import Rankings from "./components/components/rankings/Rankings.jsx";
+import { LoginGoogle } from "./components/components/loginGoogle/LoginGoogle.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const router = createBrowserRouter([
@@ -73,6 +74,10 @@ const router = createBrowserRouter([
   {
     path:"termos",
     element:<Termos/>,
+  },
+  {
+    path:"loginGoogle",
+    element:<LoginGoogle/>,
   }
 ]);
 

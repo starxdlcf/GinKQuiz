@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../../Supabase";
 import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from 'jwt-decode';
 
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
@@ -44,6 +45,7 @@ export const Login = () => {
 
       if (error) throw error;
     } catch (error) {
+      console.log(error)
       alert(error.message);
     }
   };
@@ -51,25 +53,38 @@ export const Login = () => {
   const handleSucess = async (resposta)=>{
     
     const credencial = resposta.credential
-    console.log(credencial)
 
-    // try{
-    //   const { data, error } = await supabase
-    //     .from("usuarios")
-    //     .select("id_usuario")
+    try{
 
-    //   for (i in data ){
-    //     if (credencial == data[i]){
-    //       localStorage.setItem("userId", credencial);
-    //       navigate("/menu");
-    //     } else{
+      const dadosUsuario = jwtDecode(credencial)
 
-    //     }
-    //   }
-    // }
-    // catch{
+        const userEmail = dadosUsuario.email;
+        const googleId = dadosUsuario.sub;
 
-    // }
+      const { data, error } = await supabase
+        .from("usuarios")
+        .select("*")
+        .eq("email", userEmail)
+        .eq("google_id", googleId)
+        
+        console.log(`usuario: ${data}`)
+
+        if (data && data.length > 0) {
+          localStorage.setItem("userId", data[0].id_usuario);
+          console.log("menu")
+          navigate("/menu");
+        }
+        else{
+          localStorage.setItem("googleId", googleId);
+          localStorage.setItem("email", userEmail);
+          navigate("/loginGoogle")
+        }
+      if (error) throw error;
+    }
+    catch(error){
+      console.log(error)
+      alert(error.message)
+    }
   }
 
   return (

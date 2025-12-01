@@ -1,63 +1,54 @@
 import React, { useState } from "react";
-import styles from "./Cadastro.module.css";
+import styles from "./LoginGoogle.module.css";
 import MaleIcon from "@mui/icons-material/Male";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import FemaleIcon from "@mui/icons-material/Female";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { supabase } from "../../../Supabase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-export const Cadastro = () => {
-  const [passwordVisible, setPasswordVisible] = React.useState(false);
+export const LoginGoogle = () => {
   const [genero, setGenero] = useState("homem");
   const [nomeUsuario, setNomeUsuario] = useState("");
-  const [email, setEmail] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
-  const [senha, setSenha] = useState("");
-  const [confirmarSenha, setConfirmarSenha] = useState("");
   const navigate = useNavigate()
   const [checkbox, setCheckbox] = useState(false);
   const [checkbox2, setCheckbox2] = useState(false);
 
+  const googleId = localStorage.getItem("googleId")
+  const email = localStorage.getItem("email")
+
   const handleSubmit = async (e) => {
-    if(senha!==confirmarSenha){
-      alert("As senhas não coincidem!");
-      return
-    }
-    if(email.includes('@')===false){
-      alert("Email inválido!");
-      setEmail('')
-      return
-    }
+    
     if(checkbox===false){
       alert("Você deve concordar com os termos de uso para se cadastrar!");
       return
     }
     e.preventDefault();
     try{
-
       const { error } = await supabase
         .from("usuarios")
         .insert([
           {
             nome_usuario: `${nomeUsuario}`,
             email: `${email}`,
+            google_id: `${googleId}`,
             nascimento: `${dataNascimento}`,
-            senha: `${senha}`,
             genero: `${genero}`,
           },
         ]);
+        console.log("fim")
         if (error) throw error;
+        alert("Cadastro Realizado com Sucesso! Realize o login novamente")
     }
     catch (error){ 
       console.log(error);
-      alert("Erro ao inserir dados: ", error.message);
+      alert(error.message);
     }
     finally{
-      navigate("/");
-      alert("Cadastro Realizado com Sucesso!");
+        localStorage.clear("googleId")
+        navigate("/");
+        ;
     }
   };
 
@@ -121,48 +112,6 @@ export const Cadastro = () => {
                   {genero === "homem" ? (<MaleIcon></MaleIcon>) : genero === "mulher" ? (<FemaleIcon></FemaleIcon>) : (<HorizontalRuleIcon></HorizontalRuleIcon>)}
                 </button>
               </div>
-            </div>
-            <div>
-              <label htmlFor="">Email</label>
-              <input
-                className={styles.input}
-                id={styles.UsuarioEmail}
-                type="text"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-              />
-            </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <label htmlFor="">Senha</label>
-              <input
-                onChange={(e) => setSenha(e.target.value)}
-                value={senha}
-                className={styles.input}
-                id={styles.UsuarioSenha}
-                type={passwordVisible ? "password" : "text"}
-              />{" "}
-              {passwordVisible ? (
-                <VisibilityIcon
-                  style={{ color: "white" }}
-                  onClick={() => setPasswordVisible(false)}
-                />
-              ) : (
-                <VisibilityOff
-                  style={{ color: "white" }}
-                  onClick={() => setPasswordVisible(true)}
-                />
-              )}
-            </div>
-            <div>
-              <label htmlFor="">Confirmar senha</label>
-              <input
-                onChange={(e) => setConfirmarSenha(e.target.value)}
-                value={confirmarSenha}
-                className={styles.input}
-                id={styles.UsuarioConfirmarSenha}
-                type={passwordVisible ? "password" : "text"}
-              />
-
             </div>
 
             <div className={styles.termosMaisEmail}>
