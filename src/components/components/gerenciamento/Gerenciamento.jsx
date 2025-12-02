@@ -14,6 +14,7 @@ const Gerenciamento = () => {
 
   React.useEffect(() => {
     fetchTemas();
+    
     console.log("ID do usuario no gerenciamento:", id);
   }, []);
 

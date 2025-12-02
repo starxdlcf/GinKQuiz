@@ -1,6 +1,7 @@
 import React, { use } from "react";
 import { supabase } from "../../../Supabase";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CriarPergunta = () => {
   const [temaSelecionado, setTemaSelecionado] = React.useState('');
@@ -14,13 +15,20 @@ const CriarPergunta = () => {
   const [correta2, setCorreta2] = React.useState(false);
   const [correta3, setCorreta3] = React.useState(false);
   const [correta4, setCorreta4] = React.useState(false);
+
+  const [open, setOpen] = React.useState(false);
+  const [dica, setDica] = React.useState('');
+
+  const navigate = useNavigate(); 
   
 useEffect(() => {
   showThemes();
   showQuestions();
+  showHints();  
 }, []);
 
   const createQuestion = async (e) => {
+    e.preventDefault()
     const alternativaCorreta = (
       correta1 ? alternativa1 :
       correta2 ? alternativa2 :
@@ -53,8 +61,26 @@ useEffect(() => {
           alternativa4_pergunta: `${alternativa4}`,
           resposta_pergunta: `${alternativaCorreta}`,
         },
-      ]);
+      ])
+      .select();
+      if(error){
+        alert("Erro ao criar pergunta:", error);
+        console.error(error);
+        return;
+      }
+      if(dica){
+        const { data: dicaData, error: dicaError } = await supabase
+        .from('dicas')
+        .insert([
+          {
+            pergunta_dica: data[0].id_pergunta,
+            info_dica: `${dica}`,
+          },
+        ]);
+      }
       alert("Pergunta criada com sucesso!");
+      navigate('/gerenciamento')
+      console.log(data);
   }
 
   const showThemes = async () => {
@@ -71,6 +97,12 @@ useEffect(() => {
     console.log(data);
     }
 
+  const showHints = async (id_pergunta) => {
+    const { data, error } = await supabase
+      .from('dicas')
+      .select('*')
+      console.log(data)
+  }
   return (
     <>
       <form action="" onSubmit={createQuestion}>
@@ -119,7 +151,18 @@ useEffect(() => {
           }
           }/>
         </div>
-        <button type="submit">criar pergunta</button>
+
+          {/* <button style={{color:'red'}} onClick={(e)=>{e.preventDefault(), setOpen(true)}}>criar dica</button> */}
+
+          {open ===true?  (
+            <div style={{border:'1px solid black', backgroundColor:'lime'}}>
+              <button style={{color:'red'}} onClick={(e)=> {e.preventDefault(),setOpen(false)}}>x</button>
+              <input type="text" name="" id="" value={dica} onChange={(e)=>{setDica(e.target.value)}} placeholder="dica da pergunta" />
+                
+            </div>
+          ) : ( <button style={{color:'red'}} onClick={(e)=>{e.preventDefault(), setOpen(true)}}>criar dica</button>) }
+
+        <button style={{color:'red'}} type="submit">criar pergunta</button>
       </form>
     </>
   );
