@@ -6,7 +6,7 @@ import Narci from "../../../assets/icons/narciicon.png";
 
 const PerfilIcon = () => {
   return (
-     <Link to="perfil"><img src={Narci} alt="Perfil" /></Link>
+     <Link to="perfil"><img id={styles.narci} src={Narci} alt="Perfil" /></Link>
   )
 }
 
