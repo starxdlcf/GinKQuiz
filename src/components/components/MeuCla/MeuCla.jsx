@@ -109,7 +109,7 @@ export default function MeuCla() {
               <div className={styles.points}>
                 <h2>Pontuação do Clã</h2>
                 <p id={styles.pontoscla}>{`${infoCla.pontuacao_cla}`}</p>
-                <button id={styles.rankposition}>Posição no Ranking</button>
+                <button className={styles.button} id={styles.rankposition}>Posição no Ranking</button>
               </div>
 
 
@@ -123,8 +123,8 @@ export default function MeuCla() {
                   </div>
 
                   <div className={styles.botoes}>
-                    <button id={styles.graph}>Gráfico</button>
-                    <button id={styles.quit}>Sair do Clã</button>
+                    <button className={styles.button} id={styles.graph}>Gráfico</button>
+                    <button className={styles.button} id={styles.quit}>Sair do Clã</button>
                   </div>
 
                 </div>

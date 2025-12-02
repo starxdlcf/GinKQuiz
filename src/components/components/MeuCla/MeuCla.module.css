@@ -139,7 +139,7 @@
                                     background-color: var(--red);
                                 }
 
-                        button{
+                        .button{
                             width: 11rem;
                             height: 2.4rem;
                             border-radius: 25px;
