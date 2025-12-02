@@ -132,7 +132,7 @@ export const MenuInicial = () => {
         <div className={styles.botoes}>
           <Link to="/jogar"><button className={styles.jogar} onClick={()=>console.log(id)}>Jogar</button></Link>
           <Link to="/rankings"><button className={styles.rankings}>Rankings</button></Link>
-          {isAdmin === true ? (<Link to='/gerenciamento'>Gerenciar Perguntas</Link>):(<></>)}
+          {isAdmin === true ? (<Link to='/gerenciamento'><button id={styles.button}>Gerenciar Perguntas</button></Link>):(<></>)}
         </div>
       </div>
       <div className={styles.box2}>
