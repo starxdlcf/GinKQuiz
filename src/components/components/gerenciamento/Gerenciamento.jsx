@@ -1,12 +1,16 @@
 import React from "react";
 import { supabase } from "../../../Supabase";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Gerenciamento = () => {
   const id = localStorage.getItem("userId");
 
   const [temas, setTemas] = React.useState(null);
   const [perguntas, setPerguntas] = React.useState(null);
+
+  const navigate = useNavigate();
+
+
 
   React.useEffect(() => {
     fetchTemas();
@@ -27,6 +31,17 @@ const Gerenciamento = () => {
     console.log(data);
   };
 
+  const NavigateQuestion = (idPergunta)=>{
+    navigate(`/pergunta/${idPergunta}`);
+  }
+
+    const DeleteQuestion = async (idPergunta)=>{
+      const {data, error} = await supabase
+      .from("perguntas")
+      .delete()
+      .eq("id_pergunta", idPergunta);
+
+    }
   return (
     <>
       <div>Gerenciamento</div>
@@ -50,9 +65,11 @@ const Gerenciamento = () => {
             {perguntas &&
               perguntas.map((pergunta) => (
                 <tr key={pergunta.id_pergunta}>
-                  <td>{pergunta.enunciado_pergunta}</td>
-                  <td><Link to=''>Atualizar</Link></td>
-                  <td>deletar</td>
+                  {/* <td onClick={()=>{console.log(pergunta.id_pergunta)}} > <Link to={`/pergunta/${pergunta.id_pergunta}`}>{pergunta.enunciado_pergunta}</Link></td> */}
+                  {/* <Link to={`pergunta/${pergunta.id_pergunta}`}><td>{pergunta.enunciado_pergunta}</td></Link> */}
+                  <td onClick={()=> NavigateQuestion(pergunta.id_pergunta)}>{pergunta.enunciado_pergunta}</td>
+                  <td><Link to={`/pergunta/edit/${pergunta.id_pergunta}`}>Atualizar</Link></td>
+                  <td onClick={()=>DeleteQuestion(pergunta.id_pergunta)}>deletar</td>
                 </tr>
               ))}
             <tr>
