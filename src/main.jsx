@@ -16,6 +16,8 @@ import Rankings from "./components/components/rankings/Rankings.jsx";
 import { LoginGoogle } from "./components/components/loginGoogle/LoginGoogle.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import CriarPergunta from "./components/components/criarPergunta/CriarPergunta.jsx";
+import Pergunta from "./components/components/Perguntas/Pergunta.jsx";
+import PerguntaEdit from "./components/components/PerguntaEdit/PerguntaEdit.jsx";
 
 
 const router = createBrowserRouter([
@@ -84,6 +86,14 @@ const router = createBrowserRouter([
   {
     path:'CriarPergunta',
     element:<CriarPergunta/>,
+  },
+  {
+    path:"pergunta/:id",
+    element:<Pergunta/>,
+  },
+  {
+    path: "pergunta/edit/:id",
+    element: <PerguntaEdit/>,
   }
 ]);
 
