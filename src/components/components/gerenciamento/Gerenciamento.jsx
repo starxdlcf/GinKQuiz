@@ -69,7 +69,7 @@ const Gerenciamento = () => {
                   {/* <Link to={`pergunta/${pergunta.id_pergunta}`}><td>{pergunta.enunciado_pergunta}</td></Link> */}
                   <td onClick={()=> NavigateQuestion(pergunta.id_pergunta)}>{pergunta.enunciado_pergunta}</td>
                   <td><Link to={`/pergunta/edit/${pergunta.id_pergunta}`}>Atualizar</Link></td>
-                  <td onClick={()=>DeleteQuestion(pergunta.id_pergunta)}>deletar</td>
+                  <td ><button onClick={()=>DeleteQuestion(pergunta.id_pergunta)}>deletar</button></td>
                 </tr>
               ))}
             <tr>

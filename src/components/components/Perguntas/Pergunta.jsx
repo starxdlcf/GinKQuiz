@@ -15,24 +15,24 @@ const Pergunta = () => {
       .from("perguntas")
       .select("*")
       .eq("id_pergunta", id)
-    .single(); // Usando
+      .single(); // Usando
     setDataPergunta(data);
     console.log(dataPergunta);
     console.log(data);
   };
-
-  
 
   return (
     <>
       {dataPergunta ? (
         <div>
           <h2>{dataPergunta.enunciado_pergunta}</h2>
-          
-          <button>{dataPergunta.alternativa1_pergunta}</button>
-          <button>{dataPergunta.alternativa2_pergunta}</button>
-          <button>{dataPergunta.alternativa3_pergunta}</button>
-          <button>{dataPergunta.alternativa4_pergunta}</button>
+          <div>
+            <button>{dataPergunta.alternativa1_pergunta}</button>
+            <button>{dataPergunta.alternativa2_pergunta}</button>
+            <button>{dataPergunta.alternativa3_pergunta}</button>
+            <button>{dataPergunta.alternativa4_pergunta}</button>
+          </div>
+          <button>dicas</button>
         </div>
       ) : (
         <p>Carregando...</p>
