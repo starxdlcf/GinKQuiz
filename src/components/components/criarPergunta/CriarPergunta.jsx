@@ -1,6 +1,7 @@
 import React, { use } from "react";
 import { supabase } from "../../../Supabase";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CriarPergunta = () => {
   const [temaSelecionado, setTemaSelecionado] = React.useState('');
@@ -14,6 +15,8 @@ const CriarPergunta = () => {
   const [correta2, setCorreta2] = React.useState(false);
   const [correta3, setCorreta3] = React.useState(false);
   const [correta4, setCorreta4] = React.useState(false);
+
+  const navigate = useNavigate();
   
 useEffect(() => {
   showThemes();
@@ -55,6 +58,7 @@ useEffect(() => {
         },
       ]);
       alert("Pergunta criada com sucesso!");
+      navigate(-1);
   }
 
   const showThemes = async () => {
