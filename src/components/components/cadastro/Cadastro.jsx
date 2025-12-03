@@ -8,6 +8,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { supabase } from "../../../Supabase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export const Cadastro = () => {
   const [passwordVisible, setPasswordVisible] = React.useState(false);
@@ -20,6 +21,8 @@ export const Cadastro = () => {
   const navigate = useNavigate()
   const [checkbox, setCheckbox] = useState(false);
   const [checkbox2, setCheckbox2] = useState(false);
+  
+  const recaptchaRef = React.useRef(null);
 
   const handleSubmit = async (e) => {
     if(senha!==confirmarSenha){
@@ -36,6 +39,17 @@ export const Cadastro = () => {
       return
     }
     e.preventDefault();
+
+    const token = recaptchaRef.current.getValue();
+    recaptchaRef.current.reset();
+
+    if (!token) {
+      alert('Por favor, complete o reCAPTCHA.');
+      return;
+    }
+
+    console.log(token)
+
     try{
 
       const { error } = await supabase
@@ -184,7 +198,12 @@ export const Cadastro = () => {
                   <label className={styles.terminho} htmlFor="">Aceito receber informações sobre atualizações e resultados por email</label>
                 </div>
             
-            </div>  
+            </div> 
+
+              <ReCAPTCHA
+                sitekey="6LdGmB8sAAAAAJOFRvY9rrfayWBaGg8J5aQqWAxb"
+                ref={recaptchaRef}
+              />
 
               <button className={styles.cadastrar} type="submit">Cadastrar</button>
           </form>
