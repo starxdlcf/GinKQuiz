@@ -64,7 +64,7 @@ h1{
   color: var(--white);
 }
 
-label{
+.label{
   display: flex;
   align-items: center;
   color: var(--wheat);

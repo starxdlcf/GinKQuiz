@@ -3,6 +3,7 @@ import React from "react";
 import PerfilIcon from "../perfil/PerfilIcon";
 import styles from "../MeuCla/MeuCla.module.css";
 import { Column } from "@ant-design/plots";
+import { colors } from "@mui/material";
 
 export default function MeuCla() {
   const [idCla, setIdCla] = React.useState(null);
@@ -86,22 +87,10 @@ export default function MeuCla() {
       setLoading(false);
     }
   };
-  //
-  //
-  // INÍCIO CHARTS
-  //
-  //
-
+  
   const DemoCustomSingleColor = (x, y) => {
-    // Deprecated: replaced by building chart data from infoMembersCla
     return null;
   };
-
-  //
-  //
-  // FINAL CHARTS
-  //
-  //
 
   return (
     <div className={styles.box}>
@@ -181,6 +170,9 @@ export default function MeuCla() {
               >
                 ×
               </button>
+
+              <h2>{`Pontuações dos membros do Clã ${infoCla?.nome_cla || ""} `}</h2>
+
               {/** Build chart data from members */}
               {(() => {
                 const chartData = infoMembersCla.map((m) => ({
@@ -202,6 +194,7 @@ export default function MeuCla() {
                   yField: "responses",
                   height: 400,
                   padding: "auto",
+                  marginTop: 50,
                 };
 
                 return chartData.length > 0 ? (

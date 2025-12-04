@@ -137,10 +137,13 @@
                         }
                                 #graph{
                                     background-color: var(--purple);
+                                    cursor: pointer;
+                                    
                                 }
 
                                 #quit{
                                     background-color: var(--red);
+                                    cursor: pointer;
                                 }
 
                         .button{
@@ -152,6 +155,8 @@
                             font-weight: bold;
                             color: var(--wheat);
                             border: none;
+                            cursor: pointer;
+
 
                         }
 
@@ -208,10 +213,8 @@
 
 
 .grafico{
-    background-color: #8de969;
-    border: 3px solid black;
+    background-color: var(--muted-green);
     border-radius: 15px;
-    z-index: 1000;
     width: 600px;
     height: 500px;
     position: fixed;
@@ -219,8 +222,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    overflow: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.46);
+    overflow: none;
 }
 
 .closeButton{
@@ -240,8 +243,10 @@
     align-items: center;
     justify-content: center;
     transition: background 0.2s;
+    z-index: 1000;
 }
 
 .closeButton:hover{
     background: #ff3333;
 }
+

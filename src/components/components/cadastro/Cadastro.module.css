@@ -43,6 +43,7 @@ label{
     font-size: 1rem;
     margin-bottom: 5px;
     margin-right: 5px;
+    color: black;
 }
 
 .form{
@@ -182,4 +183,5 @@ label{
 
 .terminho{
     font-size: 0.8rem;
+    color: black;
 }

@@ -96,7 +96,11 @@ export const EntrarCla = () => {
       {carregando ? (
         <p>Carregando Clãs...</p>
       ) : (
-        <table className={`${styles.tabela}`}>
+        <table className={`${styles.tabela} ${
+          (buscarClaNome ? resultadoNome : resultadoId).length >= 11 
+            ? styles.hasScroll 
+            : ''
+        }`}>
           <thead>
             <tr>
               <th>Id</th>

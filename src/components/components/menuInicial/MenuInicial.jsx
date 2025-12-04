@@ -65,29 +65,6 @@ export const MenuInicial = () => {
     console.log(data);
   };
 
-  // const checkHasTeam = async () => {
-  //   if (!id) return;
-  //   console.log("Verificando se usuário tem clã. id:", id);
-  //   const { data, error } = await supabase
-  //     .from("usuarios")
-  //     .select("*")
-  //     .eq("id_usuario", id);
-
-  //   if (error) {
-  //     console.log("erro ao buscar usuário:", error);
-  //     setHasCla(false);
-  //     return;
-  //   }
-
-  //   const user = Array.isArray(data) ? data[0] : data;
-  //   if (user && user.equipe_usuario != null) {
-  //     setHasCla(true);
-  //   } else {
-  //     setHasCla(false);
-  //   }
-  //   console.log("usuario retornado:", user);
-  // };
-
 
   const ClaCheck = async () => {
     try{

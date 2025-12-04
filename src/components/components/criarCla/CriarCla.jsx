@@ -45,17 +45,17 @@ const CriarCla = () => {
     <h1>Criar um clã</h1>
     <form  action="" onSubmit={CadastroCla}>
         <div className={styles.row}>
-            <label htmlFor="">Nome do clã</label>
+            <label className={styles.label} htmlFor="">Nome do clã</label>
             <input type="text" onChange={(e)=> setNome_equipe(e.target.value)} />
         </div>
 
         <div className={styles.row}>
-            <label htmlFor="">Descrição do clã</label>
+            <label className={styles.label} htmlFor="">Descrição do clã</label>
             <input type="text" onChange={(e)=> {setDescricao_equipe(e.target.value)}} />
         </div>
 
         <div className={styles.row}>
-            <label htmlFor="">Número máximo de participantes</label>
+            <label className={styles.label} htmlFor="">Número máximo de participantes</label>
             <select name="" id="" onChange={(e)=> setQuantidade_limite_equipe(e.target.value)}>
                 <option value="5">5</option>
                 <option value="10">10</option>
@@ -67,7 +67,7 @@ const CriarCla = () => {
         </div>
 
         <div className={styles.row}>
-            <label htmlFor="">Mínimo de pontos</label>
+            <label className={styles.label} htmlFor="">Mínimo de pontos</label>
             {/* <input type="number" name="" id="" onChange={(e)=> setPontuacao_min_equipe(e.target.value)} /> */}
             <select name="" id="">
                 <option value="0">0</option>
