@@ -16,14 +16,21 @@ const CriarPergunta = () => {
   const [correta3, setCorreta3] = React.useState(false);
   const [correta4, setCorreta4] = React.useState(false);
 
-  const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
+  const [dica, setDica] = React.useState('');
+
+  const [dica_array, setDica_array] = React.useState([])
+
+  const navigate = useNavigate(); 
   
 useEffect(() => {
   showThemes();
   showQuestions();
+  showHints();  
 }, []);
 
   const createQuestion = async (e) => {
+    e.preventDefault()
     const alternativaCorreta = (
       correta1 ? alternativa1 :
       correta2 ? alternativa2 :
@@ -56,9 +63,36 @@ useEffect(() => {
           alternativa4_pergunta: `${alternativa4}`,
           resposta_pergunta: `${alternativaCorreta}`,
         },
-      ]);
+      ])
+      .select();
+      if(error){
+        alert("Erro ao criar pergunta:", error);
+        console.error(error);
+        return;
+      }
+      if(dica){
+        // const { data: dicaData, error: dicaError } = await supabase
+        // .from('dicas')
+        // .insert([
+        //   {
+        //     pergunta_dica: data[0].id_pergunta,
+        //     info_dica: `${dica}`,
+        //   },
+        // ]);
+        for(const element of dica_array){
+          const { data : dicaData, error: dicaError } = await supabase
+          .from("dicas")
+          .insert([
+            {
+              pergunta_dica: data[0].id_pergunta,
+              info_dica: `${element}`
+            }
+          ])
+        }
+      }
       alert("Pergunta criada com sucesso!");
-      navigate(-1);
+      navigate('/gerenciamento')
+      console.log(data);
   }
 
   const showThemes = async () => {
@@ -75,6 +109,12 @@ useEffect(() => {
     console.log(data);
     }
 
+  const showHints = async (id_pergunta) => {
+    const { data, error } = await supabase
+      .from('dicas')
+      .select('*')
+      console.log(data)
+  }
   return (
     <>
       <form action="" onSubmit={createQuestion}>
@@ -123,7 +163,23 @@ useEffect(() => {
           }
           }/>
         </div>
-        <button type="submit">criar pergunta</button>
+
+          {/* <button style={{color:'red'}} onClick={(e)=>{e.preventDefault(), setOpen(true)}}>criar dica</button> */}
+
+          {open ===true?  (
+            <div style={{border:'1px solid black', backgroundColor:'lime'}}>
+              <button style={{color:'red'}} onClick={(e)=> {e.preventDefault(),setOpen(false)}}>x</button>
+              <input type="text" name="" id="" value={dica} onChange={(e)=>{setDica(e.target.value)}} placeholder="dica da pergunta" />
+              <button onClick={(e)=>{e.preventDefault(), setDica_array([...dica_array, ` ${dica}`])}}>criar dica</button>
+              <p>{dica_array}</p>
+                
+            </div>
+          ) : (<>
+           <button style={{color:'red'}} onClick={(e)=>{e.preventDefault(), setOpen(true)}}>criar dica</button>
+          </>
+          ) }
+
+        <button style={{color:'red'}} type="submit">criar pergunta</button>
       </form>
     </>
   );
