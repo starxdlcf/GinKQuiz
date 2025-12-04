@@ -26,29 +26,35 @@ export const LoginGoogle = () => {
     }
     e.preventDefault();
     try{
-      const { error } = await supabase
-        .from("usuarios")
-        .insert([
-          {
-            nome_usuario: `${nomeUsuario}`,
-            email: `${email}`,
-            google_id: `${googleId}`,
-            nascimento: `${dataNascimento}`,
-            genero: `${genero}`,
-          },
-        ]);
-        console.log("fim")
+      const { data, error } = await supabase.functions.invoke('cadastrar-google', {
+        body: {
+          nome_usuario: nomeUsuario,
+          email: email,
+          google_id: googleId,
+          nascimento: dataNascimento,
+          genero: genero,
+        },
+      });
+
         if (error) throw error;
-        alert("Cadastro Realizado com Sucesso! Realize o login novamente")
+
+        const { userId } = data;
+
+        if (userId) {
+            localStorage.setItem("userId", userId);
+            alert("Cadastro Realizado com Sucesso!");
+            navigate("/menu");
+        } else {
+            throw new Error("Erro ao obter ID do usuário.");
+        }
     }
     catch (error){ 
       console.log(error);
       alert(error.message);
     }
     finally{
-        localStorage.clear("googleId")
-        navigate("/");
-        ;
+        localStorage.removeItem("googleId")
+        localStorage.removeItem("email")
     }
   };
 

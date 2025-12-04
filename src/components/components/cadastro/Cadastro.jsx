@@ -18,61 +18,78 @@ export const Cadastro = () => {
   const [dataNascimento, setDataNascimento] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [checkbox, setCheckbox] = useState(false);
   const [checkbox2, setCheckbox2] = useState(false);
+  const [loading, setLoading] = useState(false); // Novo estado para feedback de carregamento
   
   const recaptchaRef = React.useRef(null);
 
   const handleSubmit = async (e) => {
-    if(senha!==confirmarSenha){
-      alert("As senhas não coincidem!");
-      return
-    }
-    if(email.includes('@')===false){
-      alert("Email inválido!");
-      setEmail('')
-      return
-    }
-    if(checkbox===false){
-      alert("Você deve concordar com os termos de uso para se cadastrar!");
-      return
-    }
     e.preventDefault();
+    
+    if(senha !== confirmarSenha){
+      alert("As senhas não coincidem!");
+      return;
+    }
+    if(!email.includes('@')){
+      alert("Email inválido!");
+      return;
+    }
+    if(!checkbox){
+      alert("Você deve concordar com os termos de uso para se cadastrar!");
+      return;
+    }
 
     const token = recaptchaRef.current.getValue();
-    recaptchaRef.current.reset();
-
+    
     if (!token) {
       alert('Por favor, complete o reCAPTCHA.');
       return;
     }
+    
+    setLoading(true); // Ativa indicador de carregamento
 
-    console.log(token)
+    try {
+        const { data, error } = await supabase.functions.invoke('criar-usuario', {
+          body: {
+            nome_usuario: nomeUsuario,
+            email: email,
+            nascimento: dataNascimento,
+            senha: senha,
+            genero: genero,
+            captchaToken: token 
+          }
+        });
 
-    try{
-
-      const { error } = await supabase
-        .from("usuarios")
-        .insert([
-          {
-            nome_usuario: `${nomeUsuario}`,
-            email: `${email}`,
-            nascimento: `${dataNascimento}`,
-            senha: `${senha}`,
-            genero: `${genero}`,
-          },
-        ]);
+        // Verifica se houve erro retornado pela função ou pela rede
         if (error) throw error;
-    }
-    catch (error){ 
-      console.log(error);
-      alert("Erro ao inserir dados: ", error.message);
-    }
-    finally{
-      navigate("/");
-      alert("Cadastro Realizado com Sucesso!");
-    }
+        
+        // Sucesso
+        alert("Cadastro Realizado com Sucesso!");
+        navigate("/");
+
+     } catch (error) { 
+        console.error("Erro no cadastro:", error);
+        
+        // Tratamento de mensagem de erro
+        let errorMsg = "Erro desconhecido.";
+        if (error instanceof Error) {
+            errorMsg = error.message;
+        } else if (typeof error === 'object' && error !== null && 'message' in error) {
+             // Tenta pegar a mensagem de erro do corpo da resposta, se disponível
+             errorMsg = error.message; 
+        }
+
+        alert("Erro ao cadastrar: " + errorMsg);
+        
+        // Reseta o captcha em caso de erro para permitir nova tentativa
+        if (recaptchaRef.current) {
+            recaptchaRef.current.reset();
+        }
+     } finally {
+        setLoading(false); // Desativa carregamento
+     }
   };
 
   return (
@@ -83,13 +100,14 @@ export const Cadastro = () => {
         <section className={styles.formulario}>
           <form className={styles.form} onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="">Nome de Usuário</label>
+              <label htmlFor="UsuarioNome">Nome de Usuário</label>
               <input
                 className={styles.input}
-                id={styles.UsuarioNome}
+                id="UsuarioNome"
                 type="text"
                 onChange={(e) => setNomeUsuario(e.target.value)}
                 value={nomeUsuario}
+                required
               />
             </div>
             <div
@@ -100,27 +118,29 @@ export const Cadastro = () => {
               }}
             >
               <div>
-                <label htmlFor="">Data de nascimento</label>
+                <label htmlFor="UsuarioDataNascimento">Data de nascimento</label>
                 <input
                   className={styles.input}
-                  id={styles.UsuarioDataNascimento}
+                  id="UsuarioDataNascimento"
                   type="date"
                   onChange={(e) => setDataNascimento(e.target.value)}
                   value={dataNascimento}
+                  required
                 />
               </div>
               <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginLeft: "2rem" }}>
-                <label htmlFor="">Gênero</label>
+                <label>Gênero</label>
                 <button
+                  type="button" // Importante para não submeter o form
                   className={`
                     ${styles.genero}
                     ${genero === "homem" ? styles.homem : ""}
                     ${genero === "mulher" ? styles.mulher : ""}
                     ${genero === "nbin"   ? styles.neutro : ""}
                   `}
-                  onChange={(e) => setGenero(e.target.value)}
                   value={genero}
                   onClick={(e) => {
+                    e.preventDefault();
                     setGenero(
                       genero === "homem"
                         ? "mulher"
@@ -128,55 +148,55 @@ export const Cadastro = () => {
                         ? "nbin"
                         : "homem"
                     );
-                    e.preventDefault();
-                    console.log(genero);
                   }}
                 >
-                  {genero === "homem" ? (<MaleIcon></MaleIcon>) : genero === "mulher" ? (<FemaleIcon></FemaleIcon>) : (<HorizontalRuleIcon></HorizontalRuleIcon>)}
+                  {genero === "homem" ? (<MaleIcon />) : genero === "mulher" ? (<FemaleIcon />) : (<HorizontalRuleIcon />)}
                 </button>
               </div>
             </div>
             <div>
-              <label htmlFor="">Email</label>
+              <label htmlFor="UsuarioEmail">Email</label>
               <input
                 className={styles.input}
-                id={styles.UsuarioEmail}
-                type="text"
+                id="UsuarioEmail"
+                type="email"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
+                required
               />
             </div>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <label htmlFor="">Senha</label>
+              <label htmlFor="UsuarioSenha">Senha</label>
               <input
                 onChange={(e) => setSenha(e.target.value)}
                 value={senha}
                 className={styles.input}
-                id={styles.UsuarioSenha}
-                type={passwordVisible ? "password" : "text"}
+                id="UsuarioSenha"
+                type={passwordVisible ? "text" : "password"} // Correção logica (text se visivel, password se não)
+                required
               />{" "}
               {passwordVisible ? (
                 <VisibilityIcon
-                  style={{ color: "white" }}
+                  style={{ color: "white", cursor: "pointer" }}
                   onClick={() => setPasswordVisible(false)}
                 />
               ) : (
                 <VisibilityOff
-                  style={{ color: "white" }}
+                  style={{ color: "white", cursor: "pointer" }}
                   onClick={() => setPasswordVisible(true)}
                 />
               )}
             </div>
             <div>
-              <label htmlFor="">Confirmar senha</label>
+              <label htmlFor="UsuarioConfirmarSenha">Confirmar senha</label>
               <input
                 onChange={(e) => setConfirmarSenha(e.target.value)}
                 value={confirmarSenha}
                 className={styles.input}
-                id={styles.UsuarioConfirmarSenha}
-                type={passwordVisible ? "password" : "text"}
+                id="UsuarioConfirmarSenha"
+                type={passwordVisible ? "text" : "password"}
+                required
               />
-
             </div>
 
             <div className={styles.termosMaisEmail}>
@@ -185,8 +205,10 @@ export const Cadastro = () => {
                   className={`${styles.checkbox} ${checkbox ? styles.checkboxAtivo : ''}`}
                   onChange={(e) => setCheckbox(e.target.checked)}
                   checked={checkbox}
-                  type="checkbox" name="" id="" />
-                  <label className={styles.terminho} htmlFor="">Concordo com os termos do site <Link to="/termos">acesse aqui os termos e condições de uso do GinKQuiz</Link></label>
+                  type="checkbox" 
+                  id="termosCheckbox"
+                  />
+                  <label className={styles.terminho} htmlFor="termosCheckbox">Concordo com os termos do site <Link to="/termos">acesse aqui os termos e condições de uso do GinKQuiz</Link></label>
                 </div>
               
                 <div className={styles.linha}>
@@ -194,10 +216,11 @@ export const Cadastro = () => {
                   className={`${styles.checkbox} ${checkbox2 ? styles.checkboxAtivo : ''}`}
                   onChange={(e) => setCheckbox2(e.target.checked)}
                   checked={checkbox2}
-                  type="checkbox" name="" id="" />
-                  <label className={styles.terminho} htmlFor="">Aceito receber informações sobre atualizações e resultados por email</label>
+                  type="checkbox" 
+                  id="newsletterCheckbox"
+                  />
+                  <label className={styles.terminho} htmlFor="newsletterCheckbox">Aceito receber informações sobre atualizações e resultados por email</label>
                 </div>
-            
             </div> 
 
               <ReCAPTCHA
@@ -205,7 +228,13 @@ export const Cadastro = () => {
                 ref={recaptchaRef}
               />
 
-              <button className={styles.cadastrar} type="submit">Cadastrar</button>
+              <button 
+                className={styles.cadastrar} 
+                type="submit" 
+                disabled={loading} // Desabilita botão durante o load
+              >
+                {loading ? "Carregando..." : "Cadastrar"}
+              </button>
           </form>
           
         </section>
