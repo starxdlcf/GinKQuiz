@@ -19,6 +19,8 @@ const CriarPergunta = () => {
   const [open, setOpen] = React.useState(false);
   const [dica, setDica] = React.useState('');
 
+  const [dica_array, setDica_array] = React.useState([])
+
   const navigate = useNavigate(); 
   
 useEffect(() => {
@@ -69,14 +71,24 @@ useEffect(() => {
         return;
       }
       if(dica){
-        const { data: dicaData, error: dicaError } = await supabase
-        .from('dicas')
-        .insert([
-          {
-            pergunta_dica: data[0].id_pergunta,
-            info_dica: `${dica}`,
-          },
-        ]);
+        // const { data: dicaData, error: dicaError } = await supabase
+        // .from('dicas')
+        // .insert([
+        //   {
+        //     pergunta_dica: data[0].id_pergunta,
+        //     info_dica: `${dica}`,
+        //   },
+        // ]);
+        for(const element of dica_array){
+          const { data : dicaData, error: dicaError } = await supabase
+          .from("dicas")
+          .insert([
+            {
+              pergunta_dica: data[0].id_pergunta,
+              info_dica: `${element}`
+            }
+          ])
+        }
       }
       alert("Pergunta criada com sucesso!");
       navigate('/gerenciamento')
@@ -158,9 +170,14 @@ useEffect(() => {
             <div style={{border:'1px solid black', backgroundColor:'lime'}}>
               <button style={{color:'red'}} onClick={(e)=> {e.preventDefault(),setOpen(false)}}>x</button>
               <input type="text" name="" id="" value={dica} onChange={(e)=>{setDica(e.target.value)}} placeholder="dica da pergunta" />
+              <button onClick={(e)=>{e.preventDefault(), setDica_array([...dica_array, ` ${dica}`])}}>criar dica</button>
+              <p>{dica_array}</p>
                 
             </div>
-          ) : ( <button style={{color:'red'}} onClick={(e)=>{e.preventDefault(), setOpen(true)}}>criar dica</button>) }
+          ) : (<>
+           <button style={{color:'red'}} onClick={(e)=>{e.preventDefault(), setOpen(true)}}>criar dica</button>
+          </>
+          ) }
 
         <button style={{color:'red'}} type="submit">criar pergunta</button>
       </form>

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const PerguntaEdit = () => {
   useEffect(() => {
     fetchPergunta(id);
+    fetchDica(id);
   }, []);
   const { id } = useParams();
     const navigate = useNavigate();
@@ -17,6 +18,12 @@ const PerguntaEdit = () => {
   const [NovaAlternativa3, setNovaAlternativa3] = React.useState("");
   const [NovaAlternativa4, setNovaAlternativa4] = React.useState("");
   const [NovaCorreta, setNovaCorreta] = React.useState("");
+
+
+  const [dica,setDica] = React.useState("")
+
+  const [dica_array,setDica_array] = React.useState([])
+
 
 
   const fetchPergunta = async (id) => {
@@ -51,6 +58,15 @@ const PerguntaEdit = () => {
       })
       .eq("id_pergunta", id);
 
+
+      for(const element of dica_array){
+        const {data: dicaData , error: dicaError} = await supabase
+        .from("dicas")
+        .update({
+          info_dica: `${element}`
+        })
+        .eq("pergunta_dica", id)
+      }
       if (error) {
         console.error("Erro ao atualizar a pergunta:", error);
         alert("Erro ao atualizar a pergunta.");
@@ -61,7 +77,25 @@ const PerguntaEdit = () => {
         navigate(-1)
       }
  
-  };
+    };
+
+    const fetchDica = async(id)=>{
+      const {data}= await supabase
+      .from("dicas")
+      .select("*")
+      .eq("pergunta_dica",id)
+
+      console.log(data)
+
+      const elementos = data.map(element=> element.info_dica)
+
+      setDica_array(elementos)
+    }
+
+    const handleDeleteElementOnArray =(index)=>{
+      const novo_array = dica_array.filter((_,i)=> i !==index)
+      setDica_array(novo_array)
+    }
 
   return (
     <>
@@ -112,6 +146,15 @@ const PerguntaEdit = () => {
                onChange={()=>setNovaCorreta(NovaAlternativa4)} />
             <button type="submit" onClick={(e)=>{e.preventDefault(),updateQuestion()}}>atualizar</button>
             </div>
+            <button onClick={(e)=> {e.preventDefault(),console.log(dica_array)}}>mostrar array</button>
+              {dica_array.map((t,i)=>(
+                <li key={i}>{t}
+                <button onClick={(e)=>{e.preventDefault(),handleDeleteElementOnArray(i)}}>excluir</button>
+                </li>
+              ))}
+
+              <input type="text" name="" id="" placeholder="inserir dica" value={dica} onChange={(e)=> setDica(e.target.value)} />
+              <button onClick={(e)=>{e.preventDefault(),setDica_array([...dica_array, dica]),setDica("")}}>Nova dica</button>
           </form>
         </div>
       ) : (
