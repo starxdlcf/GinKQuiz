@@ -21,25 +21,31 @@ import Google from "../../../assets/icons/GoogleLogo.png";
 export const Login = () => {
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
-
   const [visivel, setVisivel] = React.useState(false);
+  
   const navigate = useNavigate();
+
   const handleNavigate = () => {
     NavigateToMenu(email, senha);
   };
 
   const NavigateToMenu = async (email, senha) => {
     try {
-      const { data, error } = await supabase
-        .from("usuarios")
-        .select("*")
-        .eq("senha", senha)
-        .eq("email", email);
+        const { data, error } = await supabase.functions.invoke('login-usuario', {
+        body: {
+          email: email,
+          senha: senha,
+        },
+      });
+        if (error) throw error;
+      
+      const { userId } = data;
 
-      if (data && data.length > 0) {
-        localStorage.setItem("userId", data[0].id_usuario);
-        navigate("/menu");
-      } else {
+        if (userId) {
+        localStorage.setItem("userId", userId);
+          navigate("/menu");
+        }
+       else {
         alert("email ou senha incorretos");
       }
 
@@ -66,12 +72,9 @@ export const Login = () => {
         .select("*")
         .eq("email", userEmail)
         .eq("google_id", googleId)
-        
-        console.log(`usuario: ${data}`)
 
         if (data && data.length > 0) {
           localStorage.setItem("userId", data[0].id_usuario);
-          console.log("menu")
           navigate("/menu");
         }
         else{
