@@ -1,17 +1,12 @@
-//eu sei que não está funcionando, a noite eu mexo
-
-
 import React from 'react'
 import {supabase} from '../../../Supabase';
+import { useNavigate } from 'react-router-dom';
 
 const Perfil = () => {
   const id = localStorage.getItem("userId");
-  const [data,setData] = React.useState(null);  
-
-  React.useEffect(() => {
-    showProfile();
-    console.log("Esse é seu id para mostrar o perfil",id);
-  }, []);
+  const [data,setData] = React.useState(null); 
+  
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     showProfile();
@@ -38,6 +33,12 @@ const Perfil = () => {
     }
 
   }
+
+  function logOut (){
+    localStorage.clear("userId")
+    navigate("/")
+  }
+
   return (
     <>
       <h1>Perfil</h1>
@@ -49,6 +50,8 @@ const Perfil = () => {
           {user.cla && <p>Clã:{user.cla.nome_cla}</p>}
         </div>
       ))}
+
+      <button  onClick={(e)=>{e.preventDefault(),logOut()}}>Desconectar</button>
 
     </>
   )
