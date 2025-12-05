@@ -58,19 +58,36 @@ const PerguntaEdit = () => {
       })
       .eq("id_pergunta", id);
 
+      
+            if (error) {
+              console.error("Erro ao atualizar a pergunta:", error);
+              alert("Erro ao atualizar a pergunta.");
+            } else {
 
-      for(const element of dica_array){
-        const {data: dicaData , error: dicaError} = await supabase
-        .from("dicas")
-        .update({
-          info_dica: `${element}`
-        })
-        .eq("pergunta_dica", id)
+
+      const {error: deleteError} = await supabase
+      .from('dicas')
+      .delete()
+      .eq("pergunta_dica", id)
+
+      if(deleteError){
+        console.log('deu erro na hora de deleta pergunta', deleteError)
       }
-      if (error) {
-        console.error("Erro ao atualizar a pergunta:", error);
-        alert("Erro ao atualizar a pergunta.");
-      } else {
+
+      for (const element of dica_array){
+
+        const {error: insertError} = await supabase
+        .from('dicas')
+        .insert([{
+          pergunta_dica: `${id}`,
+          info_dica: `${element}`
+        }])
+
+if(insertError){
+  console.log('deu erro na hora de fazer o insert de cada dica',insertError)
+}
+      }
+
         
         console.log("Pergunta atualizada com sucesso:", data);
         alert("Pergunta atualizada com sucesso!");
