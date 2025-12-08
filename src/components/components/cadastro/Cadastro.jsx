@@ -8,7 +8,12 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { supabase } from "../../../Supabase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import ReCAPTCHA from 'react-google-recaptcha';
+import ReCAPTCHA from "react-google-recaptcha";
+import leao from "../../../assets/icons/leao.png";
+import girafa from "../../../assets/icons/girafa.png";
+import lagosta from "../../../assets/icons/lagosta.png";
+import sapo from "../../../assets/icons/sapo.png";
+import gato from "../../../assets/icons/gato.png";
 
 export const Cadastro = () => {
   const [passwordVisible, setPasswordVisible] = React.useState(false);
@@ -18,79 +23,154 @@ export const Cadastro = () => {
   const [dataNascimento, setDataNascimento] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [idFotoDePerfil, setIdFotoDePerfil] = useState(null);
+  const [fotoDePerfilPreview, setFotoDePerfilPreview] = useState(null);
   const navigate = useNavigate();
   const [checkbox, setCheckbox] = useState(false);
   const [checkbox2, setCheckbox2] = useState(false);
   const [loading, setLoading] = useState(false); // Novo estado para feedback de carregamento
-  
+
   const recaptchaRef = React.useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if(senha !== confirmarSenha){
+
+    if (senha !== confirmarSenha) {
       alert("As senhas não coincidem!");
       return;
     }
-    if(!email.includes('@')){
+    if (!email.includes("@")) {
       alert("Email inválido!");
       return;
     }
-    if(!checkbox){
+    if (!checkbox) {
       alert("Você deve concordar com os termos de uso para se cadastrar!");
       return;
     }
 
-    const token = recaptchaRef.current.getValue();
-    
-    if (!token) {
-      alert('Por favor, complete o reCAPTCHA.');
+    //maior de 13 anos a partir da data atual do sistema
+
+    const hoje = new Date();
+    const dataLimite = new Date(
+      hoje.getFullYear() - 13,
+      hoje.getMonth(),
+      hoje.getDate()
+    );
+    const dataNascimentoDate = new Date(dataNascimento);
+
+    if (dataNascimentoDate > dataLimite) {
+      alert("Você deve ser maior de 13 anos para se cadastrar!");
       return;
     }
-    
+
+    const token = recaptchaRef.current.getValue();
+
+    if (!token) {
+      alert("Por favor, complete o reCAPTCHA.");
+      return;
+    }
+
+    if (idFotoDePerfil === null) {
+      alert("Por favor, selecione uma foto de perfil.");
+      return;
+    }
+
     setLoading(true); // Ativa indicador de carregamento
 
     try {
-        const { data, error } = await supabase.functions.invoke('criar-usuario', {
-          body: {
-            nome_usuario: nomeUsuario,
-            email: email,
-            nascimento: dataNascimento,
-            senha: senha,
-            genero: genero,
-            captchaToken: token 
-          }
-        });
+      console.log("Enviando para banco:", {
+        nome_usuario: nomeUsuario,
+        id_fotoPerfil: idFotoDePerfil,
+        email: email,
+        nascimento: dataNascimento,
+        senha: senha,
+        genero: genero,
+      });
 
-        // Verifica se houve erro retornado pela função ou pela rede
-        if (error) throw error;
-        
-        // Sucesso
-        alert("Cadastro Realizado com Sucesso!");
-        navigate("/");
+      const { data, error } = await supabase.functions.invoke("criar-usuario", {
+        body: {
+          nome_usuario: nomeUsuario,
+          email: email,
+          nascimento: dataNascimento,
+          senha: senha,
+          genero: genero,
+          captchaToken: token,
+        },
+      });
 
-     } catch (error) { 
-        console.error("Erro no cadastro:", error);
-        
-        // Tratamento de mensagem de erro
-        let errorMsg = "Erro desconhecido.";
-        if (error instanceof Error) {
-            errorMsg = error.message;
-        } else if (typeof error === 'object' && error !== null && 'message' in error) {
-             // Tenta pegar a mensagem de erro do corpo da resposta, se disponível
-             errorMsg = error.message; 
+      // Verifica se houve erro retornado pela função ou pela rede
+      if (error) throw error;
+
+      // Atualiza o id_fotoPerfil após criação do usuário
+      if (idFotoDePerfil) {
+        const { error: updateError } = await supabase
+          .from("usuarios")
+          .update({ id_fotoPerfil: idFotoDePerfil })
+          .eq("email", email);
+
+        if (updateError) {
+          console.error("Erro ao atualizar foto de perfil:", updateError);
         }
+      }
 
-        alert("Erro ao cadastrar: " + errorMsg);
-        
-        // Reseta o captcha em caso de erro para permitir nova tentativa
-        if (recaptchaRef.current) {
-            recaptchaRef.current.reset();
-        }
-     } finally {
-        setLoading(false); // Desativa carregamento
-     }
+      // Sucesso
+      alert("Cadastro Realizado com Sucesso!");
+      navigate("/");
+    } catch (error) {
+      console.error("Erro no cadastro:", error);
+
+      // Tratamento de mensagem de erro
+      let errorMsg = "Erro desconhecido.";
+      if (error instanceof Error) {
+        errorMsg = error.message;
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error
+      ) {
+        // Tenta pegar a mensagem de erro do corpo da resposta, se disponível
+        errorMsg = error.message;
+      }
+
+      alert("Erro ao cadastrar: " + errorMsg);
+
+      // Reseta o captcha em caso de erro para permitir nova tentativa
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset();
+      }
+    } finally {
+      setLoading(false); // Desativa carregamento
+    }
   };
+
+  React.useEffect(() => {
+    if (idFotoDePerfil) {
+      switch (idFotoDePerfil) {
+        case 1:
+          setFotoDePerfilPreview(sapo);
+          setIdFotoDePerfil(1);
+          break;
+        case 2:
+          setFotoDePerfilPreview(gato);
+          setIdFotoDePerfil(2);
+          break;
+        case 3:
+          setFotoDePerfilPreview(leao);
+          setIdFotoDePerfil(3);
+          break;
+        case 4:
+          setFotoDePerfilPreview(girafa);
+          setIdFotoDePerfil(4);
+          break;
+        case 5:
+          setFotoDePerfilPreview(lagosta);
+          setIdFotoDePerfil(5);
+          break;
+        default:
+          setFotoDePerfilPreview(null);
+      }
+    }
+  }, [idFotoDePerfil]);
 
   return (
     <>
@@ -103,7 +183,7 @@ export const Cadastro = () => {
               <label htmlFor="UsuarioNome">Nome de Usuário</label>
               <input
                 className={styles.input}
-                id="UsuarioNome"
+                id={styles.UsuarioNome}
                 type="text"
                 onChange={(e) => setNomeUsuario(e.target.value)}
                 value={nomeUsuario}
@@ -118,17 +198,26 @@ export const Cadastro = () => {
               }}
             >
               <div>
-                <label htmlFor="UsuarioDataNascimento">Data de nascimento</label>
+                <label htmlFor="UsuarioDataNascimento">
+                  Data de nascimento
+                </label>
                 <input
                   className={styles.input}
-                  id="UsuarioDataNascimento"
+                  id={styles.UsuarioDataNascimento}
                   type="date"
                   onChange={(e) => setDataNascimento(e.target.value)}
                   value={dataNascimento}
                   required
                 />
               </div>
-              <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginLeft: "2rem" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginLeft: "2rem",
+                }}
+              >
                 <label>Gênero</label>
                 <button
                   type="button" // Importante para não submeter o form
@@ -136,7 +225,7 @@ export const Cadastro = () => {
                     ${styles.genero}
                     ${genero === "homem" ? styles.homem : ""}
                     ${genero === "mulher" ? styles.mulher : ""}
-                    ${genero === "nbin"   ? styles.neutro : ""}
+                    ${genero === "nbin" ? styles.neutro : ""}
                   `}
                   value={genero}
                   onClick={(e) => {
@@ -150,20 +239,53 @@ export const Cadastro = () => {
                     );
                   }}
                 >
-                  {genero === "homem" ? (<MaleIcon />) : genero === "mulher" ? (<FemaleIcon />) : (<HorizontalRuleIcon />)}
+                  {genero === "homem" ? (
+                    <MaleIcon />
+                  ) : genero === "mulher" ? (
+                    <FemaleIcon />
+                  ) : (
+                    <HorizontalRuleIcon />
+                  )}
                 </button>
               </div>
             </div>
-            <div>
+            <div className={styles.emailFoto}>
               <label htmlFor="UsuarioEmail">Email</label>
               <input
                 className={styles.input}
-                id="UsuarioEmail"
+                id={styles.UsuarioEmail}
                 type="email"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 required
               />
+
+              <label htmlFor="UsuarioFotoDePerfil">Foto de perfil</label>
+              <select
+                id="UsuarioFotoDePerfil"
+                className={styles.UsuarioFotoDePerfil}
+                value={idFotoDePerfil || ""}
+                onChange={(e) => {
+                  const valor = e.target.value;
+                  if (valor) {
+                    setIdFotoDePerfil(Number(valor));
+                  }
+                }}
+              >
+                <option value="">Selecione uma opção</option>
+                <option value="1">Foto 1</option>
+                <option value="2">Foto 2</option>
+                <option value="3">Foto 3</option>
+                <option value="4">Foto 4</option>
+                <option value="5">Foto 5</option>
+              </select>
+              {fotoDePerfilPreview && (
+                <img
+                  className={styles.imagemdeperfil}
+                  src={fotoDePerfilPreview}
+                  alt="Preview"
+                />
+              )}
             </div>
             <div style={{ display: "flex", alignItems: "center" }}>
               <label htmlFor="UsuarioSenha">Senha</label>
@@ -171,7 +293,7 @@ export const Cadastro = () => {
                 onChange={(e) => setSenha(e.target.value)}
                 value={senha}
                 className={styles.input}
-                id="UsuarioSenha"
+                id={styles.UsuarioSenha}
                 type={passwordVisible ? "text" : "password"} // Correção logica (text se visivel, password se não)
                 required
               />{" "}
@@ -193,50 +315,64 @@ export const Cadastro = () => {
                 onChange={(e) => setConfirmarSenha(e.target.value)}
                 value={confirmarSenha}
                 className={styles.input}
-                id="UsuarioConfirmarSenha"
+                id={styles.UsuarioConfirmarSenha}
                 type={passwordVisible ? "text" : "password"}
                 required
               />
             </div>
 
             <div className={styles.termosMaisEmail}>
-                <div className={styles.linha}>
-                  <input
-                  className={`${styles.checkbox} ${checkbox ? styles.checkboxAtivo : ''}`}
+              <div className={styles.linha}>
+                <input
+                  className={`${styles.checkbox} ${
+                    checkbox ? styles.checkboxAtivo : ""
+                  }`}
                   onChange={(e) => setCheckbox(e.target.checked)}
                   checked={checkbox}
-                  type="checkbox" 
-                  id="termosCheckbox"
-                  />
-                  <label className={styles.terminho} htmlFor="termosCheckbox">Concordo com os termos do site <Link to="/termos">acesse aqui os termos e condições de uso do GinKQuiz</Link></label>
-                </div>
-              
-                <div className={styles.linha}>
-                  <input
-                  className={`${styles.checkbox} ${checkbox2 ? styles.checkboxAtivo : ''}`}
+                  type="checkbox"
+                  id={styles.termosCheckbox}
+                />
+                <label
+                  className={styles.terminho}
+                  htmlFor={styles.termosCheckbox}
+                >
+                  Concordo com os termos do site{" "}
+                  <Link to="/termos">
+                    acesse aqui os termos e condições de uso do GinKQuiz
+                  </Link>
+                </label>
+              </div>
+
+              <div className={styles.linha}>
+                <input
+                  className={`${styles.checkbox} ${
+                    checkbox2 ? styles.checkboxAtivo : ""
+                  }`}
                   onChange={(e) => setCheckbox2(e.target.checked)}
                   checked={checkbox2}
-                  type="checkbox" 
-                  id="newsletterCheckbox"
-                  />
-                  <label className={styles.terminho} htmlFor="newsletterCheckbox">Aceito receber informações sobre atualizações e resultados por email</label>
-                </div>
-            </div> 
+                  type="checkbox"
+                  id={styles.newsletterCheckbox}
+                />
+                <label className={styles.terminho} htmlFor="newsletterCheckbox">
+                  Aceito receber informações sobre atualizações e resultados por
+                  email
+                </label>
+              </div>
+            </div>
 
-              <ReCAPTCHA
-                sitekey="6LdGmB8sAAAAAJOFRvY9rrfayWBaGg8J5aQqWAxb"
-                ref={recaptchaRef}
-              />
+            <ReCAPTCHA
+              sitekey="6LdGmB8sAAAAAJOFRvY9rrfayWBaGg8J5aQqWAxb"
+              ref={recaptchaRef}
+            />
 
-              <button 
-                className={styles.cadastrar} 
-                type="submit" 
-                disabled={loading} // Desabilita botão durante o load
-              >
-                {loading ? "Carregando..." : "Cadastrar"}
-              </button>
+            <button
+              className={styles.cadastrar}
+              type="submit"
+              disabled={loading} // Desabilita botão durante o load
+            >
+              {loading ? "Carregando..." : "Cadastrar"}
+            </button>
           </form>
-          
         </section>
       </div>
     </>

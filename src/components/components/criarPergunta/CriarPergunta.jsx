@@ -2,6 +2,8 @@ import React, { use } from "react";
 import { supabase } from "../../../Supabase";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./criarPergunta.module.css";
+import Logotipo from "../../../assets/icons/LogotipoGinKQuiz.png";
 
 const CriarPergunta = () => {
   const [temaSelecionado, setTemaSelecionado] = React.useState('');
@@ -117,52 +119,63 @@ useEffect(() => {
   }
   return (
     <>
-      <form action="" onSubmit={createQuestion}>
-        <input type="text" name="" id="" value={enunciado_pergunta} onChange={(e)=>{setEnunciado_pergunta(e.target.value),console.log(enunciado_pergunta)}} placeholder="descrição da pergunta" />
-        <select name="" id="" value={temaSelecionado} onChange={(e)=>{setTemaSelecionado(e.target.value)}} >
-          <option value="">Selecione um tema</option>
+      <img id={styles.logoGinKQuiz} src={Logotipo} alt="Logotipo do GinkQuiz" />
+      <form id={styles.form} action="" onSubmit={createQuestion}>
+
+        <input id={styles.enunciado} type="text" name="" value={enunciado_pergunta} onChange={(e)=>{setEnunciado_pergunta(e.target.value),console.log(enunciado_pergunta)}} placeholder="Insira a sua pergunta aqui" />
+
+        <select name="" className={styles.select} value={temaSelecionado} onChange={(e)=>{setTemaSelecionado(e.target.value)}} >
+          <option id={styles.temas} value="">Selecione um tema</option>
           {temas && temas.map((tema) => (
             <option key={tema.id_tema} value={tema.id_tema}>{tema.nome_tema}</option>
           ))}
         </select>
-        <div>
-          <input type="text" name="" id="" value={alternativa1} onChange={(e)=>{setAlternativa1(e.target.value),console.log(alternativa1)}} placeholder="alternativa 1" />
-          <input type="checkbox" name="" id="" 
-          onChange={()=> { 
-            setCorreta1(true);
-            setCorreta2(false);
-            setCorreta3(false);            
-            setCorreta4(false);
-          }
-          }/>
-          <input type="text" name="" id="" value={alternativa2} onChange={(e)=>{setAlternativa2(e.target.value),console.log(alternativa2)}} placeholder="alternativa 2" />
-          <input type="checkbox" name="" id=""
-          onChange={()=> { 
-            setCorreta1(false);
-            setCorreta2(true);
-            setCorreta3(false);            
-            setCorreta4(false);
-          }
-          } />
-          <input type="text" name="" id="" value={alternativa3} onChange={(e)=>{setAlternativa3(e.target.value),console.log(alternativa3)}} placeholder="alternativa 3" />
-          <input type="checkbox" name="" id=""
-          onChange={()=> { 
-            setCorreta1(false);
-            setCorreta2(false);
-            setCorreta3(true);            
-            setCorreta4(false);
-          }
-          } />
-          <input type="text" name="" id="" value={alternativa4} onChange={(e)=>{setAlternativa4(e.target.value),console.log(alternativa4)}} placeholder="alternativa 4" />
-          <input type="checkbox" name="" id="" 
-          onChange={()=> { 
-            setCorreta1(false);
-            setCorreta2(false);
-            setCorreta3(false);            
-            setCorreta4(true);
-          }
-          }/>
-        </div>
+        <div id={styles.containeralt}>
+
+          <div className={styles.alt1e2}>
+
+            <input className={styles.alternativas} type="text" name="" id="" value={alternativa1} onChange={(e)=>{setAlternativa1(e.target.value),console.log(alternativa1)}} placeholder="alternativa 1" />
+            <input  className={styles.checkboxes} type="checkbox" name="" id=""
+            onChange={()=> {
+              setCorreta1(true);
+              setCorreta2(false);
+              setCorreta3(false);
+              setCorreta4(false);
+            }
+            }/>
+            <input className={styles.alternativas} type="text" name="" id="" value={alternativa2} onChange={(e)=>{setAlternativa2(e.target.value),console.log(alternativa2)}} placeholder="alternativa 2" />
+            <input className={styles.checkboxes} type="checkbox" name="" id=""
+            onChange={()=> {
+              setCorreta1(false);
+              setCorreta2(true);
+              setCorreta3(false);
+              setCorreta4(false);
+            }
+            } />
+          </div>
+
+          <div className={styles.alt3e4}>
+
+            <input className={styles.alternativas} type="text" name="" id="" value={alternativa3} onChange={(e)=>{setAlternativa3(e.target.value),console.log(alternativa3)}} placeholder="alternativa 3" />
+            <input className={styles.checkboxes} type="checkbox" name="" id=""
+            onChange={()=> {
+              setCorreta1(false);
+              setCorreta2(false);
+              setCorreta3(true);
+              setCorreta4(false);
+            }
+            } />
+            <input className={styles.alternativas} type="text" name="" id="" value={alternativa4} onChange={(e)=>{setAlternativa4(e.target.value),console.log(alternativa4)}} placeholder="alternativa 4" />
+            <input className={styles.checkboxes} type="checkbox" name="" id=""
+            onChange={()=> {
+              setCorreta1(false);
+              setCorreta2(false);
+              setCorreta3(false);
+              setCorreta4(true);
+            }
+            }/>
+                    </div>
+          </div>
 
           {/* <button style={{color:'red'}} onClick={(e)=>{e.preventDefault(), setOpen(true)}}>criar dica</button> */}
 

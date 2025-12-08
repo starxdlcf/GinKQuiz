@@ -115,21 +115,21 @@ export default function MeuCla() {
   return (
     <div className={styles.box}>
       {loading ? (
-        <p>Carregando...</p>
+        <p className={styles.p} >Carregando...</p>
       ) : (
         <div id={styles.all}>
           <div className={styles.global}>
             <div className={styles.perfilbar}>
-              <p id={styles.bar}></p>
+              <p className={styles.p} id={styles.bar}></p>
               <PerfilIcon id={styles.perfil} />
             </div>
             <div className={styles.header}>
               <div className={styles.namedesc}>
                 <h1>{infoCla?.nome_cla || ""}</h1>
-                <p>Descrição:</p>
+                <p className={styles.p}>Descrição:</p>
                 <h2>{`${infoCla?.descricao_cla || ""}`}</h2>
               </div>
-              <p id={styles.howmanymembers}>
+              <p className={styles.p} id={styles.howmanymembers}>
                 {infoCla?.quantidade_atual_cla || 0}/
                 {infoCla?.quantidade_limite_cla || 0}
               </p>
@@ -137,7 +137,7 @@ export default function MeuCla() {
             <div className={styles.body}>
               <div className={styles.points}>
                 <h2>Pontuação do Clã</h2>
-                <p id={styles.pontoscla}>{`${infoCla?.pontuacao_cla ?? 0}`}</p>
+                <p className={styles.p} id={styles.pontoscla}>{`${infoCla?.pontuacao_cla ?? 0}`}</p>
                 <button className={styles.button} id={styles.rankposition}>
                   Posição no Ranking
                 </button>
@@ -145,8 +145,8 @@ export default function MeuCla() {
               <div className={styles.tableuser}>
                 <div className={styles.infouser}>
                   <div className={styles.user}>
-                    <p>{`${nomeUser} (você)`}</p>
-                    <p>{`${pontosUser}`}</p>
+                    <p className={styles.p}>{`${nomeUser} (você)`}</p>
+                    <p className={styles.p}>{`${pontosUser}`}</p>
                   </div>
                   <div className={styles.botoes}>
                     <button 
@@ -220,7 +220,7 @@ export default function MeuCla() {
                 return chartData.length > 0 ? (
                   <Column {...columnConfig} />
                 ) : (
-                  <p>Sem dados suficientes para a construção do gráfico...</p>
+                  <p className={styles.p}>Sem dados suficientes para a construção do gráfico...</p>
                 );
               })()}
             </div>
