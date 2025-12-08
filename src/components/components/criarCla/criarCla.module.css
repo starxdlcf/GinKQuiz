@@ -60,7 +60,7 @@ html{
   flex-direction: row;
 }
 
-h1{
+.h1{
   color: var(--white);
 }
 
