@@ -56,12 +56,15 @@ export const EntrarCla = () => {
       .eq("id_usuario", id);
     // console.log(data);
 
+    
     if (error) {
       console.error(error);
       return;
     }
-
+    
     alert("Você entrou no Clã com sucesso!");
+    
+    window.location.reload()
     const { data } = await supabase
       .from("cla")
       .select("*")
@@ -82,12 +85,13 @@ export const EntrarCla = () => {
 
       <div>
         <input
+          id={styles.isearch}
           type="text"
           placeholder="Pesquisar por um Clã"
           onChange={handleBuscarClaNome}
           style={{ marginRight: "30px" }}
         />
-        <input style={{ width: "130px" }} 
+        <input id={styles.isearch} style={{ width: "130px" }} 
         type="text" 
         onChange={handleBuscarClaId} 
         placeholder="#0000" />
@@ -97,7 +101,7 @@ export const EntrarCla = () => {
         <p>Carregando Clãs...</p>
       ) : (
         <table className={`${styles.tabela} ${
-          (buscarClaNome ? resultadoNome : resultadoId).length >= 11 
+          (buscarClaNome ? resultadoNome : resultadoId).length >= 10 
             ? styles.hasScroll 
             : ''
         }`}>
@@ -107,6 +111,7 @@ export const EntrarCla = () => {
               <th>Clã</th>
               <th>Membros</th>
               <th>Pontuação</th>
+              <th aria-hidden="true"></th>
             </tr>
           </thead>
           <tbody className={`${styles.scrollableTable}`}>

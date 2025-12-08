@@ -30,6 +30,26 @@ export default function MeuCla() {
     }
   }, [idCla]);
 
+  const QuitCla = async (idPessoa) => {
+    try{
+      const { data, error} = await supabase 
+      .from("usuarios")
+      .update({
+        cla_usuario: null
+      })
+      .eq("id_usuario", idPessoa);
+
+      
+      if (error) throw error;
+      
+      alert("Você saiu do clã")
+      window.location.reload()
+
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   const catchIdCla = async (idUser) => {
     try {
       const { data, error } = await supabase
@@ -136,7 +156,7 @@ export default function MeuCla() {
                     >
                       Gráfico
                     </button>
-                    <button className={styles.button} id={styles.quit}>
+                    <button className={styles.button} onClick={(e) => {e.preventDefault(),QuitCla(id)}} id={styles.quit}>
                       Sair do Clã
                     </button>
                   </div>

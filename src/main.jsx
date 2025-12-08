@@ -27,21 +27,21 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   
-  {
-    path: "menu",
-    element: <Debbug/>,
-    children: [
-      {
+//   {
+//     path: "menu",
+//     element: <Debbug/>,
+//     children: [
+//       {
         
-     path: "perfil",
-    element: <Perfil />,
-   },
-   {
-    path:"/menu",
-    element:<MenuInicial/>,
-   },
-      
-  ]
+//      path: "perfil",
+//     element: <Perfil />,
+//    },
+   
+//   ]
+// },
+{
+ path:"/menu",
+ element:<MenuInicial/>,
 },
 {
   path:"gerenciamento",
@@ -63,14 +63,14 @@ const router = createBrowserRouter([
     path: "/concluido",
     element: <Cadastro />,
   },
-  // {
-  //   path: "menu/perfil",
-  //   element: <Perfil />,
-  // },
-  // {
-  //   path:"menu/criarCla",
-  //   element:<CriarCla/>,
-  // },
+  {
+    path: "menu/perfil",
+    element: <Perfil />,
+  },
+  {
+    path:"menu/criarCla",
+    element:<CriarCla/>,
+  },
   {
     path:"/rankings",
     element:<Rankings/>,
