@@ -82,6 +82,33 @@ label{
     outline: none;
 }
 
+.emailFoto{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 18px;
+}
+
+.imagemdeperfil{
+    width: 5rem;
+    height: 5rem;
+    border-radius: 30px;
+    object-fit: cover;
+    margin-left: -8px;
+}
+
+#UsuarioFotoDePerfil{
+    background-color: var(--blue);
+    color: var(--white);
+    border: none;
+}
+
+.opt{
+    background-color: var(--white);
+    color: var(--blue);
+    border: none;
+}
+
 #UsuarioSenha{
     border: solid 2px var(--orange);
     width: 200px;

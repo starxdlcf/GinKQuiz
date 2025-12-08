@@ -2,91 +2,76 @@
 
 import React from "react";
 import { supabase } from "../../../Supabase";
-import sapoPerfil from "../../../assets/icons/sapo.png"
-import gatoPerfil from "../../../assets/icons/sapo.png"
-import leaoPerfil from "../../../assets/icons/sapo.png"
-import girafaPerfil from "../../../assets/icons/sapo.png"
-import lagostaPerfil from "../../../assets/icons/sapo.png"
+import sapoPerfil from "../../../assets/icons/sapo.png";
+import gatoPerfil from "../../../assets/icons/gato.png";
+import leaoPerfil from "../../../assets/icons/leao.png";
+import girafaPerfil from "../../../assets/icons/girafa.png";
+import lagostaPerfil from "../../../assets/icons/lagosta.png";
 import styles from "./Perfil.module.css";
 
 const Perfil = () => {
   const id = localStorage.getItem("userId");
   const [data, setData] = React.useState(null);
-  const [idFoto, setIdFoto] = React.useState(null);
-  const [fotoDePerfil,setFotoDePerfil] = React.useState(null);
-
+  const [fotoDePerfil, setFotoDePerfil] = React.useState(null);
 
   React.useEffect(() => {
-    showProfile();
-    getProfilePictureId(idFoto);
-    showProfilePicture();
-    console.log("Esse é seu id para mostrar o perfil", id);
-  }, []);
+    const loadProfileData = async () => {
+      try {
+        if (!id) return;
 
-  React.useEffect(() => {
-    showProfile();
-    getProfilePictureId(idFoto);
-    // showProfilePicture();
-    console.log("Esse é seu id para mostrar o perfil", id);
+        // Fetch user profile data
+        const { data: userData, error: userError } = await supabase
+          .from("usuarios")
+          .select(
+            `id_usuario,
+             nome_usuario,
+             email,
+             cla_usuario,
+             id_fotoPerfil,
+             cla: cla_usuario ( nome_cla )`
+          )
+          .eq("id_usuario", id);
+
+        if (userError) throw userError;
+
+        setData(userData);
+        console.log("Dados do usuário:", userData);
+
+        // Get profile picture based on id_fotoPerfil
+        if (userData && userData.length > 0) {
+          const idFoto = userData[0].id_fotoPerfil;
+          console.log("ID Foto:", idFoto);
+
+          let fotoselecionada = null;
+          switch (idFoto) {
+            case 1:
+              fotoselecionada = sapoPerfil;
+              break;
+            case 2:
+              fotoselecionada = gatoPerfil;
+              break;
+            case 3:
+              fotoselecionada = leaoPerfil;
+              break;
+            case 4:
+              fotoselecionada = girafaPerfil;
+              break;
+            case 5:
+              fotoselecionada = lagostaPerfil;
+              break;
+            default:
+              console.log("Nenhuma foto selecionada para ID:", idFoto);
+          }
+
+          setFotoDePerfil(fotoselecionada);
+        }
+      } catch (error) {
+        console.error("Erro ao carregar perfil:", error);
+      }
+    };
+
+    loadProfileData();
   }, [id]);
-
-  const showProfile = async () => {
-    const { data, error } = await supabase
-      .from("usuarios")
-      .select(
-        `  id_usuario,
-           nome_usuario,
-           email,
-           cla_usuario,
-           cla: cla_usuario ( nome_cla )`
-      )
-      .eq("id_usuario", id);
-    console.log(data);
-    setData(data);
-
-    if (error) {
-      console.log(error);
-    }
-  };
-
-  const getProfilePictureId = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("usuarios")
-        .select(`id_fotoPerfil`)
-        .eq("id_usuario", id)
-        .single();
-
-      if (error) throw error;
-
-      setIdFoto(data.id_fotoPerfil);
-
-      console.log(idFoto);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      // showProfilePicture();
-      //console.log(idFoto);
-    }
-  };
-
-  const showProfilePicture = async () => {
-    await getProfilePictureId();
-    console.log(idFoto);
-    if (idFoto == 1) {
-      setFotoDePerfil(sapoPerfil);
-      console.log("entrou no 1");
-    } else if (idFoto == 2) {
-      setFotoDePerfil(gatoPerfil);
-      console.log("entrou no 2");
-    } else if (idFoto == 3) {
-      setFotoDePerfil(leaoPerfil);
-    } else if (idFoto == 4) {
-      setFotoDePerfil(girafaPerfil);
-    } else {
-      setFotoDePerfil(lagostaPerfil);
-    }
-  };
 
   return (
     <>
@@ -98,7 +83,7 @@ const Perfil = () => {
             <img id={styles.foto} src={fotoDePerfil} alt="Foto de Perfil" />
             <h2 id={styles.nome}>Nome: {user.nome_usuario}</h2>
             <h3 id={styles.email}>Email: {user.email}</h3>
-            {user.cla && <p>Clã:{user.cla.nome_cla}</p>}
+            {user.cla && <p>Clã: {user.cla.nome_cla}</p>}
           </div>
         ))}
     </>
