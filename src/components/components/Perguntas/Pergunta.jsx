@@ -1,16 +1,19 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../../Supabase";
 import styles from "../Perguntas/Pergunta.module.css";
+import { Navigate } from "react-router-dom";
 
 const Pergunta = () => {
   const { id } = useParams();
+
+  const navigate = useNavigate()
 
   const [dataPergunta, setDataPergunta] = React.useState(null);
 
   const [dica, setDica] = React.useState(null);
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true)
 
   React.useEffect(() => {
     fetchPergunta(id);
@@ -39,8 +42,14 @@ const Pergunta = () => {
   const showIdPergunta = () => {
     console.log();
   };
+
+  const returnToMenu = (e) =>{
+    e.preventDefault()
+    navigate(-1)
+  }
   return (
     <>
+    <button onClick={returnToMenu}>voltar</button>
       {dataPergunta ? (
         <div>
           <>
@@ -78,7 +87,6 @@ const Pergunta = () => {
             </>
           ) : (
             <>
-              <p>aqui aparecerá sua tabela</p>
             </>
           )}
         </div>
