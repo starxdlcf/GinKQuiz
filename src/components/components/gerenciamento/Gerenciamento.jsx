@@ -6,15 +6,12 @@ const Gerenciamento = () => {
   const id = localStorage.getItem("userId");
 
   const [temas, setTemas] = React.useState(null);
-  const [perguntas, setPerguntas] = React.useState(null);
+  const [perguntas, setPerguntas] = React.useState([]);
 
   const navigate = useNavigate();
 
-
-
   React.useEffect(() => {
     fetchTemas();
-    
     console.log("ID do usuario no gerenciamento:", id);
   }, []);
 
@@ -32,17 +29,35 @@ const Gerenciamento = () => {
     console.log(data);
   };
 
-  const NavigateQuestion = (idPergunta)=>{
+  const NavigateQuestion = (idPergunta) => {
     navigate(`/pergunta/${idPergunta}`);
-  }
+  };
 
-    const DeleteQuestion = async (idPergunta)=>{
-      const {data, error} = await supabase
+  const DeleteQuestion = async (idPergunta) => {
+    const { error: errorDica } = await supabase
+      .from("dicas")
+      .delete()
+      .eq("pergunta_dica", idPergunta);
+
+    if (errorDica) {
+      console.log("erro ao deletar", errorDica);
+    }
+
+    const { data, error } = await supabase
       .from("perguntas")
       .delete()
       .eq("id_pergunta", idPergunta);
 
+    console.log("pergunta deletada foi a pergunta numero", idPergunta);
+
+    if (error) {
+      console.log("error a deletar", error);
     }
+
+    setPerguntas((PerguntasAntigas) => {
+      PerguntasAntigas.filter((pergunta) => pergunta.id_pergunta !== idPergunta);
+    });
+  };
   return (
     <>
       <div>Gerenciamento</div>
@@ -68,13 +83,27 @@ const Gerenciamento = () => {
                 <tr key={pergunta.id_pergunta}>
                   {/* <td onClick={()=>{console.log(pergunta.id_pergunta)}} > <Link to={`/pergunta/${pergunta.id_pergunta}`}>{pergunta.enunciado_pergunta}</Link></td> */}
                   {/* <Link to={`pergunta/${pergunta.id_pergunta}`}><td>{pergunta.enunciado_pergunta}</td></Link> */}
-                  <td onClick={()=> NavigateQuestion(pergunta.id_pergunta)}>{pergunta.enunciado_pergunta}</td>
-                  <td><Link to={`/pergunta/edit/${pergunta.id_pergunta}`}>Atualizar</Link></td>
-                  <td ><button onClick={()=>DeleteQuestion(pergunta.id_pergunta)}>deletar</button></td>
+                  <td onClick={() => NavigateQuestion(pergunta.id_pergunta)}>
+                    {pergunta.enunciado_pergunta}
+                  </td>
+                  <td>
+                    <Link to={`/pergunta/edit/${pergunta.id_pergunta}`}>
+                      Atualizar
+                    </Link>
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => DeleteQuestion(pergunta.id_pergunta)}
+                    >
+                      deletar
+                    </button>
+                  </td>
                 </tr>
               ))}
             <tr>
-              <td><Link to='/CriarPergunta'>criar uma nova</Link></td>
+              <td>
+                <Link to="/CriarPergunta">criar uma nova</Link>
+              </td>
             </tr>
           </tbody>
         </table>
