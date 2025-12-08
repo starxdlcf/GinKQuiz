@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root{
+  --fancy: 'Cormorant Garamond', serif;
+  --simple: 'Host Grotesk', sans-serif;
+  --red: #ff5757;
+  --yellow: #ffe785;
+  --gray: #737373;
+  --pink: #ff99c9;
+  --white: #ffffff;
+  --green: #8de969;
+  --muted-green: #87bba2;
+  --blue: #5d91e8;
+  --purple: #5d2e8c;
+  --vivid-purple: #8156f6;
+  --wheat: #fff4e3;
+  --orange: #ffd699;
+}
+
+#perfil{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  color: black;
+  text-align: center;
+  font-family: var(--fancy);
+
+}
+
+h2 #nome{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  color: var(--red);
+  font-family: var(--fancy);
+
+}
+
+#foto{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 0px;
+}
+
+p #email{
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-left: -10px;
+  color: black;
+  font-family: var(--fancy);
+}
+
+#div{
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 20rem;
+  margin-top: 30px;
+  padding: 20px;
+  background-color: var(--orange);
+  margin: auto;
+}

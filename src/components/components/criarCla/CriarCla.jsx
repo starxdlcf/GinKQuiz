@@ -98,7 +98,7 @@ const CriarCla = () => {
   return (
     <div className={styles.criarClaContainer}>
       <div className={styles.ContainerNovoCla}>
-        <h1>Criar um clã</h1>
+        <h1 className={styles.h1}>Criar um clã</h1>
         <form className={styles.form} action="" onSubmit={CadastroCla}>
           <div className={styles.row}>
             <label className={styles.label} htmlFor="">
