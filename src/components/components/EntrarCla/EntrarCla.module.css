@@ -27,10 +27,14 @@
     /* margin-bottom: -30px; */
 }
 
+table.tabela{
+    width: 600px;
+}
+
 .botoes{
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 10px;
     margin-top: 20px;
 }
 
@@ -81,19 +85,18 @@ h1{
     /* margin-bottom: 3%; */
 }
 
-input{
+#isearch{
     width: 300px;
     height: 40px;
     font-size: 1.2rem;
     font-family: var(--fancy);
     font-weight: 700;
     padding: 10px 10px;
-    /* margin-bottom: 5%; */
+    margin-bottom: 5%;
     border-radius: 20px;
     border: none;
     background-color: var(--wheat);
     color: var(--gray);
-    margin-bottom: 10px;
 }
 
 .perfil{
@@ -106,16 +109,22 @@ input{
 .tabela{
     /* border: 2px solid black; */
     /* border-collapse: collapse; */
-    width: 70%;
+    width: 550px;
     max-width: 600px;
-    gap: 10px;
+    /* gap: 10px; */
     border-collapse: collapse;
+    margin-right: 0;
 }
 
 .tabela.hasScroll{
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: scroll;
-    display: block;
+    display: inline-block;
+    gap: 0;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    width: 600px;
 }
 
 th{
@@ -135,6 +144,35 @@ td{
     font-size: 0.9rem;
     font-family: var(--simple);
     background-color: var(--wheat);
+    width: 10rem;
+}
+
+/* small action column for the + buttons */
+.tabela td:last-child{
+    width: 42px;
+    padding: 4px 6px;
+    text-align: center;
+    background-color: transparent; /* keep cell background consistent */
+}
+
+/* table.tabela::-webkit-scrollbar-thumb{
+    width: 1rem;
+    color: var(--muted-green);
+} */
+
+.entrarButton{
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: none;
+    background-color: var(--red);
+    color: var(--wheat);
+    cursor: pointer;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
 }
 
 .nome_equipe{
@@ -198,5 +236,3 @@ td:first-child:hover{
     text-decoration: none;
     cursor: pointer;
 }
-
-@media 
