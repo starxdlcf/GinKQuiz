@@ -57,7 +57,7 @@ const router = createBrowserRouter([
     element: <Cadastro />,
   },
   {
-    path: "/jogar",
+    path: "jogar/:id",
     element: <Jogar />,
   },
   {
