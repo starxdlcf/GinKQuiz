@@ -67,7 +67,9 @@ export const Jogar = () => {
 
       if (error) throw error
 
-      setDica(data)
+      const aleatorio =  data[Math.floor((Math.random()*data.lenght))]
+
+      setDica(aleatorio)
     }
     catch (error){
       console.error(error)
