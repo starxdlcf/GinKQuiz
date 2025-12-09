@@ -87,7 +87,7 @@ export const Cadastro = () => {
         genero: genero,
       });
 
-      const { data, error } = await supabase.functions.invoke("criar-usuario", {
+      const { error } = await supabase.functions.invoke("criar-usuario", {
         body: {
           nome_usuario: nomeUsuario,
           email: email,

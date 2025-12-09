@@ -1,6 +1,5 @@
-import React, { useEffect, useEffectEvent } from "react";
 import { supabase } from "../../../Supabase";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../criarCla/criarCla.module.css";
 import { useNavigate } from "react-router-dom";
 
@@ -18,12 +17,6 @@ const CriarCla = () => {
     showClas();
     setIdCla(null)
   }, []);
-
-
-//   useEffect(()=>{
-//     console.log(idCla.id_cla)
-//   },[idCla])
-
 
   const showClas = async () => {
     const { data } = await supabase.from("cla").select("*");

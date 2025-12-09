@@ -35,12 +35,9 @@ const Pergunta = () => {
       .from("dicas")
       .select("*")
       .eq("pergunta_dica", id);
+    if (error) console.error(error)
     setDica(data);
     console.log(data);
-  };
-
-  const showIdPergunta = () => {
-    console.log();
   };
 
   const returnToMenu = (e) =>{
