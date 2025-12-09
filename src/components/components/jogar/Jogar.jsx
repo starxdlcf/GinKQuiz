@@ -8,16 +8,24 @@ import { FindInPage } from "@mui/icons-material";
 export const Jogar = () => {
 
   //const { id } = useParams();
-  const id = 12
+  const [id, setId] = React.useState(12)//para testes
   const navigate = useNavigate();
   const [dataPergunta, setDataPergunta] = React.useState(null);
   const [dica,setDica] = React.useState("")
   const [open, setOpen] = React.useState(false)
   
+  //resolver
+  console.log("id começo")
+  console.log(id)
+
   useEffect(() => {
-    fetchPergunta(id);
-    fetchDicas(id);
-  }, []);
+    setId(Math.floor((Math.random()*40)+1))
+    handlePergunta()
+  }, []); //para testes
+
+  const handlePergunta = () =>{
+    fetchPergunta(id);//colocar no use effect dps
+  }
   
   
   const fetchPergunta = async (id) => {
@@ -27,6 +35,9 @@ export const Jogar = () => {
       .select("*")
       .eq("id_pergunta", id)
       .single();
+
+      console.log("id real")
+      console.log(id)
       
       if (error) throw error
 
@@ -58,22 +69,27 @@ export const Jogar = () => {
     }
   }
 
-  const fetchDicas = async(id)=>{
-    try{        
-      const {data, error}= await supabase
-      .from("dicas")
-      .select("*")
-      .eq("pergunta_dica",id)
-
-      if (error) throw error
-
-      const aleatorio =  data[Math.floor((Math.random()*data.lenght))]
-
-      setDica(aleatorio)
-    }
-    catch (error){
-      console.error(error)
-      alert(error.message)
+  const fetchDicas = async()=>{
+    if (!open){
+      console.log("id no dica")
+      console.log(id)
+      try{        
+        const {data, error}= await supabase
+        .from("dicas")
+        .select("*")
+        .eq("pergunta_dica",id)
+  
+        if (error) throw error
+  
+        const dicas = data
+  
+        const aleatorio =  dicas[Math.floor((Math.random()*dicas.length))]
+        setDica(aleatorio)
+      }
+      catch (error){
+        console.error(error)
+        alert(error.message)
+      }
     }
   }
   
@@ -85,19 +101,19 @@ return (
             <h2>{dataPergunta.enunciado_pergunta}</h2>
             <div>
               <button className={styles.alternativa} onClick={
-                (e)=>{ e.preventDefault(), verificarResposta(dataPergunta.alternativa1_pergunta)}} >
+                (e)=>{ e.preventDefault(); verificarResposta(dataPergunta.alternativa1_pergunta)}} >
                 {dataPergunta.alternativa1_pergunta}
               </button>
               <button className={styles.alternativa} onClick={ 
-                (e)=>{e.preventDefault(), verificarResposta(dataPergunta.alternativa2_pergunta)}} >
+                (e)=>{e.preventDefault(); verificarResposta(dataPergunta.alternativa2_pergunta)}} >
                 {dataPergunta.alternativa2_pergunta}
               </button>
               <button className={styles.alternativa} onClick={ 
-                (e)=>{ e.preventDefault(), verificarResposta(dataPergunta.alternativa3_pergunta)}}>
+                (e)=>{ e.preventDefault(); verificarResposta(dataPergunta.alternativa3_pergunta)}}>
                 {dataPergunta.alternativa3_pergunta}
               </button>
               <button className={styles.alternativa} onClick={ 
-                (e)=>{ e.preventDefault(), verificarResposta(dataPergunta.alternativa4_pergunta)}} >
+                (e)=>{ e.preventDefault(); verificarResposta(dataPergunta.alternativa4_pergunta)}} >
                 {dataPergunta.alternativa4_pergunta}
               </button>
             </div>
@@ -106,20 +122,14 @@ return (
               className={styles.alternativa}
               onClick={() => {
                 setOpen(!open);
-                fetchDicas(id)}}
+                fetchDicas()}}
             >
               {open === false ? "mostrar dicas" : "fechar dicas"}
             </button>
           </>
 
           {open === true ? (
-            <>
-              {dica && dica.length > 0 ? (
-                dica.map((dica) => <p key={dica.id_dica}> {dica.info_dica}</p>)
-              ) : (
-                <p>sem dicas cadastradas</p>
-              )}
-            </>
+            <p key={dica.id_dica}> {dica.info_dica}</p>
           ) : (
             <>
             </>
