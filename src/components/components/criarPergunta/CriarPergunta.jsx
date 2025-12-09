@@ -23,13 +23,13 @@ const CriarPergunta = () => {
 
   const [dica_array, setDica_array] = React.useState([])
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   
-useEffect(() => {
-  showThemes();
-  showQuestions();
-  showHints();  
-}, []);
+  useEffect(() => {
+    showThemes();
+    showQuestions();
+    showHints();  
+  }, []);
 
   const createQuestion = async (e) => {
     e.preventDefault()

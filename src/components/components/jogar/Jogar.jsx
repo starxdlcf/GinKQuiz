@@ -3,21 +3,20 @@ import { useParams } from "react-router-dom";
 import { supabase } from "../../../Supabase";
 import { useNavigate } from "react-router-dom";
 import styles from "./Jogar.module.css"
+import { FindInPage } from "@mui/icons-material";
 
 export const Jogar = () => {
 
   //const { id } = useParams();
   const id = 12
   const navigate = useNavigate();
-
   const [dataPergunta, setDataPergunta] = React.useState(null);
-  const [escolha, setEscolha] = React.useState("");
-  //const [dica_array,setDica_array] = React.useState([])
-  //const [dica,setDica] = React.useState("")
+  const [dica,setDica] = React.useState("")
+  const [open, setOpen] = React.useState(false)
   
   useEffect(() => {
     fetchPergunta(id);
-    //fetchDica(id);
+    fetchDicas(id);
   }, []);
   
   
@@ -32,6 +31,7 @@ export const Jogar = () => {
       if (error) throw error
 
       setDataPergunta(data)
+      
     }
     catch(error){
       console.log(error)
@@ -39,11 +39,11 @@ export const Jogar = () => {
     }
   };
 
-  const verificaResposta = async()=>{
+  const verificarResposta = async(escolha)=>{
     try{
       const {data, error} = await supabase
       .from("perguntas")
-      .get("*")
+      .select("*")
       .eq("resposta_pergunta", escolha)
       
       if (error) throw error
@@ -58,23 +58,22 @@ export const Jogar = () => {
     }
   }
 
-  // const fetchDica = async(id)=>{
-  //   try{        
-  //     const {data}= await supabase
-  //     .from("dicas")
-  //     .select("*")
-  //     .eq("pergunta_dica",id)
+  const fetchDicas = async(id)=>{
+    try{        
+      const {data, error}= await supabase
+      .from("dicas")
+      .select("*")
+      .eq("pergunta_dica",id)
 
-  //     if (error) throw error
+      if (error) throw error
 
-  //     const elementos = data.map(element=> element.info_dica)
-  //     setDica_array(elementos)
-  //   }
-  //   catch (error){
-  //     console.error(error)
-  //     alert(error.message)
-  //   }
-  // }
+      setDica(data)
+    }
+    catch (error){
+      console.error(error)
+      alert(error.message)
+    }
+  }
   
 return (
     <>
@@ -83,23 +82,29 @@ return (
           <>
             <h2>{dataPergunta.enunciado_pergunta}</h2>
             <div>
-              <button className={styles.alternativa} >
+              <button className={styles.alternativa} onClick={
+                (e)=>{ e.preventDefault(), verificarResposta(dataPergunta.alternativa1_pergunta)}} >
                 {dataPergunta.alternativa1_pergunta}
               </button>
-              <button className={styles.alternativa} >
+              <button className={styles.alternativa} onClick={ 
+                (e)=>{e.preventDefault(), verificarResposta(dataPergunta.alternativa2_pergunta)}} >
                 {dataPergunta.alternativa2_pergunta}
               </button>
-              <button className={styles.alternativa} >
+              <button className={styles.alternativa} onClick={ 
+                (e)=>{ e.preventDefault(), verificarResposta(dataPergunta.alternativa3_pergunta)}}>
                 {dataPergunta.alternativa3_pergunta}
               </button>
-              <button className={styles.alternativa} >
+              <button className={styles.alternativa} onClick={ 
+                (e)=>{ e.preventDefault(), verificarResposta(dataPergunta.alternativa4_pergunta)}} >
                 {dataPergunta.alternativa4_pergunta}
               </button>
             </div>
 
             <button
               className={styles.alternativa}
-              onClick={() => fetchDicas(id)}
+              onClick={() => {
+                setOpen(!open);
+                fetchDicas(id)}}
             >
               {open === false ? "mostrar dicas" : "fechar dicas"}
             </button>
