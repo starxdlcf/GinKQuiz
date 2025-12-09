@@ -3,29 +3,18 @@ import { useParams } from "react-router-dom";
 import { supabase } from "../../../Supabase";
 import { useNavigate } from "react-router-dom";
 import styles from "./Jogar.module.css"
-import { FindInPage } from "@mui/icons-material";
 
 export const Jogar = () => {
 
-  //const { id } = useParams();
-  const [id, setId] = React.useState(12)//para testes
+  const { id } = useParams();
   const navigate = useNavigate();
   const [dataPergunta, setDataPergunta] = React.useState(null);
   const [dica,setDica] = React.useState("")
   const [open, setOpen] = React.useState(false)
-  
-  //resolver
-  console.log("id começo")
-  console.log(id)
 
   useEffect(() => {
-    setId(Math.floor((Math.random()*40)+1))
-    handlePergunta()
-  }, []); //para testes
-
-  const handlePergunta = () =>{
-    fetchPergunta(id);//colocar no use effect dps
-  }
+    fetchPergunta(id)
+  }, [id]);
   
   
   const fetchPergunta = async (id) => {
@@ -35,9 +24,6 @@ export const Jogar = () => {
       .select("*")
       .eq("id_pergunta", id)
       .single();
-
-      console.log("id real")
-      console.log(id)
       
       if (error) throw error
 
@@ -59,8 +45,14 @@ export const Jogar = () => {
       
       if (error) throw error
 
-      if (data != "")alert("acertou")
-      else alert("errou")
+      if (data != ""){
+        alert("acertou")
+        navigate(`/jogar/${Math.floor((Math.random()*40)+1)}`)
+      }
+      else {
+        alert("errou")
+        navigate(`/jogar/${Math.floor((Math.random()*40)+1)}`)
+      }
 
     }
     catch (error){
@@ -71,8 +63,6 @@ export const Jogar = () => {
 
   const fetchDicas = async()=>{
     if (!open){
-      console.log("id no dica")
-      console.log(id)
       try{        
         const {data, error}= await supabase
         .from("dicas")
