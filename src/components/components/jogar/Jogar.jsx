@@ -14,9 +14,8 @@ export const Jogar = () => {
 
   useEffect(() => {
     fetchPergunta(id)
-  }, [id]);
-  
-  
+  }, [id]); 
+
   const fetchPergunta = async (id) => {
     try{
       const { data,error } = await supabase
@@ -46,11 +45,14 @@ export const Jogar = () => {
       if (error) throw error
 
       if (data != ""){
+        somarPontos()
         alert("acertou")
+        setOpen(false)
         navigate(`/jogar/${Math.floor((Math.random()*40)+1)}`)
       }
       else {
         alert("errou")
+        setOpen(false)
         navigate(`/jogar/${Math.floor((Math.random()*40)+1)}`)
       }
 
@@ -59,6 +61,13 @@ export const Jogar = () => {
       console.error(error)
       alert(error.message)
     }
+  }
+
+  const somarPontos= ()=>{
+    const pontos = Number(localStorage.getItem("pontos"))
+    const pontosAtualizados = pontos+50
+    localStorage.setItem("pontos",pontosAtualizados)
+    console.log("pontos Atuais", pontosAtualizados)
   }
 
   const fetchDicas = async()=>{
@@ -128,6 +137,8 @@ return (
       ) : (
         <p>Carregando...</p>
       )}
+
+      <button onClick={(e)=>{e.preventDefault(); localStorage.clear("pontos")}}>limpar pontos</button>
     </>
   );
 };
