@@ -3,23 +3,19 @@ import { useParams } from "react-router-dom";
 import { supabase } from "../../../Supabase";
 import { useNavigate } from "react-router-dom";
 import styles from "./Jogar.module.css"
-import { FindInPage } from "@mui/icons-material";
 
 export const Jogar = () => {
 
-  //const { id } = useParams();
-  const id = 12
+  const { id } = useParams();
   const navigate = useNavigate();
   const [dataPergunta, setDataPergunta] = React.useState(null);
   const [dica,setDica] = React.useState("")
   const [open, setOpen] = React.useState(false)
-  
+
   useEffect(() => {
-    fetchPergunta(id);
-    fetchDicas(id);
-  }, []);
-  
-  
+    fetchPergunta(id)
+  }, [id]); 
+
   const fetchPergunta = async (id) => {
     try{
       const { data,error } = await supabase
@@ -48,8 +44,17 @@ export const Jogar = () => {
       
       if (error) throw error
 
-      if (data != "")alert("acertou")
-      else alert("errou")
+      if (data != ""){
+        somarPontos()
+        alert("acertou")
+        setOpen(false)
+        navigate(`/jogar/${Math.floor((Math.random()*40)+1)}`)
+      }
+      else {
+        alert("errou")
+        setOpen(false)
+        navigate(`/jogar/${Math.floor((Math.random()*40)+1)}`)
+      }
 
     }
     catch (error){
@@ -58,23 +63,46 @@ export const Jogar = () => {
     }
   }
 
-  const fetchDicas = async(id)=>{
-    try{        
-      const {data, error}= await supabase
-      .from("dicas")
-      .select("*")
-      .eq("pergunta_dica",id)
+  const somarPontos= ()=>{
+    const pontos = Number(localStorage.getItem("pontos"))
+    const pontosAtualizados = pontos+50
+    localStorage.setItem("pontos",pontosAtualizados)
+    console.log("pontos Atuais", pontosAtualizados)
+  }
 
-      if (error) throw error
-
-      const aleatorio =  data[Math.floor((Math.random()*data.lenght))]
-
-      setDica(aleatorio)
+  const fetchDicas = async()=>{
+    if (!open){
+      try{        
+        const {data, error}= await supabase
+        .from("dicas")
+        .select("*")
+        .eq("pergunta_dica",id)
+  
+        if (error) throw error
+  
+        const dicas = data
+  
+        const aleatorio =  dicas[Math.floor((Math.random()*dicas.length))]
+        setDica(aleatorio)
+      }
+      catch (error){
+        console.error(error)
+        alert(error.message)
+      }
     }
-    catch (error){
-      console.error(error)
-      alert(error.message)
-    }
+  }
+
+  const finalizarQuiz = ()=>{
+    const fim = Date.now()
+    const inicio = Number(localStorage.getItem("inicioQuiz"))
+    const tempoSeg = (fim - inicio)/1000
+    const minutos = Math.floor(tempoSeg / 60);
+    const segundos = Math.floor(tempoSeg % 60);
+
+    alert(`Seu tempo = ${minutos}:${segundos}, sua pontuação = ${localStorage.getItem("pontos")}`)
+
+    localStorage.clear("inicioQuiz")
+    localStorage.clear("pontos")
   }
   
 return (
@@ -85,19 +113,19 @@ return (
             <h2>{dataPergunta.enunciado_pergunta}</h2>
             <div>
               <button className={styles.alternativa} onClick={
-                (e)=>{ e.preventDefault(), verificarResposta(dataPergunta.alternativa1_pergunta)}} >
+                (e)=>{ e.preventDefault(); verificarResposta(dataPergunta.alternativa1_pergunta)}} >
                 {dataPergunta.alternativa1_pergunta}
               </button>
               <button className={styles.alternativa} onClick={ 
-                (e)=>{e.preventDefault(), verificarResposta(dataPergunta.alternativa2_pergunta)}} >
+                (e)=>{e.preventDefault(); verificarResposta(dataPergunta.alternativa2_pergunta)}} >
                 {dataPergunta.alternativa2_pergunta}
               </button>
               <button className={styles.alternativa} onClick={ 
-                (e)=>{ e.preventDefault(), verificarResposta(dataPergunta.alternativa3_pergunta)}}>
+                (e)=>{ e.preventDefault(); verificarResposta(dataPergunta.alternativa3_pergunta)}}>
                 {dataPergunta.alternativa3_pergunta}
               </button>
               <button className={styles.alternativa} onClick={ 
-                (e)=>{ e.preventDefault(), verificarResposta(dataPergunta.alternativa4_pergunta)}} >
+                (e)=>{ e.preventDefault(); verificarResposta(dataPergunta.alternativa4_pergunta)}} >
                 {dataPergunta.alternativa4_pergunta}
               </button>
             </div>
@@ -106,20 +134,14 @@ return (
               className={styles.alternativa}
               onClick={() => {
                 setOpen(!open);
-                fetchDicas(id)}}
+                fetchDicas()}}
             >
               {open === false ? "mostrar dicas" : "fechar dicas"}
             </button>
           </>
 
           {open === true ? (
-            <>
-              {dica && dica.length > 0 ? (
-                dica.map((dica) => <p key={dica.id_dica}> {dica.info_dica}</p>)
-              ) : (
-                <p>sem dicas cadastradas</p>
-              )}
-            </>
+            <p key={dica.id_dica}> {dica.info_dica}</p>
           ) : (
             <>
             </>
@@ -128,6 +150,10 @@ return (
       ) : (
         <p>Carregando...</p>
       )}
+
+      {/* remover isso no final */}
+      <button onClick={(e)=>{e.preventDefault(); localStorage.clear("pontos")}}>limpar pontos</button>
+      <button onClick={(e)=>{e.preventDefault(); finalizarQuiz()}}>finalizar</button>
     </>
   );
 };
