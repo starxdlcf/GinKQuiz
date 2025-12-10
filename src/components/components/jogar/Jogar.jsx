@@ -91,6 +91,19 @@ export const Jogar = () => {
       }
     }
   }
+
+  const finalizarQuiz = ()=>{
+    const fim = Date.now()
+    const inicio = Number(localStorage.getItem("inicioQuiz"))
+    const tempoSeg = (fim - inicio)/1000
+    const minutos = Math.floor(tempoSeg / 60);
+    const segundos = Math.floor(tempoSeg % 60);
+
+    alert(`Seu tempo = ${minutos}:${segundos}, sua pontuação = ${localStorage.getItem("pontos")}`)
+
+    localStorage.clear("inicioQuiz")
+    localStorage.clear("pontos")
+  }
   
 return (
     <>
@@ -138,7 +151,9 @@ return (
         <p>Carregando...</p>
       )}
 
+      {/* remover isso no final */}
       <button onClick={(e)=>{e.preventDefault(); localStorage.clear("pontos")}}>limpar pontos</button>
+      <button onClick={(e)=>{e.preventDefault(); finalizarQuiz()}}>finalizar</button>
     </>
   );
 };

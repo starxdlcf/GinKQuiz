@@ -1,14 +1,15 @@
 import React from "react";
 import { supabase } from "../../../Supabase";
+import { useNavigate } from "react-router-dom";
 
 function Lobby() {
   const [listaGeneros, setListaGeneros] = React.useState({});
   const [temasSelecionados, setTemasSelecionados] = React.useState([]);
   const [tamanhoSelecionado, setTamanhoSelecionado] = React.useState(10);
-
-  const tamanho = [10, 20, 30];
-
   const [perguntas, setPerguntas] = React.useState([]);
+
+  const navigate = useNavigate()
+  const tamanho = [10, 20, 30];
 
   React.useEffect(() => {
     fetchLista();
@@ -85,6 +86,12 @@ function Lobby() {
     }
 
   };
+
+  const iniciarQuiz = ()=>{
+    const inicio = Date.now()
+    localStorage.setItem("inicioQuiz", inicio)
+    navigate(`/jogar/${Math.floor((Math.random()*40)+1)}`)
+  }
 
   return (
     <div>
@@ -187,7 +194,7 @@ function Lobby() {
         <div>
           <button
             onClick={(e) => {
-              e.preventDefault(), BuscarPerguntas();
+              e.preventDefault(), BuscarPerguntas(), iniciarQuiz()//modificar depois
             }}
           >
             JOGAR!
