@@ -19,6 +19,7 @@ import CriarPergunta from "./components/components/criarPergunta/CriarPergunta.j
 import Pergunta from "./components/components/Perguntas/Pergunta.jsx";
 import PerguntaEdit from "./components/components/PerguntaEdit/PerguntaEdit.jsx";
 import Lobby from "./components/components/lobby/Lobby.jsx";
+import TelaFinal from "./components/components/telaFinal/TelaFinal.jsx";
 
 
 const router = createBrowserRouter([
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
   {
     path: "lobby",
     element: <Lobby/>,
+  },
+  {
+    path: "telaFinal",
+    element: <TelaFinal/>,
   }
 ]);
 
