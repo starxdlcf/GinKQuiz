@@ -3,16 +3,15 @@ import styles from "./Erro.module.css";
 import { useEffect } from "react";
 import { useState } from "react";
 
-
 const arrayPalavras = [
   "quiz",
   "jogo",
   "diversão",
-  "matematica",
-  "portugues",
-  "quimica",
-  "fisica",
-  "historia",
+  "matemática",
+  "português",
+  "química",
+  "física",
+  "história",
   "geografia",
   "biologia",
   "computador",
@@ -37,15 +36,15 @@ const arrayPalavras = [
   "saúde",
   "esporte",
   "viagem",
-  "mafagafos"
+  "mafagafos",
 ];
 let palavraAleatoria =
-arrayPalavras[Math.floor(Math.random() * arrayPalavras.length)];
+  arrayPalavras[Math.floor(Math.random() * arrayPalavras.length)];
 
 export const Error = () => {
-  const TEMPO_INICIAL = 7;
-  
-  const [game,setGame] = React.useState(false);
+  const TEMPO_INICIAL = 9;
+
+  const [game, setGame] = React.useState(false);
 
   const [seconds, setSeconds] = React.useState(TEMPO_INICIAL);
 
@@ -59,19 +58,20 @@ export const Error = () => {
 
   const segundoRef = React.useRef(null);
 
-useEffect(()=>{
-  if(palavraRef.current){
-    palavraRef.current.classList.remove(styles.bounce);
-    void palavraRef.current.offsetWidth; // força reinício
-    palavraRef.current.classList.add(styles.bounce);
-  }}, [palavraAleatoria])
-useEffect(()=>{
-  if(segundoRef.current){
-    segundoRef.current.classList.remove(styles.bounce);
-    void segundoRef.current.offsetWidth; // força reinício
-    segundoRef.current.classList.add(styles.bounce);
-  }}, [seconds])
-
+  useEffect(() => {
+    if (palavraRef.current) {
+      palavraRef.current.classList.remove(styles.bounce);
+      void palavraRef.current.offsetWidth; // força reinício
+      palavraRef.current.classList.add(styles.bounce);
+    }
+  }, [palavraAleatoria]);
+  useEffect(() => {
+    if (segundoRef.current) {
+      segundoRef.current.classList.remove(styles.bounce);
+      void segundoRef.current.offsetWidth; // força reinício
+      segundoRef.current.classList.add(styles.bounce);
+    }
+  }, [seconds]);
 
   useEffect(() => {
     let interval = null;
@@ -84,10 +84,8 @@ useEffect(()=>{
       setRunning(false);
       setGame(false);
     }
-  return () => clearInterval(interval);
-  
-  },[pontos, seconds, running]);
-
+    return () => clearInterval(interval);
+  }, [pontos, seconds, running]);
 
   const handleChange = (event) => {
     setPalavra(event.target.value);
@@ -95,21 +93,21 @@ useEffect(()=>{
 
     if (event.target.value.length === palavraAleatoria.length) {
       if (event.target.value == palavraAleatoria) {
-        setPontos((num)=> num+1);
+        setPontos((num) => num + 1);
         setSeconds((segundos) => segundos + 1);
-        console.log('oioi')
+        console.log("oioi");
       } else {
         console.log("erro");
       }
       palavraAleatoria =
-      arrayPalavras[Math.floor(Math.random() * arrayPalavras.length)];
+        arrayPalavras[Math.floor(Math.random() * arrayPalavras.length)];
       setPalavra("");
     }
   };
 
   // const handlekey = (event) => {
   //   setPalavrasplit(palavrasplit => [...palavrasplit,event.key])
-  //  setPalavra(event.key) 
+  //  setPalavra(event.key)
   //   console.log(palavrasplit)
   // }
 
@@ -118,43 +116,37 @@ useEffect(()=>{
     setRunning(true);
     setSeconds(TEMPO_INICIAL);
     setPontos(0);
-  }
-
+  };
 
   return (
     <div>
-      <div className={styles.paginaErro} >
+      <div className={styles.paginaErro}>
         <h1>Erro 404</h1>
 
         <div className={styles.container}>
           <div className={styles.boxContent}>
             <h2>Página não encontrada</h2>
-            <h2>
-              Por que ao inves de futricar, você não vai jogar um quiz
-              divertido?
-            </h2>
-            <h2>Ou se quiser jogar outra coisa</h2>
+            <h2>Recarregue a página ou volte para a página inicial.</h2>
+            <h2>Teste nosso desafio de palavras abaixo!</h2>
 
-            {game ===true?
-            <>
-            <input
-            className={styles.input}
-                value={palavra}
-                onChange={handleChange}
-                type="text"
-                name=""
-                id=""
-              />
-  
-              <h3 ref={palavraRef}>{palavraAleatoria}</h3>
-              <h3 ref={segundoRef}>{pontos}</h3>
-              <h3>Tempo restante:{seconds}</h3>
-            
-            </>
-          : 
-          <button onClick={startGame} >desafio das palavras</button>
-          
-          }
+            {game === true ? (
+              <>
+                <input
+                  className={styles.input}
+                  value={palavra}
+                  onChange={handleChange}
+                  type="text"
+                  name=""
+                  id=""
+                />
+
+                <h3 ref={palavraRef}>{palavraAleatoria}</h3>
+                <h3 ref={segundoRef}>{pontos}</h3>
+                <h3>Tempo restante:{seconds}</h3>
+              </>
+            ) : (
+              <button onClick={startGame}>desafio das palavras</button>
+            )}
           </div>
         </div>
       </div>
