@@ -89,7 +89,7 @@ const router = createBrowserRouter([
     element: <Lobby/>,
   },
   {
-    path: "telaFinal",
+    path: "final",
     element: <TelaFinal/>,
   }
 ]);
