@@ -56,7 +56,7 @@ const PerfilIcon = () => {
   }, [id]);
 
   return (
-    <Link to="perfil">
+    <Link to="/perfil">
       <img id={styles.narci} src={fotoDePerfil} alt="Perfil" />
     </Link>
   );
