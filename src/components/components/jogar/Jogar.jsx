@@ -15,6 +15,7 @@ export const Jogar = () => {
   const [open, setOpen] = React.useState(false);
   const [acertou, setAcertou] = React.useState(null);
   const [alternativaClicada, setAlternativaClicada] = React.useState(null);
+  
 
   useEffect(() => {
     fetchPergunta(idPergunta);
@@ -121,8 +122,7 @@ export const Jogar = () => {
     localStorage.setItem("pontos", pontos);
     localStorage.setItem("tempoMin", minutos);
     localStorage.setItem("tempoSeg", segundos);
-    localStorage.clear("inicioQuiz");
-    navigate("/telaFinal")
+    navigate("/final")
   };
 
   return (
@@ -227,7 +227,6 @@ export const Jogar = () => {
       )}
 
       {/* remover isso no final */}
-      <button onClick={(e)=>{e.preventDefault(); localStorage.clear("acertos")}}>limpar acertos</button>
       <button onClick={(e)=>{e.preventDefault(); finalizarQuiz()}}>finalizar</button>
     </div>
   );
