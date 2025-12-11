@@ -31,60 +31,94 @@ function Lobby() {
   const RandomThemes = () => {
     console.log("-----------------sorteando temas-----------------");
     const temasRandom = [];
-    for (let i = 0; i < 5; i++) {
-      const randomIndex = Math.floor(Math.random() * listaGeneros.length) + 1;
-      if (temasRandom.includes(randomIndex)) {
-        console.log("tem repetido", randomIndex);
-        if (randomIndex === 10) {
-          const newRandomIndex = randomIndex - 1;
-          temasRandom.push(newRandomIndex);
-          console.log(temasRandom);
-          continue;
-        } else {
-          const newRandomIndex = randomIndex + 1;
-          temasRandom.push(newRandomIndex);
-          console.log(temasRandom);
-        }
-      } else {
-        temasRandom.push(randomIndex);
-        console.log(temasRandom);
-      }
+    console.log(listaGeneros.length);
+    for (let i = 0; i < listaGeneros.length; i++) {
+      temasRandom.push(i + 1);
     }
-    setTemasSelecionados(temasRandom);
+    temasRandom.sort(() => Math.random() - 0.5);
+    const temasSelecionadosRandom = temasRandom.slice(0, 5);
+    setTemasSelecionados(temasSelecionadosRandom);
+    console.log("temas selecionados randomicos:", temasSelecionadosRandom);
+    // for (let i = 0; i < 5; i++) {
+    //   const randomIndex = Math.floor(Math.random() * listaGeneros.length) + 1;
+    //   if (temasRandom.includes(randomIndex)) {
+    //     console.log("tem repetido", randomIndex);
+    //     if (randomIndex === 10) {
+    //       const newRandomIndex = randomIndex - 1;
+    //       temasRandom.push(newRandomIndex);
+    //       console.log(temasRandom);
+    //       continue;
+    //     } else {
+    //       const newRandomIndex = randomIndex + 1;
+    //       temasRandom.push(newRandomIndex);
+    //       console.log(temasRandom);
+    //     }
+    //   } else {
+    //     temasRandom.push(randomIndex);
+    //     console.log(temasRandom);
+    //   }
+    //   setTemasSelecionados(temasRandom);
+    // }
   };
 
   const BuscarPerguntas = async () => {
     setPerguntas([]);
     console.log("buscando perguntas");
-    console.log(temasSelecionados);
+    // console.log(temasSelecionados);
 
-    console.log(tamanhoSelecionado);
-    // const { data, error } = await supabase
-    //   .from("perguntas")
-    //   .select("tema_pergunta")
-    //   .in("tema_pergunta", temasSelecionados)
-    //   .limit(tamanhoSelecionado)
-    // console.log(data);
+    // console.log(tamanhoSelecionado);
+    // // const { data, error } = await supabase
+    // //   .from("perguntas")
+    // //   .select("tema_pergunta")
+    // //   .in("tema_pergunta", temasSelecionados)
+    // //   .limit(tamanhoSelecionado)
+    // // console.log(data);
+
+    // for (let i = 0; i < temasSelecionados.length; i++) {
+    //   const { data, error } = await supabase
+    //     .from("perguntas")
+    //     .select("tema_pergunta,enunciado_pergunta")
+    //     .eq("tema_pergunta", temasSelecionados[i])
+    //     .limit(Math.ceil(tamanhoSelecionado / temasSelecionados.length));
+    //   console.log(data);
+    //   setPerguntas((prevPerguntas) => [...prevPerguntas, ...data]);
+
+    //   if (error) {
+    //     console.error("Erro ao buscar perguntas:", error);
+    //   }
+
+    //   for (let i = 0; i < data.length; i++) {
+    //     console.log(data[i].tema_pergunta);
+
+    // }
+    //     setTemasSelecionados((prev)=> prev.slice(0,tamanhoSelecionado));
+    // }
 
     for (let i = 0; i < temasSelecionados.length; i++) {
       const { data, error } = await supabase
         .from("perguntas")
         .select("tema_pergunta,enunciado_pergunta")
-        .eq("tema_pergunta", temasSelecionados[i])
-        .limit(Math.ceil(tamanhoSelecionado / temasSelecionados.length));
-      console.log(data);
-      setPerguntas((prevPerguntas) => [...prevPerguntas, ...data]);
-
-      if (error) {
-        console.error("Erro ao buscar perguntas:", error);
-      }
-
-      for (let i = 0; i < data.length; i++) {
-        console.log(data[i].tema_pergunta);
-      
+        .eq("tema_pergunta", temasSelecionados[i]);
+      console.log(
+        data
+          .sort(() => Math.random() - 0.5)
+          .slice(0, Math.ceil(tamanhoSelecionado / temasSelecionados.length))
+      );
+      setPerguntas((prevPerguntas) => [
+        ...prevPerguntas,
+        ...data
+          .sort(() => Math.random() - 0.5)
+          .slice(0, Math.ceil(tamanhoSelecionado / temasSelecionados.length)),
+      ]);
     }
-    }
 
+    const arrayAleatorio = [];
+    for (let i = 0; i < tamanhoSelecionado; i++) {
+      arrayAleatorio.push(i);
+    }
+    arrayAleatorio.sort(() => Math.random() - 0.5);
+    
+    console.log("Array aleatorio:", arrayAleatorio);
   };
 
   const iniciarQuiz = ()=>{
@@ -201,10 +235,23 @@ function Lobby() {
           </button>
         </div>
         <div>
-          <button onClick={()=>{
-            console.log(perguntas);
-          }}>Mostrar perguntas</button>
-          </div>  
+          <button
+            onClick={() => {
+              console.log(perguntas);
+            }}
+          >
+            Mostrar perguntas
+          </button>
+        </div>
+        <div>
+          <button
+            onClick={() => {
+              console.log(perguntas.sort(() => Math.random() - 0.5));
+            }}
+          >
+            Mostrar perguntas embaralhadas
+          </button>
+        </div>
       </div>
     </div>
   );
