@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../../Supabase";
 import styles from "../Perguntas/Pergunta.module.css";
+import ideiaIcon from "../../../assets/icons/lampadaideia.png";
 import { Navigate } from "react-router-dom";
 
 const Pergunta = () => {
@@ -46,46 +47,53 @@ const Pergunta = () => {
   }
   return (
     <>
-    <button onClick={returnToMenu}>voltar</button>
+    <button className={styles.voltarbutton} onClick={returnToMenu}>voltar</button>
       {dataPergunta ? (
-        <div>
-          <>
+        <div className={styles.container}>
+          <div className={styles.containerPergunta}>
             <h2>{dataPergunta.enunciado_pergunta}</h2>
             <div>
-              <button className={styles.alternativa}>
-                {dataPergunta.alternativa1_pergunta}
-              </button>
-              <button className={styles.alternativa}>
-                {dataPergunta.alternativa2_pergunta}
-              </button>
-              <button className={styles.alternativa}>
-                {dataPergunta.alternativa3_pergunta}
-              </button>
-              <button className={styles.alternativa}>
-                {dataPergunta.alternativa4_pergunta}
-              </button>
+              <div className={styles.alt1e2}>
+                <button className={styles.alternativa}>
+                  {dataPergunta.alternativa1_pergunta}
+                </button>
+                <button className={styles.alternativa}>
+                  {dataPergunta.alternativa2_pergunta}
+                </button>
+              </div>
+              <div className={styles.alt3e4}>
+                <button className={styles.alternativa}>
+                  {dataPergunta.alternativa3_pergunta}
+                </button>
+                <button className={styles.alternativa}>
+                  {dataPergunta.alternativa4_pergunta}
+                </button>
+              </div>
             </div>
 
             <button
-              className={styles.alternativa}
+              className={styles.dica}
               onClick={() => fetchDicas(id)}
-            >
-              {open === false ? "mostrar dicas" : "fechar dicas"}
+            >{open === false ? (
+                <img id={styles.dicaimagem} src={ideiaIcon} alt="Ideia" />
+              ) : (
+                "fechar dicas"
+              )}
             </button>
-          </>
-
           {open === true ? (
-            <>
+            <div id={styles.dicaOpen}>
               {dica && dica.length > 0 ? (
                 dica.map((dica) => <p key={dica.id_dica}> {dica.info_dica}</p>)
               ) : (
                 <p>sem dicas cadastradas</p>
               )}
-            </>
+            </div>
           ) : (
             <>
             </>
           )}
+          </div>
+
         </div>
       ) : (
         <p>Carregando...</p>

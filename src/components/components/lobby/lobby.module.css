@@ -1,0 +1,233 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root{
+  --fancy: 'Cormorant Garamond', serif;
+  --simple: 'Host Grotesk', sans-serif;
+  --red: #ff5757;
+  --yellow: #ffe785;
+  --gray: #737373;
+  --pink: #ff99c9;
+  --white: #ffffff;
+  --green: #8de969;
+  --muted-green: #87bba2;
+  --blue: #5d91e8;
+  --purple: #5d2e8c;
+  --vivid-purple: #8156f6;
+  --wheat: #fff4e3;
+  --orange: #ffd699;
+}
+
+
+
+.lobbyContainer{
+  background-color: var(--orange);
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.someOtherClass{
+  background-color: var(--white);
+  padding: 2.5rem;
+  font-size: 1.2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 30rem;
+  display: flex;
+  flex-direction: row;
+  height: auto;
+}
+.someOtherClass h2{
+  font-family: var(--fancy);
+  font-size: 2rem;
+  color: var(--purple);
+  margin-bottom: 1rem;
+}
+
+.containertudo{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 4rem;
+}
+
+  .dois{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    height: auto;
+    width: 30rem;
+  }
+
+#divQuantiaPerguntas{
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+#selectquantasperguntas{
+  width: 10rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  background-color: var(--pink);
+  font-family: var(--simple);
+  font-size: 1rem;
+  padding: 0.5rem;
+  color: var(--gray);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#selectquantasperguntas option{
+  background-color: var(--white);
+  width: 7rem;
+}
+
+.jogarbutton{
+  background-color: var(--red);
+  color: var(--white);
+  font-family: var(--fancy);
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 5rem;
+  margin-bottom: 1rem;
+}
+.jogarbutton:hover{
+  background-color: var(--pink);
+  width: 5rem;
+  margin-bottom: 1rem;
+
+}
+
+#sorteartemas{
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  background-color: var(--white);
+  border-radius: 0.5rem;
+  color: var(--gray);
+  padding: 4px 4px 4px 4px;
+  border: 1px solid var(--gray);
+}
+
+#sorteartemasClicked{
+  border: 2px solid var(--green);
+}
+
+#containertemas{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+#containertemas p{
+  font-family: var(--simple);
+  font-size: 1.2rem;
+  color: black;
+  margin: 0;
+}
+#containertemas input[type="checkbox"]{
+  margin-left: 1rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  cursor: pointer;
+  outline: none;
+  border: 2px solid var(--gray);
+  border-radius: 50%;
+  appearance: none;
+  background-color: transparent;
+}
+
+#containertemas input[type="checkbox"]:checked{
+  background-color: var(--green);
+  border-color: var(--green);
+}
+
+#novoJogo{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-right: 1rem;
+  border-right: solid 5px black;
+  height: 15rem;
+  
+}
+
+#novoJogo h2{
+  font-family: var(--fancy);
+  font-size: 4rem;
+  
+}
+
+.partedireita{
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  height: auto;
+}
+
+#perfil{
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 5rem;
+  margin-top: -10rem;
+  margin-right: -9rem;
+}
+
+/* Buttons for selecting quiz size */
+.buttons{
+  background-color: var(--white);
+  color: var(--gray);
+  font-family: var(--simple);
+  font-size: 1rem;
+  padding: 0.35rem 0.8rem;
+  border: 2px solid var(--gray);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 7rem;
+  gap: .5rem;
+  margin-top: 1rem;
+}
+.buttons:hover{
+  transform: translateY(-1px);
+}
+.buttonActive{
+  background-color: var(--green);
+  color: var(--white);
+  border-color: var(--green);
+}
+
+/* Sortear temas button (class names for CSS modules) */
+.sorteartemas{
+  background-color: var(--white);
+  color: var(--gray);
+  border: 1px solid var(--gray);
+  padding: 0.35rem 0.8rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-top: 0.5rem;
+}
+.sorteartemas:hover{
+  transform: translateY(-1px);
+}
+.sorteartemasClicked{
+  background-color: var(--green);
+  color: var(--white);
+  border-color: var(--green);
+}

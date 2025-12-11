@@ -19,6 +19,91 @@
   --cyan: #6ce5e8;
 }
 
+#criardica{
+  background-color: var(--white);
+  border: 2px solid var(--blue);
+  border-radius: 1rem;
+  font-size: 1rem;
+  font-family: var(--fancy);
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  margin: 0;
+}
+
+#dicabox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+}
+
+#dicabox p {
+  font-family: var(--simple);
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#criardicabox{
+  position: relative;
+  width: 35rem;
+  height: 3.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 1rem;
+  padding: .1rem;
+  gap: .3rem;
+  border: 1px solid var(--blue);
+  background-color: var(--blue);
+}
+
+#saircriardica{
+  background-color: var(--red);
+  border-radius: 1rem;
+  font-size: 1rem;
+  font-family: var(--fancy);
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  color: var(--white);
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+}
+
+#inputcriardica{
+  width: 20rem;
+  height: 2rem;
+  font-size: 1.2rem;
+  font-family: var(--fancy);
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 15px;
+  border: none;
+  background-color: var(--white);
+  border: none;
+  color: black;
+}
+
+#criarpergunta{
+  background-color: var(--pink);
+  border: 2px solid var(--blue);
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  font-family: var(--fancy);
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  margin-bottom: 2rem;
+}
+
 #logoGinKQuiz {
   display: block;
   margin-left: auto;
@@ -38,7 +123,7 @@
   margin-top: 2rem;
   background-color: var(--cyan);
   width: 55rem;
-  height: 30rem;
+  height: 35rem;
   border-radius: 2rem;
 } 
 
@@ -86,7 +171,7 @@
 
 #containeralt{
   width: 100%;
-  height: 50%;
+  height: 60%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -96,24 +181,30 @@
       display: flex;
       align-items: center;
       justify-content: space-around;
-      width: 80%;
+      width: 90%;
       margin-top: 2rem;
     }
     .alt3e4{
       display: flex;
       align-items: center;
       justify-content: space-around;
-      width: 80%;
+      width: 90%;
       margin-top: 2rem;
     }
 
 .alternativas{
-  width: 20rem;
+  width: 25rem;
   height: 3rem;
   border-radius: 2rem;
   border: none;
   padding-left: 10px;
   font-size: 1rem;
+}
+
+#dicaimagem{
+  width: 2rem;
+  height: 2rem;
+  margin: .5rem;
 }
 
 .checkboxes{

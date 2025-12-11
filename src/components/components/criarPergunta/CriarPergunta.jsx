@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./criarPergunta.module.css";
 import Logotipo from "../../../assets/icons/LogotipoGinKQuiz.png";
+import ideiaIcon from "../../../assets/icons/lampadaideia.png";
+
 
 const CriarPergunta = () => {
   const [temaSelecionado, setTemaSelecionado] = React.useState('');
@@ -180,19 +182,23 @@ const CriarPergunta = () => {
           {/* <button style={{color:'red'}} onClick={(e)=>{e.preventDefault(), setOpen(true)}}>criar dica</button> */}
 
           {open ===true?  (
-            <div style={{border:'1px solid black', backgroundColor:'lime'}}>
-              <button style={{color:'red'}} onClick={(e)=> {e.preventDefault(),setOpen(false)}}>x</button>
-              <input type="text" name="" id="" value={dica} onChange={(e)=>{setDica(e.target.value)}} placeholder="dica da pergunta" />
-              <button onClick={(e)=>{e.preventDefault(), setDica_array([...dica_array, ` ${dica}`])}}>criar dica</button>
+            <div id={styles.dicabox}>
+              <div id={styles.criardicabox}>
+                <button id={styles.saircriardica} onClick={(e)=> {e.preventDefault(),setOpen(false)}}>x</button>
+                <input id={styles.inputcriardica} type="text" name="" value={dica} onChange={(e)=>{setDica(e.target.value)}} placeholder="dica da pergunta" />
+                <button id={styles.criardica} onClick={(e)=>{e.preventDefault(), setDica_array([...dica_array, ` ${dica}`])}}>criar dica</button>
+              </div>
+
+
               <p>{dica_array}</p>
                 
             </div>
           ) : (<>
-           <button style={{color:'red'}} onClick={(e)=>{e.preventDefault(), setOpen(true)}}>criar dica</button>
+           <button id={styles.criardica} onClick={(e)=>{e.preventDefault(), setOpen(true)}}><img id={styles.dicaimagem} src={ideiaIcon} alt="Ideia" /></button>
           </>
           ) }
 
-        <button style={{color:'red'}} type="submit">criar pergunta</button>
+        <button id={styles.criarpergunta} type="submit">criar pergunta</button>
       </form>
     </>
   );

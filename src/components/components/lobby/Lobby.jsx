@@ -1,14 +1,22 @@
 import React from "react";
 import { supabase } from "../../../Supabase";
 import { useNavigate } from "react-router-dom";
+import styles from "./lobby.module.css";
+import Perfil from "../perfil/PerfilIcon";
 
 function Lobby() {
   const [listaGeneros, setListaGeneros] = React.useState({});
   const [temasSelecionados, setTemasSelecionados] = React.useState([]);
-  const [tamanhoSelecionado, setTamanhoSelecionado] = React.useState(10);
+  const [tamanhoSelecionado, setTamanhoSelecionado] = React.useState(null);
   const [perguntas, setPerguntas] = React.useState([]);
+  const [clickedButtonFacil, setClickedButtonFacil] = React.useState(false);
+  const [clickedButtonMedio, setClickedButtonMedio] = React.useState(false);
+  const [clickedButtonExpert, setClickedButtonExpert] = React.useState(false);
+  const [randomClicked, setRandomClicked] = React.useState(false);
 
-  const navigate = useNavigate()
+  const id = localStorage.getItem("userId");
+
+  const navigate = useNavigate();
   const tamanho = [10, 20, 30];
 
   React.useEffect(() => {
@@ -30,6 +38,7 @@ function Lobby() {
 
   const RandomThemes = () => {
     console.log("-----------------sorteando temas-----------------");
+    setRandomClicked(true);
     const temasRandom = [];
     console.log(listaGeneros.length);
     for (let i = 0; i < listaGeneros.length; i++) {
@@ -117,140 +126,217 @@ function Lobby() {
       arrayAleatorio.push(i);
     }
     arrayAleatorio.sort(() => Math.random() - 0.5);
-    
+
     console.log("Array aleatorio:", arrayAleatorio);
   };
 
-  const iniciarQuiz = ()=>{
-    const inicio = Date.now()
-    localStorage.setItem("inicioQuiz", inicio)
-    navigate(`/jogar/${Math.floor((Math.random()*40)+1)}`)
-  }
+  const iniciarQuiz = () => {
+    if (tamanhoSelecionado === null) {
+      alert("Por favor, selecione a quantidade de perguntas.");
+      return;
+    } else if (temasSelecionados.length === 0) {
+      alert("Por favor, selecione pelo menos um tema.");
+      return;
+    } else {
+      const inicio = Date.now();
+      localStorage.setItem("inicioQuiz", inicio);
+      navigate(`/jogar/${Math.floor(Math.random() * 40 + 1)}`);
+    }
+  };
 
   return (
-    <div>
-      <h2>Lobby</h2>
-      <div>
-        {listaGeneros && listaGeneros.length > 0 ? (
-          <>
-            {listaGeneros.map((genero) => (
-              <div key={genero.id_tema} style={{ display: "flex" }}>
-                <p key={genero.created_at}>{genero.nome_tema}</p>
-                <input
-                  type="checkbox"
-                  checked={temasSelecionados.includes(genero.id_tema)}
-                  value={genero.id_tema}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setTemasSelecionados((prev) => [...prev, genero.id_tema]);
-                      console.log(temasSelecionados);
-                    } else {
-                      setTemasSelecionados((prev) =>
-                        prev.filter((id) => id !== genero.id_tema)
-                      );
-                      console.log(temasSelecionados);
-                    }
+    <div className={styles.lobbyContainer}>
+      <div className={styles.someOtherClass}>
+        <div className={styles.dois}>
+          <div className={styles.containertudo}>
+            <div className={styles.parteesquerdacontainer}>
+              {listaGeneros && listaGeneros.length > 0 ? (
+                <div id={styles.containertemas}>
+                  {listaGeneros.map((genero) => (
+                    <div key={genero.id_tema} style={{ display: "flex" }}>
+                      <p key={genero.created_at}>{genero.nome_tema}</p>
+                      <input
+                        id={styles.checkbox}
+                        type="checkbox"
+                        checked={temasSelecionados.includes(genero.id_tema)}
+                        value={genero.id_tema}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setTemasSelecionados((prev) => [
+                              ...prev,
+                              genero.id_tema,
+                            ]);
+                            console.log(temasSelecionados);
+                          } else {
+                            setTemasSelecionados((prev) =>
+                              prev.filter((id) => id !== genero.id_tema)
+                            );
+                            console.log(temasSelecionados);
+                          }
+                        }}
+                      />
+                    </div>
+                  ))}
+                  <div style={{ display: "flex" }}>
+                    <p>Todos</p>
+                    <input
+                      id={styles.checkbox}
+                      type="checkbox"
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          const listaGenerosId = listaGeneros.map(
+                            (item) => item.id_tema
+                          );
+                          setTemasSelecionados([...listaGenerosId]);
+                        } else {
+                          setTemasSelecionados([]);
+                        }
+                        console.log(temasSelecionados);
+                      }}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <p>Carregando generos...</p>
+              )}
+              <div>
+                <button
+                  className={`${styles.sorteartemas} ${
+                    randomClicked ? styles.sorteartemasClicked : ""
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    RandomThemes();
                   }}
-                />
+                >
+                  Sortear Temas
+                </button>
               </div>
-            ))}
-            <div style={{ display: "flex" }}>
-              <p>Todos</p>
-              <input
-                type="checkbox"
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    const listaGenerosId = listaGeneros.map(
-                      (item) => item.id_tema
-                    );
-                    setTemasSelecionados([...listaGenerosId]);
-                  } else {
-                    setTemasSelecionados([]);
-                  }
-                  console.log(temasSelecionados);
-                }}
-              />
             </div>
-          </>
-        ) : (
-          <p>Carregando generos...</p>
-        )}
+            <div>
+              {/* <h3>Temas Selecionados:</h3> */}
+              {/* daria pa coloca os temas selecionados com um destaque, nn precisa nem ser aqui pode ser direto nas checkboxs, tendeu? */}
+              {/* <ul> */}
+              {/* {temasSelecionados.map((temaId) => {
+                  const tema = listaGeneros.find((t) => t.id_tema === temaId);
+                  return (
+                    <li key={temaId}>
+                      {tema ? tema.nome_tema : "Tema não encontrado"}
+                    </li>
+                  );
+                })} */}
+              {/* </ul> */}
+            </div>
+            <div id={styles.divQuantiaPerguntas}>
+              {/* <h3>Tamanhos Disponíveis:</h3> */}
+              {/* <select
+                name=""
+                id={styles.selectquantasperguntas}
+                value={tamanhoSelecionado}
+                onChange={(e) => {
+                  // e.preventDefault(), handleLengthChange(e);
+                  e.preventDefault();
+                  setTamanhoSelecionado(parseInt(e.target.value));
+                  typeof tamanhoSelecionado === "string"
+                    ? console.log(
+                        "Tamanho selecionado:",
+                        parseInt(tamanhoSelecionado)
+                      )
+                    : console.log("Tamanho selecionado:", tamanhoSelecionado);
+                }}
+              >
+                {tamanho.map((tamanhoOption) => (
+                  <option key={tamanhoOption} value={tamanhoOption}>
+                    {tamanhoOption}
+                  </option>
+                ))}
+              </select> */}
 
-        <div>
-          <button
-            onClick={(e) => {
-              e.preventDefault(), RandomThemes();
-            }}
-          >
-            Sortear Temas
-          </button>
-        </div>
-        <div>
-          <h3>Temas Selecionados:</h3>
-          {/* daria pa coloca os temas selecionados com um destaque, nn precisa nem ser aqui pode ser direto nas checkboxs, tendeu? */}
-          <ul>
-            {temasSelecionados.map((temaId) => {
-              const tema = listaGeneros.find((t) => t.id_tema === temaId);
-              return (
-                <li key={temaId}>
-                  {tema ? tema.nome_tema : "Tema não encontrado"}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+              {/* A PARTIR DAQUI A ANNA QUE FEZ */}
 
-        <div>
-          <h3>Tamanhos Disponíveis:</h3>
-          <select
-            name=""
-            id=""
-            value={tamanhoSelecionado}
-            onChange={(e) => {
-              // e.preventDefault(), handleLengthChange(e);
-              e.preventDefault();
-              setTamanhoSelecionado(parseInt(e.target.value));
-              typeof tamanhoSelecionado === "string"
-                ? console.log(
-                    "Tamanho selecionado:",
-                    parseInt(tamanhoSelecionado)
-                  )
-                : console.log("Tamanho selecionado:", tamanhoSelecionado);
-            }}
-          >
-            {tamanho.map((tamanhoOption) => (
-              <option key={tamanhoOption} value={tamanhoOption}>
-                {tamanhoOption}
-              </option>
-            ))}
-          </select>
+              <button
+                className={`${styles.buttons} ${
+                  clickedButtonFacil ? styles.buttonActive : ""
+                }`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (clickedButtonFacil) {
+                    setClickedButtonFacil(false);
+                    setTamanhoSelecionado(null);
+                    console.log("Fácil desativado, voltando ao padrão");
+                  } else {
+                    setTamanhoSelecionado(10);
+                    setClickedButtonFacil(true);
+                    setClickedButtonMedio(false);
+                    setClickedButtonExpert(false);
+                    console.log("Tamanho selecionado:", 10);
+                  }
+                }}
+              >
+                Fácil
+              </button>
+              <button
+                className={`${styles.buttons} ${
+                  clickedButtonMedio ? styles.buttonActive : ""
+                }`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (clickedButtonMedio) {
+                    setClickedButtonMedio(false);
+                    setTamanhoSelecionado(null);
+                    console.log("Médio desativado, voltando ao padrão");
+                  } else {
+                    setTamanhoSelecionado(20);
+                    setClickedButtonFacil(false);
+                    setClickedButtonMedio(true);
+                    setClickedButtonExpert(false);
+                    console.log("Tamanho selecionado:", 20);
+                  }
+                }}
+              >
+                Médio
+              </button>
+              <button
+                className={`${styles.buttons} ${
+                  clickedButtonExpert ? styles.buttonActive : ""
+                }`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (clickedButtonExpert) {
+                    setClickedButtonExpert(false);
+                    setTamanhoSelecionado(null);
+                    console.log("Expert desativado, voltando ao padrão");
+                  } else {
+                    setTamanhoSelecionado(30);
+                    setClickedButtonFacil(false);
+                    setClickedButtonMedio(false);
+                    setClickedButtonExpert(true);
+                    console.log("Tamanho selecionado:", 30);
+                  }
+                }}
+              >
+                Expert
+              </button>
+            </div>
+          </div>
+          <div>
+            <button
+              className={styles.jogarbutton}
+              onClick={(e) => {
+                e.preventDefault(), BuscarPerguntas(), iniciarQuiz(); //modificar depois
+              }}
+            >
+              Iniciar
+            </button>
+          </div>
         </div>
-        <div>
-          <button
-            onClick={(e) => {
-              e.preventDefault(), BuscarPerguntas(), iniciarQuiz()//modificar depois
-            }}
-          >
-            JOGAR!
-          </button>
+      </div>
+      <div className={styles.partedireita}>
+        <div id={styles.perfil}>
+          <Perfil/>
         </div>
-        <div>
-          <button
-            onClick={() => {
-              console.log(perguntas);
-            }}
-          >
-            Mostrar perguntas
-          </button>
-        </div>
-        <div>
-          <button
-            onClick={() => {
-              console.log(perguntas.sort(() => Math.random() - 0.5));
-            }}
-          >
-            Mostrar perguntas embaralhadas
-          </button>
+        <div id={styles.novoJogo}>
+          <h2>Novo Jogo</h2>
         </div>
       </div>
     </div>
