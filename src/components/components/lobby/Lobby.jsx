@@ -333,7 +333,7 @@ function Lobby() {
       </div>
       <div className={styles.partedireita}>
         <div id={styles.perfil}>
-          <Perfil />
+          <Perfil/>
         </div>
         <div id={styles.novoJogo}>
           <h2>Novo Jogo</h2>

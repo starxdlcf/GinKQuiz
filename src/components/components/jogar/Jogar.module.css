@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root{
+  --fancy: 'Cormorant Garamond', serif;
+  --simple: 'Host Grotesk', sans-serif;
+  --red: #ff5757;
+  --yellow: #ffe785;
+  --gray: #737373;
+  --pink: #ff99c9;
+  --white: #ffffff;
+  --green: #8de969;
+  --muted-green: #87bba2;
+  --blue: #5d91e8;
+  --purple: #5d2e8c;
+  --vivid-purple: #8156f6;
+  --wheat: #fff4e3;
+  --orange: #ffd699;
+  --cyan: #6ce5e8;
+  --pink-transparent: rgba(248, 163, 158, 0.41);
+  --burned-pink: #ffadad;
+}
+
+#html{
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--white);
+    width: 100vw;
+    height: 100%;
+}
+
+#divcabecalho{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.logo{
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    width: 250px;
+}
+
+.containerPergunta{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--pink-transparent);
+    width: 55rem;
+    height: 45rem;
+    border-radius: 2rem;
+    margin-bottom: 8rem;
+}
+
+.alt1e2{
+    display: flex;
+    flex-direction: row;
+    gap: 3.5rem;
+    margin-top: 2rem;
+  }
+
+.alt3e4{
+    display: flex;
+    flex-direction: row;
+    gap: 3.5rem;
+    margin-top: 2rem;
+  }
+  
+.alternativa{
+    gap: 1.5rem;
+    margin-top: 1.8rem;
+    background-color: var(--burned-pink);
+    width: 23rem;
+    height: 4rem;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--simple);
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+}
+
+.alternativaCheckedWrong{
+  gap: 1.5rem;
+    margin-top: 1.8rem;
+    background-color: var(--burned-pink);
+    width: 22rem;
+    height: 4rem;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--simple);
+    font-size: 1rem;
+    cursor: pointer;
+    border: 5px solid var(--red);
+
+}
+
+.alternativaCheckedRight{
+  gap: 1.5rem;
+    margin-top: 1.8rem;
+    background-color: var(--burned-pink);
+    width: 22rem;
+    height: 4rem;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--simple);
+    font-size: 1rem;
+    cursor: pointer;
+    border: 5px solid var(--green);
+}
+
+.dica{
+    margin-top: 2rem;
+    background-color: var(--white);
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1.5rem;
+    font-family: var(--fancy);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#dicaOpen{
+    margin-top: 1rem;
+    width: 40rem;
+    height: auto;
+    font-family: var(--simple);
+    font-size: 1rem;
+    text-align: center;
+}
+
+#dicaimagem{
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0;
+
+}

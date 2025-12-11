@@ -65,7 +65,7 @@ const router = createBrowserRouter([
     element: <Cadastro />,
   },
   {
-    path: "menu/perfil",
+    path: "/perfil",
     element: <Perfil />,
   },
   {

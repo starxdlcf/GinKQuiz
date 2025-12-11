@@ -2,158 +2,241 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "../../../Supabase";
 import { useNavigate } from "react-router-dom";
-import styles from "./Jogar.module.css"
+import styles from "./Jogar.module.css";
+import Logo from "../../../assets/icons/LogotipoGinKQuiz.png";
+import ideiaIcon from "../../../assets/icons/lampadaideia.png";
+import PerfilIcon from "../../components/perfil/PerfilIcon.jsx";
 
 export const Jogar = () => {
-
   const { id } = useParams();
   const navigate = useNavigate();
   const [dataPergunta, setDataPergunta] = React.useState(null);
-  const [dica,setDica] = React.useState("")
-  const [open, setOpen] = React.useState(false)
+  const [dica, setDica] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const [acertou, setAcertou] = React.useState(null);
+  const [alternativaClicada, setAlternativaClicada] = React.useState(null);
 
   useEffect(() => {
-    fetchPergunta(id)
-  }, [id]); 
+    fetchPergunta(id);
+  }, [id]);
 
   const fetchPergunta = async (id) => {
-    try{
-      const { data,error } = await supabase
-      .from("perguntas")
-      .select("*")
-      .eq("id_pergunta", id)
-      .single();
-      
-      if (error) throw error
+    try {
+      const { data, error } = await supabase
+        .from("perguntas")
+        .select("*")
+        .eq("id_pergunta", id)
+        .single();
 
-      setDataPergunta(data)
-      
-    }
-    catch(error){
-      console.log(error)
-      alert(error.message)
+      if (error) throw error;
+
+      setDataPergunta(data);
+    } catch (error) {
+      console.log(error);
+      alert(error.message);
     }
   };
 
-  const verificarResposta = async(escolha)=>{
-    try{
-      const {data, error} = await supabase
-      .from("perguntas")
-      .select("*")
-      .eq("resposta_pergunta", escolha)
-      
-      if (error) throw error
-
-      if (data != ""){
-        somarPontos()
-        alert("acertou")
-        setOpen(false)
-        navigate(`/jogar/${Math.floor((Math.random()*40)+1)}`)
-      }
-      else {
-        alert("errou")
-        setOpen(false)
-        navigate(`/jogar/${Math.floor((Math.random()*40)+1)}`)
-      }
-
-    }
-    catch (error){
-      console.error(error)
-      alert(error.message)
-    }
-  }
-
-  const somarPontos= ()=>{
-    const pontos = Number(localStorage.getItem("pontos"))
-    const pontosAtualizados = pontos+50
-    localStorage.setItem("pontos",pontosAtualizados)
-    console.log("pontos Atuais", pontosAtualizados)
-  }
-
-  const fetchDicas = async()=>{
-    if (!open){
-      try{        
-        const {data, error}= await supabase
-        .from("dicas")
+  const verificarResposta = async (escolha) => {
+    try {
+      const { data, error } = await supabase
+        .from("perguntas")
         .select("*")
-        .eq("pergunta_dica",id)
-  
-        if (error) throw error
-  
-        const dicas = data
-  
-        const aleatorio =  dicas[Math.floor((Math.random()*dicas.length))]
-        setDica(aleatorio)
+        .eq("resposta_pergunta", escolha);
+
+      if (error) throw error;
+
+      if (data != "") {
+        somarPontos();
+        setAcertou(true);
+        // Aguarda o React atualizar o estado acertou antes de registrar a alternativa
+        setTimeout(() => {
+          setAlternativaClicada(escolha);
+          // Mostra alert DEPOIS da cor renderizar
+          setTimeout(() => {
+            alert("acertou");
+            // Aguarda 300ms após fechar o alert, depois reseta e navega
+            setTimeout(() => {
+              setAlternativaClicada(null);
+              setAcertou(null);
+              navigate(`/jogar/${Math.floor(Math.random() * 40 + 1)}`);
+            }, 300);
+          }, 100);
+        }, 50);
+      } else {
+        setAcertou(false);
+        // Aguarda o React atualizar o estado acertou antes de registrar a alternativa
+        setTimeout(() => {
+          setAlternativaClicada(escolha);
+          // Mostra alert DEPOIS da cor renderizar
+          setTimeout(() => {
+            alert("errou");
+            // Aguarda 300ms após fechar o alert, depois reseta e navega
+            setTimeout(() => {
+              setAlternativaClicada(null);
+              setAcertou(null);
+              navigate(`/jogar/${Math.floor(Math.random() * 40 + 1)}`);
+            }, 300);
+          }, 100);
+        }, 50);
       }
-      catch (error){
-        console.error(error)
-        alert(error.message)
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+      setAlternativaClicada(null);
+      setAcertou(null);
+    }
+  };
+
+  const somarPontos = () => {
+    const pontos = Number(localStorage.getItem("pontos"));
+    const pontosAtualizados = pontos + 50;
+    localStorage.setItem("pontos", pontosAtualizados);
+    console.log("pontos Atuais", pontosAtualizados);
+  };
+
+  const fetchDicas = async () => {
+    if (!open) {
+      try {
+        const { data, error } = await supabase
+          .from("dicas")
+          .select("*")
+          .eq("pergunta_dica", id);
+
+        if (error) throw error;
+
+        const dicas = data;
+
+        const aleatorio = dicas[Math.floor(Math.random() * dicas.length)];
+        setDica(aleatorio);
+      } catch (error) {
+        console.error(error);
+        alert(error.message);
       }
     }
-  }
+  };
 
-  const finalizarQuiz = ()=>{
-    const fim = Date.now()
-    const inicio = Number(localStorage.getItem("inicioQuiz"))
-    const tempoSeg = (fim - inicio)/1000
+  const finalizarQuiz = () => {
+    const fim = Date.now();
+    const inicio = Number(localStorage.getItem("inicioQuiz"));
+    const tempoSeg = (fim - inicio) / 1000;
     const minutos = Math.floor(tempoSeg / 60);
     const segundos = Math.floor(tempoSeg % 60);
 
-    alert(`Seu tempo = ${minutos}:${segundos}, sua pontuação = ${localStorage.getItem("pontos")}`)
+    alert(
+      `Seu tempo = ${minutos}:${segundos}, sua pontuação = ${localStorage.getItem(
+        "pontos"
+      )}`
+    );
 
-    localStorage.clear("inicioQuiz")
-    localStorage.clear("pontos")
-  }
-  
-return (
-    <>
+    localStorage.clear("inicioQuiz");
+    localStorage.clear("pontos");
+  };
+
+  return (
+    <div id={styles.html}>
       {dataPergunta ? (
-        <div>
-          <>
+        <div className={styles.container}>
+          <div id={styles.divcabecalho}>
+            <img src={Logo} alt="Logo GinKQuiz" className={styles.logo} />
+              <img id={styles.botaoPerfil}
+               src={PerfilIcon} alt="Perfil" />
+          </div>
+
+          <div className={styles.containerPergunta}>
             <h2>{dataPergunta.enunciado_pergunta}</h2>
-            <div>
-              <button className={styles.alternativa} onClick={
-                (e)=>{ e.preventDefault(); verificarResposta(dataPergunta.alternativa1_pergunta)}} >
-                {dataPergunta.alternativa1_pergunta}
-              </button>
-              <button className={styles.alternativa} onClick={ 
-                (e)=>{e.preventDefault(); verificarResposta(dataPergunta.alternativa2_pergunta)}} >
-                {dataPergunta.alternativa2_pergunta}
-              </button>
-              <button className={styles.alternativa} onClick={ 
-                (e)=>{ e.preventDefault(); verificarResposta(dataPergunta.alternativa3_pergunta)}}>
-                {dataPergunta.alternativa3_pergunta}
-              </button>
-              <button className={styles.alternativa} onClick={ 
-                (e)=>{ e.preventDefault(); verificarResposta(dataPergunta.alternativa4_pergunta)}} >
-                {dataPergunta.alternativa4_pergunta}
-              </button>
+            <div >
+              <div className={styles.alt1e2}>
+                <button
+                  className={`${
+                    alternativaClicada === dataPergunta.alternativa1_pergunta
+                      ? acertou == true
+                        ? styles.alternativaCheckedRight
+                        : styles.alternativaCheckedWrong
+                      : styles.alternativa
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    verificarResposta(dataPergunta.alternativa1_pergunta);
+                  }}
+                >
+                  {dataPergunta.alternativa1_pergunta}
+                </button>
+                <button
+                  className={`${
+                    alternativaClicada == dataPergunta.alternativa2_pergunta
+                      ? acertou == true
+                        ? styles.alternativaCheckedRight
+                        : styles.alternativaCheckedWrong
+                      : styles.alternativa
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    verificarResposta(dataPergunta.alternativa2_pergunta);
+                  }}
+                >
+                  {dataPergunta.alternativa2_pergunta}
+                </button>
+              </div>
+              <div className={styles.alt3e4}>
+                <button
+                  className={`${
+                    alternativaClicada == dataPergunta.alternativa3_pergunta
+                      ? acertou == true
+                        ? styles.alternativaCheckedRight
+                        : styles.alternativaCheckedWrong
+                      : styles.alternativa
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    verificarResposta(dataPergunta.alternativa3_pergunta);
+                  }}
+                >
+                  {dataPergunta.alternativa3_pergunta}
+                </button>
+                <button
+                  className={`${
+                    alternativaClicada === dataPergunta.alternativa4_pergunta
+                      ? acertou == true
+                        ? styles.alternativaCheckedRight
+                        : styles.alternativaCheckedWrong
+                      : styles.alternativa
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    verificarResposta(dataPergunta.alternativa4_pergunta);
+                  }}
+                >
+                  {dataPergunta.alternativa4_pergunta}
+                </button>
+              </div>
             </div>
 
             <button
-              className={styles.alternativa}
+              className={styles.dica}
               onClick={() => {
                 setOpen(!open);
-                fetchDicas()}}
+                fetchDicas();
+              }}
             >
-              {open === false ? "mostrar dicas" : "fechar dicas"}
+              {open === false ? (
+                <img id={styles.dicaimagem} src={ideiaIcon} alt="Ideia" />
+              ) : (
+                "fechar dicas"
+              )}
             </button>
-          </>
+          {open === true ? <p id={styles.dicaOpen} key={dica.id_dica}> {dica.info_dica}</p> : <></>}
+          </div>
 
-          {open === true ? (
-            <p key={dica.id_dica}> {dica.info_dica}</p>
-          ) : (
-            <>
-            </>
-          )}
+
         </div>
       ) : (
         <p>Carregando...</p>
       )}
 
       {/* remover isso no final */}
-      <button onClick={(e)=>{e.preventDefault(); localStorage.clear("pontos")}}>limpar pontos</button>
-      <button onClick={(e)=>{e.preventDefault(); finalizarQuiz()}}>finalizar</button>
-    </>
+      {/* <button onClick={(e)=>{e.preventDefault(); localStorage.clear("pontos")}}>limpar pontos</button>
+      <button onClick={(e)=>{e.preventDefault(); finalizarQuiz()}}>finalizar</button> */}
+    </div>
   );
 };
