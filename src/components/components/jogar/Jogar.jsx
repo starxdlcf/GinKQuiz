@@ -8,7 +8,7 @@ import ideiaIcon from "../../../assets/icons/lampadaideia.png";
 import PerfilIcon from "../../components/perfil/PerfilIcon.jsx";
 
 export const Jogar = () => {
-  const { id } = useParams();
+  const { idPergunta } = useParams();
   const navigate = useNavigate();
   const [dataPergunta, setDataPergunta] = React.useState(null);
   const [dica, setDica] = React.useState("");
@@ -17,8 +17,8 @@ export const Jogar = () => {
   const [alternativaClicada, setAlternativaClicada] = React.useState(null);
 
   useEffect(() => {
-    fetchPergunta(id);
-  }, [id]);
+    fetchPergunta(idPergunta);
+  }, [idPergunta]);
 
   const fetchPergunta = async (id) => {
     try {
@@ -47,37 +47,29 @@ export const Jogar = () => {
       if (error) throw error;
 
       if (data != "") {
-        somarPontos();
+        somarAcertos();
         setAcertou(true);
         // Aguarda o React atualizar o estado acertou antes de registrar a alternativa
         setTimeout(() => {
           setAlternativaClicada(escolha);
-          // Mostra alert DEPOIS da cor renderizar
           setTimeout(() => {
-            alert("acertou");
-            // Aguarda 300ms após fechar o alert, depois reseta e navega
-            setTimeout(() => {
-              setAlternativaClicada(null);
-              setAcertou(null);
-              navigate(`/jogar/${Math.floor(Math.random() * 40 + 1)}`);
-            }, 300);
-          }, 100);
+            setAlternativaClicada(null);
+            setAcertou(null);
+            navigate(`/jogar/${Math.floor(Math.random() * 40 + 1)}`);
+          }, 300);
+
         }, 50);
       } else {
         setAcertou(false);
         // Aguarda o React atualizar o estado acertou antes de registrar a alternativa
         setTimeout(() => {
           setAlternativaClicada(escolha);
-          // Mostra alert DEPOIS da cor renderizar
           setTimeout(() => {
-            alert("errou");
-            // Aguarda 300ms após fechar o alert, depois reseta e navega
-            setTimeout(() => {
-              setAlternativaClicada(null);
-              setAcertou(null);
-              navigate(`/jogar/${Math.floor(Math.random() * 40 + 1)}`);
-            }, 300);
-          }, 100);
+            setAlternativaClicada(null);
+            setAcertou(null);
+            navigate(`/jogar/${Math.floor(Math.random() * 40 + 1)}`);
+          }, 300);
+
         }, 50);
       }
     } catch (error) {
@@ -88,11 +80,10 @@ export const Jogar = () => {
     }
   };
 
-  const somarPontos = () => {
-    const pontos = Number(localStorage.getItem("pontos"));
-    const pontosAtualizados = pontos + 50;
-    localStorage.setItem("pontos", pontosAtualizados);
-    console.log("pontos Atuais", pontosAtualizados);
+  const somarAcertos = () => {
+    const acertos = Number(localStorage.getItem("acertos"));
+    const acertosAtualizados = acertos + 1;
+    localStorage.setItem("acertos", acertosAtualizados);
   };
 
   const fetchDicas = async () => {
@@ -101,7 +92,7 @@ export const Jogar = () => {
         const { data, error } = await supabase
           .from("dicas")
           .select("*")
-          .eq("pergunta_dica", id);
+          .eq("pergunta_dica", idPergunta);
 
         if (error) throw error;
 
@@ -119,18 +110,19 @@ export const Jogar = () => {
   const finalizarQuiz = () => {
     const fim = Date.now();
     const inicio = Number(localStorage.getItem("inicioQuiz"));
-    const tempoSeg = (fim - inicio) / 1000;
-    const minutos = Math.floor(tempoSeg / 60);
-    const segundos = Math.floor(tempoSeg % 60);
+    const tempo = (fim - inicio) / 1000;
+    const minutos = Math.floor(tempo / 60);
+    const segundos = Math.floor(tempo % 60);
 
-    alert(
-      `Seu tempo = ${minutos}:${segundos}, sua pontuação = ${localStorage.getItem(
-        "pontos"
-      )}`
-    );
+    const acertos = localStorage.getItem("acertos")
 
+    const pontos = Math.floor((acertos/tempo)*10000)
+
+    localStorage.setItem("pontos", pontos);
+    localStorage.setItem("tempoMin", minutos);
+    localStorage.setItem("tempoSeg", segundos);
     localStorage.clear("inicioQuiz");
-    localStorage.clear("pontos");
+    navigate("/telaFinal")
   };
 
   return (
@@ -235,8 +227,8 @@ export const Jogar = () => {
       )}
 
       {/* remover isso no final */}
-      {/* <button onClick={(e)=>{e.preventDefault(); localStorage.clear("pontos")}}>limpar pontos</button>
-      <button onClick={(e)=>{e.preventDefault(); finalizarQuiz()}}>finalizar</button> */}
+      <button onClick={(e)=>{e.preventDefault(); localStorage.clear("acertos")}}>limpar acertos</button>
+      <button onClick={(e)=>{e.preventDefault(); finalizarQuiz()}}>finalizar</button>
     </div>
   );
 };

@@ -27,19 +27,6 @@ const router = createBrowserRouter([
     errorElement: <Error />,
     element: <Login />,
   },
-  
-//   {
-//     path: "menu",
-//     element: <Debbug/>,
-//     children: [
-//       {
-        
-//      path: "perfil",
-//     element: <Perfil />,
-//    },
-   
-//   ]
-// },
 {
  path:"/menu",
  element:<MenuInicial/>,
@@ -57,7 +44,7 @@ const router = createBrowserRouter([
     element: <Cadastro />,
   },
   {
-    path: "jogar/:id",
+    path: "jogar/:idPergunta",
     element: <Jogar />,
   },
   {
@@ -65,7 +52,7 @@ const router = createBrowserRouter([
     element: <Cadastro />,
   },
   {
-    path: "/perfil",
+    path: "perfil",
     element: <Perfil />,
   },
   {

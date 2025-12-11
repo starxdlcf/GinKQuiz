@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import React from "react";
 import styles from "./MenuInicial.module.css";
 import { supabase } from "../../../Supabase";
 import { EntrarCla } from "../../../components/components/EntrarCla/EntrarCla.jsx";
@@ -12,7 +12,7 @@ export const MenuInicial = () => {
 
   const [data, setData] = React.useState(null);
 
-  const id = localStorage.getItem("userId");
+  const idUser = localStorage.getItem("userId");
 
   const [descripition, setDescription] = React.useState(false);
 
@@ -27,7 +27,7 @@ export const MenuInicial = () => {
   React.useEffect(() => {
     // showClanInfo();
     ClaCheck()
-  }, [id]);
+  }, [idUser]);
 
   const showClanInfo = async () => {
     const { data, error } = await supabase.from("cla").select("*");
@@ -41,7 +41,7 @@ export const MenuInicial = () => {
 
 
   const showId = async () => {
-    console.log("Id do usuario", id);
+    console.log("Id do usuario", idUser);
     const { data, error } = await supabase
       .from("usuarios")
       .select("*")
@@ -50,11 +50,11 @@ export const MenuInicial = () => {
   };
 
   const hasTeam = async () => {
-    console.log("Usuario tem cla?", id);
+    console.log("Usuario tem cla?", idUser);
     const { data } = await supabase
       .from("usuarios")
       .select("cla_usuario")
-      .eq("id_usuario", id);
+      .eq("id_usuario", idUser);
       setHasCla(data)
 
       if (data.cla_usuario != null) {
@@ -71,7 +71,7 @@ export const MenuInicial = () => {
       let { data, error } = await supabase
         .from("usuarios")
         .select("*")
-        .eq("id_usuario", id)
+        .eq("id_usuario", idUser)
         .single();
 
         if (error) return error;
@@ -107,7 +107,7 @@ export const MenuInicial = () => {
         <img className={styles.logo} src={GinKQuizLogo} alt="Logotipo GinKQuiz" />
 
         <div className={styles.botoes}>
-          <Link to="/lobby"><button className={styles.jogar} onClick={()=>console.log(id)}>Jogar</button></Link>
+          <Link to="/lobby"><button className={styles.jogar}>Jogar</button></Link>
           <Link to="/rankings"><button className={styles.rankings}>Rankings</button></Link>
           {isAdmin === true ? (<Link to='/gerenciamento'><button id={styles.button}>Gerenciar Perguntas</button></Link>):(<></>)}
         </div>
