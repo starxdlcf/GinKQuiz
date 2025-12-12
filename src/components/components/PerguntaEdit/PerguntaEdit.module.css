@@ -145,3 +145,7 @@
   background-color: var(--pink);
   outline: none;
 }
+.lista_dicas{
+  display: flex;
+  flex-direction: column;
+}
