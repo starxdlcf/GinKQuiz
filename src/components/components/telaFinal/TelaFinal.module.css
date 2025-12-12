@@ -1,10 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
 
+:root{
+  --fancy: 'Cormorant Garamond', serif;
+  --simple: 'Host Grotesk', sans-serif;
+  --red: #ff5757;
+  --yellow: #ffe785;
+  --gray: #737373;
+  --pink: #ff99c9;
+  --white: #ffffff;
+  --green: #8de969;
+  --muted-green: #87bba2;
+  --blue: #5d91e8;
+  --purple: #5d2e8c;
+  --vivid-purple: #8156f6;
+  --wheat: #fff4e3;
+  --orange: #ffd699;
+}
 
 #container{
 	background-image: url("../../../assets/icons/FundoTelaFinalGinKQuiz.jpg");
 	width: 100vw;
 	height: 100vh;
 	background-size: cover;
+
+
+}
+
+.cabecalho{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding-top: 5rem;
+	font-family: var(--fancy);
+	font-size: 2.5rem;
+	color: var(--blue);
+}
+
+#subtitulo{
+	color: gray;
+	font-size: 1.5rem;
+
+}
+
+.containerpontos{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-top: 9.7rem;
+}
+
+#pontos{
+		font-size: 8rem;
+		font-family: var(--fancy);
+		font-weight: bolder;
+		color: var(--gray);
+}
+
+.containerinfo{
+	display: flex;
+	flex-direction: row;
+	gap: 1.5rem;
+	margin-top: 8.7rem;
+}
+
+span{
+	font-weight: bold;
+}
+
+.p{
+	font-size: 1.2rem;
+	font-family: var(--simple);
+	color: var(--gray);
+	
+}
+
+.buttons{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	width: 100vw;
+	gap: 8rem;
+	font-family: var(--fancy);
+	font-weight: bolder;
+	margin-top: 1rem;
+
+}
+
+#jogar{
+	background-color: var(--muted-green);
+	color: black;
+	width: 10rem;
+	border: none;
+	border-radius: 3rem;
+	height: 3.5rem;
+	padding: 8px 12px;
+	font-family: var(--fancy);
+	font-weight: bolder;
+	font-size: 1.2rem;
+}
+
+#menu{
+	background-color: var(--vivid-purple);
+	color: black;
+	width: 8rem;
+	border: none;
+	border-radius: 3rem;
+	height: 3.5rem;
+	padding: 8px 12px;
+	font-family: var(--fancy);
+	font-weight: bolder;
+	font-size: 1.2rem;
 }
 
 /* Overlay que envolve o gráfico (visível ao alternar a classe .show) */
@@ -56,12 +165,16 @@
 
 /* Botão padrão (pode ser reutilizado) */
 .btn {
-	background-color: var(--primary, #1976d2);
-	color: #fff;
+	background-color: var(--pink);
+	color: black;
+	width: 8rem;
 	border: none;
+	border-radius: 3rem;
+	height: 3.5rem;
 	padding: 8px 12px;
-	border-radius: 4px;
-	cursor: pointer;
+	font-family: var(--fancy);
+	font-weight: bolder;
+	font-size: 1.2rem;
 }
 
 .btn.secondary {
