@@ -84,42 +84,52 @@ function TelaFinal() {
   };
 
   return (
-    <div>
-      <h1>Parabens {nomeUsuario}</h1>
-      <p>você completou o quiz com sucesso</p>
-      <p>+{pontos}</p>
-      <p>Perguntas respondidas: ?</p>
-      <p>Respostas corretas: {acertos}</p>
-      <p>
-        Tempo Gasto: {tempoMin}:{tempoSeg}
-      </p>
+    <div id={styles.container}>
+        <h1>Parabens {nomeUsuario}</h1>
+        <p>você completou o quiz com sucesso</p>
+        <p>+{pontos}</p>
+        <p>Perguntas respondidas: ?</p>
+        <p>Respostas corretas: {acertos}</p>
+        <p>Tempo Gasto: {tempoMin}:{tempoSeg}</p>
 
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          escolherCaminho("jogar");
-        }}
-      >
-        Jogar Novamente
-      </button>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          escolherCaminho("menu");
-        }}
-      >
-        Ir ao Menu
-      </button>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          escolherCaminho("grafico");
-        }}
-      >
-        Ver Graficos
-      </button>
-    </div>
-  );
+        <button onClick={(e)=>{e.preventDefault(); escolherCaminho("jogar")}}>Jogar Novamente</button>
+        <button onClick={(e)=>{e.preventDefault(); escolherCaminho("menu")}}>Ir ao Menu</button>
+                <button className={styles.btn} onClick={(e)=>{e.preventDefault(); setShowGrafico(!showGrafico)}}>{showGrafico ? 'Ocultar Gráficos' : 'Ver Gráficos'}</button>
+
+                {/* Overlay do gráfico: presente no DOM com display none quando oculto */}
+                <div className={`${styles.overlay} ${showGrafico ? styles.show : ''}`}>
+                    <div className={styles.overlayInner}>
+                        <div className={styles.overlayHeader}>
+                            <h3 style={{ margin: 0 }}>Histórico</h3>
+                            <button className={styles.closeButton} onClick={() => setShowGrafico(false)}>×</button>
+                        </div>
+
+                        {resultados && resultados.length > 0 ? (
+                            (() => {
+                                const chartData = resultados.map((r, i) => ({
+                                    result: `#${i + 1}`,
+                                    value: Number(r.pontuacao_resultado) || 0,
+                                    time: r.created_at,
+                                }));
+
+                                const config = {
+                                    data: chartData,
+                                    xField: "result",
+                                    yField: "value",
+                                    point: { size: 4 },
+                                    tooltip: { showMarkers: false },
+                                    style: { lineWidth: 2 },
+                                };
+
+                                return <div className={styles.chartContainer}><Line {...config} /></div>;
+                            })()
+                        ) : (
+                            <p>Sem resultados para mostrar.</p>
+                        )}
+                    </div>
+                </div>
+        </div>
+  )
 }
 
 export default TelaFinal;
