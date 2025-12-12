@@ -7,6 +7,7 @@ import Logo from "../../../assets/icons/LogotipoGinKQuiz.png";
 import ideiaIcon from "../../../assets/icons/lampadaideia.png";
 
 export const Jogar = () => {
+  const [numero,setNumero] = React.useState(1)
   const { idPergunta } = useParams();
   const navigate = useNavigate();
   const [dataPergunta, setDataPergunta] = React.useState(null);
@@ -16,16 +17,9 @@ export const Jogar = () => {
   const [alternativaClicada, setAlternativaClicada] = React.useState(null);
 
   const tamanhoSL = JSON.parse(localStorage.getItem("tamanhoSelecionado"));
-  const perguntasSL = JSON.parse(localStorage.getItem("perguntasSelecionadas"));
 
   useEffect(() => {
     fetchPergunta(idPergunta);
-    // const tamanhoSL = JSON.parse(localStorage.getItem("tamanhoSelecionado"));
-    // const perguntasSL = JSON.parse(
-    //   localStorage.getItem("perguntasSelecionadas")
-    // );
-    // console.log("tamanhoSelecionado no localStorage:", tamanhoSL);
-    // console.log("perguntasSelecionadas no localStorage:", perguntasSL);
   }, [idPergunta]);
 
   const fetchPergunta = async (id) => {
@@ -73,7 +67,8 @@ export const Jogar = () => {
             if (!proximaPergunta) {
               finalizarQuiz();
               return;
-            }else{ 
+            }else{
+              setNumero(numero+1)
               navigate(`/jogar/${proximaPergunta}`);
             }
           }, 300);
@@ -89,7 +84,8 @@ export const Jogar = () => {
                         if (!proximaPergunta) {
               finalizarQuiz();
               return;
-            }else{ 
+            }else{
+              setNumero(numero+1)
               navigate(`/jogar/${proximaPergunta}`);
             }
           }, 300);
@@ -156,7 +152,9 @@ export const Jogar = () => {
             <img src={Logo} alt="Logo GinKQuiz" className={styles.logo} />
           </div>
 
+
           <div className={styles.containerPergunta}>
+            <h2 id={styles.containerPergunta}>{numero}/{tamanhoSL}</h2>
             <h2>{dataPergunta.enunciado_pergunta}</h2>
             <div>
               <div className={styles.alt1e2}>
