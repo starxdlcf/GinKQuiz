@@ -1,6 +1,7 @@
 import React from 'react'
 import { supabase } from '../../../Supabase'
 import { useNavigate } from 'react-router-dom'
+import { Line } from '@ant-design/plots'
 
 function TelaFinal() {
     const [nomeUsuario,setNomeUsuario] = React.useState("")
@@ -12,10 +13,29 @@ function TelaFinal() {
     const tempoSeg = localStorage.getItem("tempoSeg")
     
     const navigate = useNavigate()
+    const [resultados, setResultados] = React.useState([])
+    const [showGrafico, setShowGrafico] = React.useState(false)
 
     React.useEffect(()=>{
         fetchUsuario()
+        fetchResultados()
     },[])
+
+    const fetchResultados = async () => {
+        try{
+            const { data, error } = await supabase
+                .from('resultados')
+                .select('pontuacao_resultado, acertos_resultado, tempo_resultado, usuario_id_resultado, created_at, usuario:usuario_id_resultado ( nome_usuario )')
+                .order('created_at', { ascending: true });
+
+            if (error) throw error;
+
+            setResultados(data || []);
+        }
+        catch(error){
+            console.error('Erro ao buscar resultados:', error)
+        }
+    }
 
     const fetchUsuario = async()=>{
         try{
@@ -43,10 +63,9 @@ function TelaFinal() {
 
         if (botao == "jogar"){
             navigate("/lobby")
-        }if (botao == "menu"){
+        }
+        if (botao == "menu"){
             navigate("/menu")
-        }if (botao == "grafico"){
-            alert("graficos em manutenção")
         }
     }
 
@@ -78,7 +97,6 @@ function TelaFinal() {
         localStorage.removeItem("inicioQuiz")
     }
 
-
   return (
     <div>
         <h1>Parabens {nomeUsuario}</h1>
@@ -90,10 +108,32 @@ function TelaFinal() {
 
         <button onClick={(e)=>{e.preventDefault(); escolherCaminho("jogar")}}>Jogar Novamente</button>
         <button onClick={(e)=>{e.preventDefault(); escolherCaminho("menu")}}>Ir ao Menu</button>
-        <button onClick={(e)=>{e.preventDefault(); escolherCaminho("grafico")}}>Ver Graficos</button>
+        <button onClick={(e)=>{e.preventDefault(); setShowGrafico(!showGrafico)}}>{showGrafico ? 'Ocultar Gráficos' : 'Ver Gráficos'}</button>
 
-    </div>
+        {showGrafico && resultados && resultados.length > 0 && (
+            <div style={{ marginTop: 24 }}>
+                <h3>Histórico</h3>
+                {(() => {
+                    const chartData = resultados.map((r, i) => ({
+                        result: `#${i + 1}`,
+                        value: Number(r.pontuacao_resultado) || 0,
+                        time: r.created_at,
+                    }));
+
+                    const config = {
+                        data: chartData,
+                        xField: 'result',
+                        yField: 'value',
+                        point: { size: 4 },
+                        tooltip: { showMarkers: false },
+                        style: { lineWidth: 2 },
+                    };
+
+                    return <Line {...config} />;
+                })()}
+            </div>
+        )}
+        </div>
   )
 }
-
 export default TelaFinal
