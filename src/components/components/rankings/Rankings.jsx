@@ -3,6 +3,7 @@ import { supabase } from "../../../Supabase";
 import styles from "./Rankings.module.css";
 import Perfil from "../perfil/PerfilIcon";
 import { Link } from "react-router-dom";
+import {useNavigate} from "react-router-dom"
 
 export default function Rankings() {
   const [users, setUsers] = React.useState([]);
@@ -13,6 +14,8 @@ export default function Rankings() {
   const [quantidadePerguntasFiltro, setQuantidadePerguntasFiltro] =
     React.useState(null);
   const id = localStorage.getItem("userId");
+
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     // Load rankings data here
@@ -198,9 +201,9 @@ export default function Rankings() {
         </div>
 
         <div className={styles.rodape}>
-          <button>
+          {/* <button>
             <Link to={"/menu"}>Ir ao Menu</Link>
-          </button>
+          </button> */}
 
           <select
             onChange={(e) => setQuantidadePerguntasFiltro(e.target.value)}
@@ -212,8 +215,11 @@ export default function Rankings() {
             <option value="30">30 perguntas</option>
           </select>
 
-          <button>
-            <Link to={""}>Ir ao Login</Link>
+          <button onClick={(e)=>{
+            e.preventDefault(),
+            navigate(-1)
+          }}>
+            Voltar
           </button>
         </div>
       </div>
