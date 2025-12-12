@@ -2,6 +2,7 @@ import React from 'react'
 import { supabase } from '../../../Supabase'
 import { useNavigate } from 'react-router-dom'
 import { Line } from '@ant-design/plots'
+import styles from './TelaFinal.module.css'
 
 function TelaFinal() {
     const [nomeUsuario,setNomeUsuario] = React.useState("")
@@ -108,31 +109,40 @@ function TelaFinal() {
 
         <button onClick={(e)=>{e.preventDefault(); escolherCaminho("jogar")}}>Jogar Novamente</button>
         <button onClick={(e)=>{e.preventDefault(); escolherCaminho("menu")}}>Ir ao Menu</button>
-        <button onClick={(e)=>{e.preventDefault(); setShowGrafico(!showGrafico)}}>{showGrafico ? 'Ocultar Gráficos' : 'Ver Gráficos'}</button>
+                <button className={styles.btn} onClick={(e)=>{e.preventDefault(); setShowGrafico(!showGrafico)}}>{showGrafico ? 'Ocultar Gráficos' : 'Ver Gráficos'}</button>
 
-        {showGrafico && resultados && resultados.length > 0 && (
-            <div style={{ marginTop: 24 }}>
-                <h3>Histórico</h3>
-                {(() => {
-                    const chartData = resultados.map((r, i) => ({
-                        result: `#${i + 1}`,
-                        value: Number(r.pontuacao_resultado) || 0,
-                        time: r.created_at,
-                    }));
+                {/* Overlay do gráfico: presente no DOM com display none quando oculto */}
+                <div className={`${styles.overlay} ${showGrafico ? styles.show : ''}`}>
+                    <div className={styles.overlayInner}>
+                        <div className={styles.overlayHeader}>
+                            <h3 style={{ margin: 0 }}>Histórico</h3>
+                            <button className={styles.closeButton} onClick={() => setShowGrafico(false)}>×</button>
+                        </div>
 
-                    const config = {
-                        data: chartData,
-                        xField: 'result',
-                        yField: 'value',
-                        point: { size: 4 },
-                        tooltip: { showMarkers: false },
-                        style: { lineWidth: 2 },
-                    };
+                        {resultados && resultados.length > 0 ? (
+                            (() => {
+                                const chartData = resultados.map((r, i) => ({
+                                    result: `#${i + 1}`,
+                                    value: Number(r.pontuacao_resultado) || 0,
+                                    time: r.created_at,
+                                }));
 
-                    return <Line {...config} />;
-                })()}
-            </div>
-        )}
+                                const config = {
+                                    data: chartData,
+                                    xField: "result",
+                                    yField: "value",
+                                    point: { size: 4 },
+                                    tooltip: { showMarkers: false },
+                                    style: { lineWidth: 2 },
+                                };
+
+                                return <div className={styles.chartContainer}><Line {...config} /></div>;
+                            })()
+                        ) : (
+                            <p>Sem resultados para mostrar.</p>
+                        )}
+                    </div>
+                </div>
         </div>
   )
 }
