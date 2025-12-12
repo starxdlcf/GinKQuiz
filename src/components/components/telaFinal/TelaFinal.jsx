@@ -27,6 +27,7 @@ function TelaFinal() {
             const { data, error } = await supabase
                 .from('resultados')
                 .select('pontuacao_resultado, acertos_resultado, tempo_resultado, usuario_id_resultado, created_at, usuario:usuario_id_resultado ( nome_usuario )')
+                .eq('usuario_id_resultado', idUser)
                 .order('created_at', { ascending: true });
 
             if (error) throw error;
