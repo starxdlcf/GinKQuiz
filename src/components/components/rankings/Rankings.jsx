@@ -6,9 +6,12 @@ import { Link } from "react-router-dom";
 
 export default function Rankings() {
   const [users, setUsers] = React.useState([]);
+  const [filteredUsers, setFilteredUsers] = React.useState([]);
   const [showTableUsers, setShowTableUsers] = React.useState(false);
   const [clas, setClas] = React.useState([]);
   const [showTableClas, setShowTableClas] = React.useState(true);
+  const [quantidadePerguntasFiltro, setQuantidadePerguntasFiltro] =
+    React.useState(null);
   const id = localStorage.getItem("userId");
 
   React.useEffect(() => {
@@ -16,6 +19,18 @@ export default function Rankings() {
     getClasbyPoints();
     // getUsersByPoints()
   }, [id]);
+
+  React.useEffect(() => {
+    if (quantidadePerguntasFiltro) {
+      setFilteredUsers(
+        users
+          .filter((u) => u.perguntas_respondidas == quantidadePerguntasFiltro)
+          .sort((a, b) => b.pontuacao_resultado - a.pontuacao_resultado)
+      );
+    } else {
+      setFilteredUsers(users);
+    }
+  }, [quantidadePerguntasFiltro, users]);
 
   const getClasbyPoints = async () => {
     const { data, error } = await supabase
@@ -35,29 +50,36 @@ export default function Rankings() {
 
   const getUsersByPoints = async () => {
     const { data, error } = await supabase
-      .from("usuarios")
-      .select("*")
-      .order("pontuacao_usuario", { ascending: false });
+      .from("resultados")
+      .select(
+        "pontuacao_resultado, acertos_resultado, perguntas_respondidas, usuarios: usuario_id_resultado (nome_usuario)"
+      )
+      .order("pontuacao_resultado", { ascending: false });
 
     if (error) {
-      console.log("Error fetching users:", error);
+      console.log("Error fetching results:", error);
       return;
     }
 
     setUsers(data);
+    setFilteredUsers(data);
 
     console.log(data);
   };
 
   //essa função é pra filtrar por um número x de questões, mas não temos uma coluna que armazene a quantidade de perguntas respondidas pelo usuário...
-  const getUsersByXQuestions = async () => {
+  const getUsersByXQuestions = async (quantidadePerguntasFiltro) => {
     const { data, error } = await supabase
-      .from("usuarios")
-      .select("*")
-      .order("pontuacao_usuario");
+      .from("resultados")
+      .select(
+        "pontuacao_resultado, acertos_resultado, perguntas_respondidas, usuarios: usuario_id_resultado (nome_usuario)"
+      )
+      .order("perguntas_respondidas" == quantidadePerguntasFiltro, {
+        ascending: false,
+      });
 
     if (error) {
-      console.log("Error fetching users:", error);
+      console.log("Error fetching results:", error);
       return;
     }
 
@@ -70,14 +92,14 @@ export default function Rankings() {
     setShowTableClas(true);
     setShowTableUsers(false);
 
-    getClasbyPoints()
+    getClasbyPoints();
   };
 
   const tableUsers = () => {
     setShowTableClas(false);
     setShowTableUsers(true);
 
-    getUsersByPoints()
+    getUsersByPoints();
   };
 
   return (
@@ -99,13 +121,32 @@ export default function Rankings() {
 
         <div className={styles.rankingsContent}>
           <div id={styles.buttonsFilterTable}>
-            <button id={showTableClas ? styles.buttonsFilterTableUse : styles.buttonsFilterTableNoUse} onClick={tableClas}>Top Clãs</button>
-            <button id={showTableUsers ? styles.buttonsFilterTableUse : styles.buttonsFilterTableNoUse} onClick={tableUsers}>Top Usuários</button>
+            <button
+              id={
+                showTableClas
+                  ? styles.buttonsFilterTableUse
+                  : styles.buttonsFilterTableNoUse
+              }
+              onClick={tableClas}
+            >
+              Top Clãs
+            </button>
+            <button
+              id={
+                showTableUsers
+                  ? styles.buttonsFilterTableUse
+                  : styles.buttonsFilterTableNoUse
+              }
+              onClick={tableUsers}
+            >
+              Top Usuários
+            </button>
           </div>
 
           <div className={styles.tabelaRankings}>
             <table
               id={showTableClas ? styles.mostrarTabela : styles.esconderTabela}
+              className={clas.length > 10 ? styles.scrollTable : ""}
             >
               <thead>
                 <tr>
@@ -131,6 +172,7 @@ export default function Rankings() {
 
             <table
               id={showTableUsers ? styles.mostrarTabela : styles.esconderTabela}
+              className={filteredUsers.length > 10 ? styles.scrollTable : ""}
             >
               <thead>
                 <tr>
@@ -142,12 +184,12 @@ export default function Rankings() {
               </thead>
 
               <tbody>
-                {users.map((user, index) => (
-                  <tr key={user.createdAt}>
+                {filteredUsers.map((user, index) => (
+                  <tr key={user.id_resultado || index}>
                     <td>{index + 1}</td>
-                    <td>{user.nome_usuario}</td>
-                    <td>{user.perguntas_respondidas}</td>
-                    <td>{user.pontuacao_usuario}</td>
+                    <td>{user.usuarios?.nome_usuario || "N/A"}</td>
+                    <td>{`${user.acertos_resultado}/${user.perguntas_respondidas}`}</td>
+                    <td>{user.pontuacao_resultado}</td>
                   </tr>
                 ))}
               </tbody>
@@ -156,11 +198,23 @@ export default function Rankings() {
         </div>
 
         <div className={styles.rodape}>
-          <button><Link to={"/menu"}>Ir ao Menu</Link></button>
+          <button>
+            <Link to={"/menu"}>Ir ao Menu</Link>
+          </button>
 
-          <select id={showTableUsers ? styles.selectShow : styles.selectNone}>Filtrar por</select>
+          <select
+            onChange={(e) => setQuantidadePerguntasFiltro(e.target.value)}
+            id={showTableUsers ? styles.selectShow : styles.selectNone}
+          >
+            <option value="">Todos</option>
+            <option value="10">10 perguntas</option>
+            <option value="20">20 perguntas</option>
+            <option value="30">30 perguntas</option>
+          </select>
 
-          <button><Link to={""}>Ir ao Login</Link></button>
+          <button>
+            <Link to={""}>Ir ao Login</Link>
+          </button>
         </div>
       </div>
     </div>
