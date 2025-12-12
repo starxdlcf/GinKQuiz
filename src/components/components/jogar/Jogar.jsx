@@ -14,10 +14,18 @@ export const Jogar = () => {
   const [open, setOpen] = React.useState(false);
   const [acertou, setAcertou] = React.useState(null);
   const [alternativaClicada, setAlternativaClicada] = React.useState(null);
-  
+
+  const tamanhoSL = JSON.parse(localStorage.getItem("tamanhoSelecionado"));
+  const perguntasSL = JSON.parse(localStorage.getItem("perguntasSelecionadas"));
 
   useEffect(() => {
     fetchPergunta(idPergunta);
+    // const tamanhoSL = JSON.parse(localStorage.getItem("tamanhoSelecionado"));
+    // const perguntasSL = JSON.parse(
+    //   localStorage.getItem("perguntasSelecionadas")
+    // );
+    // console.log("tamanhoSelecionado no localStorage:", tamanhoSL);
+    // console.log("perguntasSelecionadas no localStorage:", perguntasSL);
   }, [idPergunta]);
 
   const fetchPergunta = async (id) => {
@@ -44,6 +52,13 @@ export const Jogar = () => {
         .select("*")
         .eq("resposta_pergunta", escolha);
 
+      const perguntasSL =
+        JSON.parse(localStorage.getItem("perguntasSelecionadas")) || [];
+
+      const indexAtual = perguntasSL.indexOf(Number(idPergunta));
+      console.log("indexAtual:", indexAtual);
+      const proximaPergunta = perguntasSL[indexAtual + 1];
+      console.log("proximaPergunta:", proximaPergunta);
       if (error) throw error;
 
       if (data != "") {
@@ -55,9 +70,13 @@ export const Jogar = () => {
           setTimeout(() => {
             setAlternativaClicada(null);
             setAcertou(null);
-            navigate(`/jogar/${Math.floor(Math.random() * 40 + 1)}`);
+            if (!proximaPergunta) {
+              finalizarQuiz();
+              return;
+            }else{ 
+              navigate(`/jogar/${proximaPergunta}`);
+            }
           }, 300);
-
         }, 50);
       } else {
         setAcertou(false);
@@ -67,9 +86,13 @@ export const Jogar = () => {
           setTimeout(() => {
             setAlternativaClicada(null);
             setAcertou(null);
-            navigate(`/jogar/${Math.floor(Math.random() * 40 + 1)}`);
+                        if (!proximaPergunta) {
+              finalizarQuiz();
+              return;
+            }else{ 
+              navigate(`/jogar/${proximaPergunta}`);
+            }
           }, 300);
-
         }, 50);
       }
     } catch (error) {
@@ -114,14 +137,15 @@ export const Jogar = () => {
     const minutos = Math.floor(tempo / 60);
     const segundos = Math.floor(tempo % 60);
 
-    const acertos = localStorage.getItem("acertos")
+    const acertos = localStorage.getItem("acertos");
 
-    const pontos = Math.floor((acertos/tempo)*1000)
+    const pontos = Math.floor((acertos / tempo) * 1000);
 
     localStorage.setItem("pontos", pontos);
     localStorage.setItem("tempoMin", minutos);
     localStorage.setItem("tempoSeg", segundos);
-    navigate("/final")
+
+    navigate("/final");
   };
 
   return (
@@ -134,7 +158,7 @@ export const Jogar = () => {
 
           <div className={styles.containerPergunta}>
             <h2>{dataPergunta.enunciado_pergunta}</h2>
-            <div >
+            <div>
               <div className={styles.alt1e2}>
                 <button
                   className={`${
@@ -214,17 +238,38 @@ export const Jogar = () => {
                 "fechar dicas"
               )}
             </button>
-          {open === true ? <p id={styles.dicaOpen} key={dica.id_dica}> {dica.info_dica}</p> : <></>}
+            {open === true ? (
+              <p id={styles.dicaOpen} key={dica.id_dica}>
+                {" "}
+                {dica.info_dica}
+              </p>
+            ) : (
+              <></>
+            )}
           </div>
-
-
         </div>
       ) : (
         <p>Carregando...</p>
       )}
 
       {/* remover isso no final */}
-      <button onClick={(e)=>{e.preventDefault(); finalizarQuiz()}}>finalizar</button>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          finalizarQuiz();
+        }}
+      >
+        finalizar
+      </button>
+      <button
+        onClick={(e) => {
+          e.preventDefault(),
+            console.log("tamanhoSelecionado no localStorage:", tamanhoSL);
+          console.log("perguntasSelecionadas no localStorage:", perguntasSL);
+        }}
+      >
+        mostrar localStorage
+      </button>
     </div>
   );
 };
