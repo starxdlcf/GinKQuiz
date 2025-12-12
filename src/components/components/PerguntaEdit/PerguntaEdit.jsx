@@ -115,71 +115,101 @@ if(insertError){
       setDica_array(novo_array)
     }
 
-  return (
-    <>
-      {dataPergunta ? (
-        <div>
-          <form action="" onSubmit={updateQuestion}>
-            <input
-              type="text"
-              value={NovoEnunciado}
-              onChange={(e) => {
-                setNovoEnunciado(e.target.value);
-              }}
-              placeholder={dataPergunta.enunciado_pergunta}
-            />
-            {/* Formulário de edição aqui */}
-            <div>
+    return (
+      <>
+        {dataPergunta ? (
+          <div className={styles.form}>
+            <form action="" onSubmit={updateQuestion}>
               <input
+                className={styles.enunciado}
                 type="text"
-                value={NovaAlternativa1}
-                onChange={(e) => setNovaAlternativa1(e.target.value)}
-                placeholder={dataPergunta.alternativa1_pergunta}
+                value={NovoEnunciado}
+                onChange={(e) => {
+                  setNovoEnunciado(e.target.value);
+                }}
+                placeholder={dataPergunta.enunciado_pergunta}
               />
-              <input type="checkbox" 
-              onChange={()=>setNovaCorreta(NovaAlternativa1)}/>
+              <div className={styles.containeralt}>
+                <div className={styles.alt1e2}>
+                  <input
+                    className={styles.alternativas}
+                    type="text"
+                    value={NovaAlternativa1}
+                    onChange={(e) => setNovaAlternativa1(e.target.value)}
+                    placeholder="Alternativa 1"
+                  />
+                  <input
+                    className={styles.checkboxes}
+                    type="checkbox"
+                    onChange={(e) => console.log(e.target.checked)}
+                  />
+                </div>
+                <div className={styles.alt1e2}>
+                  <input
+                    className={styles.alternativas}
+                    type="text"
+                    value={NovaAlternativa2}
+                    onChange={(e) => setNovaAlternativa2(e.target.value)}
+                    placeholder="Alternativa 2"
+                  />
+                  <input
+                    className={styles.checkboxes}
+                    type="checkbox"
+                    onChange={(e) => console.log(e.target.checked)}
+                  />
+                </div>
+                <div className={styles.alt3e4}>
+                  <input
+                    className={styles.alternativas}
+                    type="text"
+                    value={NovaAlternativa3}
+                    onChange={(e) => setNovaAlternativa3(e.target.value)}
+                    placeholder="Alternativa 3"
+                  />
+                  <input
+                    className={styles.checkboxes}
+                    type="checkbox"
+                    onChange={(e) => console.log(e.target.checked)}
+                  />
+                </div>
+                <div className={styles.alt3e4}>
+                  <input
+                    className={styles.alternativas}
+                    type="text"
+                    value={NovaAlternativa4}
+                    onChange={(e) => setNovaAlternativa4(e.target.value)}
+                    placeholder="Alternativa 4"
+                  />
+                  <input
+                    className={styles.checkboxes}
+                    type="checkbox"
+                    onChange={(e) => console.log(e.target.checked)}
+                  />
+                </div>
+              </div>
               <input
+                className={styles.enunciado}
                 type="text"
-                value={NovaAlternativa2}
-                onChange={(e) => setNovaAlternativa2(e.target.value)}
-                placeholder={dataPergunta.alternativa2_pergunta}
+                placeholder="Inserir dica"
+                value={dica}
+                onChange={(e) => setDica(e.target.value)}
               />
-              <input type="checkbox" 
-              onChange={()=>setNovaCorreta(NovaAlternativa2)}/>
-              <input
-                type="text"
-                value={NovaAlternativa3}
-                onChange={(e) => setNovaAlternativa3(e.target.value)}
-                placeholder={dataPergunta.alternativa3_pergunta}
-              />
-              <input type="checkbox" 
-               onChange={()=>setNovaCorreta(NovaAlternativa3)}/>
-              <input
-                type="text"
-                value={NovaAlternativa4}
-                onChange={(e) => setNovaAlternativa4(e.target.value)}
-                placeholder={dataPergunta.alternativa4_pergunta}
-              />
-              <input type="checkbox"
-               onChange={()=>setNovaCorreta(NovaAlternativa4)} />
-            <button type="submit" onClick={(e)=>{e.preventDefault(),updateQuestion()}}>atualizar</button>
-            </div>
-            <button onClick={(e)=> {e.preventDefault(),console.log(dica_array)}}>mostrar array</button>
-              {dica_array.map((t,i)=>(
-                <li key={i}>{t}
-                <button onClick={(e)=>{e.preventDefault(),handleDeleteElementOnArray(i)}}>excluir</button>
-                </li>
-              ))}
-
-              <input type="text" name="" id="" placeholder="inserir dica" value={dica} onChange={(e)=> setDica(e.target.value)} />
-              <button onClick={(e)=>{e.preventDefault(),setDica_array([...dica_array, dica]),setDica("")}}>Nova dica</button>
-          </form>
-        </div>
-      ) : (
-        <p>Carregando...</p>
-      )}
-    </>
-  );
-};
+              <button
+                className={styles.button}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setDica_array([...dica_array, dica]);
+                  setDica("");
+                }}
+              >
+                Nova dica
+              </button>
+            </form>
+          </div>
+        ) : (
+          <p>Carregando...</p>
+        )}
+      </>
+    );}
 
 export default PerguntaEdit;
