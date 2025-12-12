@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Jogar.module.css";
 import Logo from "../../../assets/icons/LogotipoGinKQuiz.png";
 import ideiaIcon from "../../../assets/icons/lampadaideia.png";
-import PerfilIcon from "../../components/perfil/PerfilIcon.jsx";
 
 export const Jogar = () => {
   const { idPergunta } = useParams();
@@ -131,8 +130,6 @@ export const Jogar = () => {
         <div className={styles.container}>
           <div id={styles.divcabecalho}>
             <img src={Logo} alt="Logo GinKQuiz" className={styles.logo} />
-              <img id={styles.botaoPerfil}
-               src={PerfilIcon} alt="Perfil" />
           </div>
 
           <div className={styles.containerPergunta}>
