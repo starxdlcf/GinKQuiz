@@ -99,7 +99,7 @@ function TelaFinal() {
     }
 
   return (
-    <div>
+    <div id={styles.container}>
         <h1>Parabens {nomeUsuario}</h1>
         <p>você completou o quiz com sucesso</p>
         <p>+{pontos}</p>
