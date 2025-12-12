@@ -204,7 +204,10 @@ if(insertError){
               >
                 Nova dica
               </button>
+              <button type="submit">Atualizar Pergunta</button>
             </form>
+            {dica_array && <>
+            <li className={styles.lista_dicas}>{dica_array}</li></>}
           </div>
         ) : (
           <p>Carregando...</p>
