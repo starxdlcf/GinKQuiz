@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "../../../Supabase";
 import { useNavigate } from "react-router-dom";
+import styles from "../../components/PerguntaEdit/PerguntaEdit.module.css"
 
 const PerguntaEdit = () => {
   useEffect(() => {

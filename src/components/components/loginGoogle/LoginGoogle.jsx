@@ -60,88 +60,88 @@ export const LoginGoogle = () => {
 
   return (
     <>
-      <div className={styles.container}>
-        <h1>Faça seu cadastro</h1>
+      <div className={styles.pageContainer}>
+        <h1 className={styles.title}>Faça seu cadastro</h1>
 
         <section className={styles.formulario}>
           <form className={styles.form} onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="">Nome de Usuário</label>
-              <input
-                className={styles.input}
-                id={styles.UsuarioNome}
-                type="text"
-                onChange={(e) => setNomeUsuario(e.target.value)}
-                value={nomeUsuario}
-              />
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <div>
-                <label htmlFor="">Data de nascimento</label>
+            <div className={styles.textArea}>
+              <div className={styles.textArea}>
+                <label className={styles.p} htmlFor="">Nome de Usuário</label>
                 <input
                   className={styles.input}
-                  id={styles.UsuarioDataNascimento}
-                  type="date"
-                  onChange={(e) => setDataNascimento(e.target.value)}
-                  value={dataNascimento}
+                  id={styles.UsuarioNome}
+                  type="text"
+                  onChange={(e) => setNomeUsuario(e.target.value)}
+                  value={nomeUsuario}
                 />
               </div>
-              <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginLeft: "2rem" }}>
-                <label htmlFor="">Gênero</label>
-                <button
-                  className={`
-                    ${styles.genero}
-                    ${genero === "homem" ? styles.homem : ""}
-                    ${genero === "mulher" ? styles.mulher : ""}
-                    ${genero === "nbin"   ? styles.neutro : ""}
-                  `}
-                  onChange={(e) => setGenero(e.target.value)}
-                  value={genero}
-                  onClick={(e) => {
-                    setGenero(
-                      genero === "homem"
-                        ? "mulher"
-                        : genero === "mulher"
-                        ? "nbin"
-                        : "homem"
-                    );
-                    e.preventDefault();
-                    console.log(genero);
-                  }}
-                >
-                  {genero === "homem" ? (<MaleIcon></MaleIcon>) : genero === "mulher" ? (<FemaleIcon></FemaleIcon>) : (<HorizontalRuleIcon></HorizontalRuleIcon>)}
-                </button>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div>
+                  <label className={styles.p} htmlFor="">Data de nascimento</label>
+                  <input
+                    className={styles.input}
+                    id={styles.UsuarioDataNascimento}
+                    type="date"
+                    onChange={(e) => setDataNascimento(e.target.value)}
+                    value={dataNascimento}
+                  />
+                </div>
+                <div style={{ display: "flex", flexDirection: "row", alignItems: "center", marginLeft: "2rem" }}>
+                  <label className={styles.p} htmlFor="">Gênero</label>
+                  <button
+                    className={`
+                      ${styles.genero}
+                      ${genero === "homem" ? styles.homem : ""}
+                      ${genero === "mulher" ? styles.mulher : ""}
+                      ${genero === "nbin"   ? styles.neutro : ""}
+                    `}
+                    onChange={(e) => setGenero(e.target.value)}
+                    value={genero}
+                    onClick={(e) => {
+                      setGenero(
+                        genero === "homem"
+                          ? "mulher"
+                          : genero === "mulher"
+                          ? "nbin"
+                          : "homem"
+                      );
+                      e.preventDefault();
+                      console.log(genero);
+                    }}
+                  >
+                    {genero === "homem" ? (<MaleIcon></MaleIcon>) : genero === "mulher" ? (<FemaleIcon></FemaleIcon>) : (<HorizontalRuleIcon></HorizontalRuleIcon>)}
+                  </button>
+                </div>
               </div>
-            </div>
-
-            <div className={styles.termosMaisEmail}>
-                <div className={styles.linha}>
-                  <input
-                  className={`${styles.checkbox} ${checkbox ? styles.checkboxAtivo : ''}`}
-                  onChange={(e) => setCheckbox(e.target.checked)}
-                  checked={checkbox}
-                  type="checkbox" name="" id="" />
-                  <label className={styles.terminho} htmlFor="">Concordo com os termos do site <Link to="/termos">acesse aqui os termos e condições de uso do GinKQuiz</Link></label>
-                </div>
+              <div className={styles.termosMaisEmail}>
+                  <div className={styles.linha}>
+                    <input
+                    className={`${styles.checkbox} ${checkbox ? styles.checkboxAtivo : ''}`}
+                    onChange={(e) => setCheckbox(e.target.checked)}
+                    checked={checkbox}
+                    type="checkbox" name="" id="" />
+                    <label className={styles.p} htmlFor="">Concordo com os termos do site <Link to="/termos">acesse aqui os termos e condições de uso do GinKQuiz</Link></label>
+                  </div>
               
-                <div className={styles.linha}>
-                  <input
-                  className={`${styles.checkbox} ${checkbox2 ? styles.checkboxAtivo : ''}`}
-                  onChange={(e) => setCheckbox2(e.target.checked)}
-                  checked={checkbox2}
-                  type="checkbox" name="" id="" />
-                  <label className={styles.terminho} htmlFor="">Aceito receber informações sobre atualizações e resultados por email</label>
-                </div>
-            
-            </div>  
-
-              <button className={styles.cadastrar} type="submit">Cadastrar</button>
+                  <div className={styles.linha}>
+                    <input
+                    className={`${styles.checkbox} ${checkbox2 ? styles.checkboxAtivo : ''}`}
+                    onChange={(e) => setCheckbox2(e.target.checked)}
+                    checked={checkbox2}
+                    type="checkbox" name="" id="" />
+                    <label className={styles.p} htmlFor="">Aceito receber informações sobre atualizações e resultados por email</label>
+                  </div>
+              
+              </div>
+                <button className={styles.cadastrar} type="submit">Cadastrar</button>
+            </div>
           </form>
           
         </section>

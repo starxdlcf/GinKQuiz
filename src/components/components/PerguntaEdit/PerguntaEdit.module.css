@@ -1,0 +1,227 @@
+@import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root{
+  --fancy: 'Cormorant Garamond', serif;
+  --simple: 'Host Grotesk', sans-serif;
+  --red: #ff5757;
+  --yellow: #ffe785;
+  --gray: #737373;
+  --pink: #ff99c9;
+  --white: #ffffff;
+  --green: #8de969;
+  --muted-green: #87bba2;
+  --blue: #5d91e8;
+  --purple: #5d2e8c;
+  --vivid-purple: #8156f6;
+  --wheat: #fff4e3;
+  --orange: #ffd699;
+  --cyan: #6ce5e8;
+}
+
+#criardica{
+  background-color: var(--white);
+  border: 2px solid var(--blue);
+  border-radius: 1rem;
+  font-size: 1rem;
+  font-family: var(--fancy);
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  margin: 0;
+}
+
+#dicabox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+}
+
+#dicabox p {
+  font-family: var(--simple);
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#criardicabox{
+  position: relative;
+  width: 35rem;
+  height: 3.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 1rem;
+  padding: .1rem;
+  gap: .3rem;
+  border: 1px solid var(--blue);
+  background-color: var(--blue);
+}
+
+#saircriardica{
+  background-color: var(--red);
+  border-radius: 1rem;
+  font-size: 1rem;
+  font-family: var(--fancy);
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  color: var(--white);
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+}
+
+#inputcriardica{
+  width: 20rem;
+  height: 2rem;
+  font-size: 1.2rem;
+  font-family: var(--fancy);
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 15px;
+  border: none;
+  background-color: var(--white);
+  border: none;
+  color: black;
+}
+
+#criarpergunta{
+  background-color: var(--pink);
+  border: 2px solid var(--blue);
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  font-family: var(--fancy);
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  margin-bottom: 2rem;
+}
+
+#logoGinKQuiz {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 250px;
+  margin-bottom: 20px;
+}
+
+#form{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2rem;
+  background-color: var(--cyan);
+  width: 55rem;
+  height: 35rem;
+  border-radius: 2rem;
+} 
+
+#enunciado{
+  width: 90%;
+  height: 3rem;
+  font-size: 1.7rem;
+  font-family: var(--fancy);
+  font-weight: 700;
+  padding: 10px 10px;
+  border-radius: 15px;
+  border: 2px solid transparent;
+  text-align: center;
+  background-color: var(--cyan);
+  color: black;
+}
+  #enunciado:focus{
+    outline: none;
+    /* border: 2px solid var(--blue); */
+    
+  }
+  #enunciado::placeholder {
+      color: black;
+    }
+
+
+#temas{
+  background-color: var(--white);
+}
+
+
+.select{
+  width: 21%;
+  height: 2rem;
+  font-size: 1.2rem;
+  font-family: var(--fancy);
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 15px;
+  border: none;
+  background-color: var(--white);
+  border: none;
+  color: black;
+}
+
+#containeralt{
+  width: 100%;
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+    .alt1e2{
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      width: 90%;
+      margin-top: 2rem;
+    }
+    .alt3e4{
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      width: 90%;
+      margin-top: 2rem;
+    }
+
+.alternativas{
+  width: 25rem;
+  height: 3rem;
+  border-radius: 2rem;
+  border: none;
+  padding-left: 10px;
+  font-size: 1rem;
+}
+
+#dicaimagem{
+  width: 2rem;
+  height: 2rem;
+  margin: .5rem;
+}
+
+.checkboxes{
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 2rem;
+  margin-left: 10px;
+  margin-right: 20px;
+  outline: none;
+  cursor: pointer;
+  border: 2px solid var(--gray);
+  appearance: none;
+  background-color: var(--white);
+  transition: background-color 0.2s;
+}
+
+.checkboxes:checked{
+  background-color: var(--green);
+  border-color: var(--gray);
+}
