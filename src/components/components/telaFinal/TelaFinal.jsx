@@ -78,7 +78,8 @@ function TelaFinal() {
                 usuario_id_resultado: idUser,
                 pontuacao_resultado: pontos,
                 tempo_resultado: `${tempoMin}:${tempoSeg}`,
-                acertos_resultado: acertos
+                acertos_resultado: acertos,
+                perguntas_respondidas: `${localStorage.getItem("tamanhoSelecionado")}`
             })
 
             if (error) throw error
@@ -102,16 +103,24 @@ function TelaFinal() {
 
   return (
     <div id={styles.container}>
-        <h1>Parabens {nomeUsuario}</h1>
-        <p>você completou o quiz com sucesso</p>
-        <p>+{pontos}</p>
-        <p>Perguntas respondidas: {localStorage.getItem("tamanhoSelecionado")}</p>
-        <p>Respostas corretas: {acertos}</p>
-        <p>Tempo Gasto: {tempoMin}:{tempoSeg}</p>
+        <div className={styles.cabecalho}>
+            <h1>Parabéns, {nomeUsuario}!</h1>
+            <p id={styles.subtitulo}>Você completou o quiz com sucesso!</p>
+        </div>
+        <div className={styles.containerpontos}>
+            <p id={styles.pontos}>+{pontos}</p>
+            <div className={styles.containerinfo}>
+                <p className={styles.p}><span>Perguntas respondidas:</span> {localStorage.getItem("tamanhoSelecionado")}</p>
+                <p className={styles.p}><span>Respostas corretas:</span> {acertos}</p>
+                <p className={styles.p}><span>Tempo Gasto:</span> {tempoMin}:{tempoSeg}</p>
+            </div>
+        </div>
 
-        <button onClick={(e)=>{e.preventDefault(); escolherCaminho("jogar")}}>Jogar Novamente</button>
-        <button onClick={(e)=>{e.preventDefault(); escolherCaminho("menu")}}>Ir ao Menu</button>
-                <button className={styles.btn} onClick={(e)=>{e.preventDefault(); setShowGrafico(!showGrafico)}}>{showGrafico ? 'Ocultar Gráficos' : 'Ver Gráficos'}</button>
+        <div className={styles.buttons}>
+            <button id={styles.jogar} onClick={(e)=>{e.preventDefault(); escolherCaminho("jogar")}}>Jogar Novamente</button>
+            <button id={styles.menu} onClick={(e)=>{e.preventDefault(); escolherCaminho("menu")}}>Ir ao Menu</button>
+                    <button className={styles.btn} onClick={(e)=>{e.preventDefault(); setShowGrafico(!showGrafico)}}>{showGrafico ? 'Ocultar Gráficos' : 'Ver Gráficos'}</button>
+        </div>
 
                 <div className={`${styles.overlay} ${showGrafico ? styles.show : ''}`}>
                     <div className={styles.overlayInner}>
