@@ -1,6 +1,8 @@
 import React from "react";
 import { supabase } from "../../../Supabase";
 import { useNavigate } from "react-router-dom";
+import styles from "../telaFinal/TelaFinal.module.css"
+import { Line } from '@ant-design/plots'
 
 function TelaFinal() {
   const [nomeUsuario, setNomeUsuario] = React.useState("");
