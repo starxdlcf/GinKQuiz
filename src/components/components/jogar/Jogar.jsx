@@ -252,24 +252,6 @@ export const Jogar = () => {
         <p>Carregando...</p>
       )}
 
-      {/* remover isso no final */}
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          finalizarQuiz();
-        }}
-      >
-        finalizar
-      </button>
-      <button
-        onClick={(e) => {
-          e.preventDefault(),
-            console.log("tamanhoSelecionado no localStorage:", tamanhoSL);
-          console.log("perguntasSelecionadas no localStorage:", perguntasSL);
-        }}
-      >
-        mostrar localStorage
-      </button>
     </div>
   );
 };
