@@ -1,102 +1,87 @@
-import React from 'react'
-import { supabase } from '../../../Supabase'
-import { useNavigate } from 'react-router-dom'
-import { Line } from '@ant-design/plots'
-import styles from './TelaFinal.module.css'
+import React from "react";
+import { supabase } from "../../../Supabase";
+import { useNavigate } from "react-router-dom";
 
 function TelaFinal() {
-    const [nomeUsuario,setNomeUsuario] = React.useState("")
+  const [nomeUsuario, setNomeUsuario] = React.useState("");
 
-    const idUser = localStorage.getItem("userId")
-    const pontos = localStorage.getItem("pontos")
-    const acertos = localStorage.getItem("acertos")
-    const tempoMin = localStorage.getItem("tempoMin")
-    const tempoSeg = localStorage.getItem("tempoSeg")
-    
-    const navigate = useNavigate()
-    const [resultados, setResultados] = React.useState([])
-    const [showGrafico, setShowGrafico] = React.useState(false)
+  const idUser = localStorage.getItem("userId");
+  const pontos = localStorage.getItem("pontos");
+  const acertos = localStorage.getItem("acertos");
+  const tempoMin = localStorage.getItem("tempoMin");
+  const tempoSeg = localStorage.getItem("tempoSeg");
 
-    React.useEffect(()=>{
-        fetchUsuario()
-        fetchResultados()
-    },[])
 
-    const fetchResultados = async () => {
-        try{
-            const { data, error } = await supabase
-                .from('resultados')
-                .select('pontuacao_resultado, acertos_resultado, tempo_resultado, usuario_id_resultado, created_at, usuario:usuario_id_resultado ( nome_usuario )')
-                .order('created_at', { ascending: true });
 
-            if (error) throw error;
+  const navigate = useNavigate();
 
-            setResultados(data || []);
-        }
-        catch(error){
-            console.error('Erro ao buscar resultados:', error)
-        }
+  React.useEffect(() => {
+    fetchUsuario();
+    localStorage.removeItem("tamanhoSelecionado");
+    localStorage.removeItem("perguntasSelecionadas");
+  }, []);
+
+  const fetchUsuario = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("usuarios")
+        .select("*")
+        .eq("id_usuario", idUser)
+        .single();
+
+      if (error) throw error;
+
+      setNomeUsuario(data.nome_usuario);
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  const escolherCaminho = (botao) => {
+    const autorizacao = confirm(
+      "Deseja enviar seus dados para o Rankig Global?"
+    );
+    if (autorizacao) {
+      guardarResultado();
     }
 
-    const fetchUsuario = async()=>{
-        try{
-            const {data, error} = await supabase
-            .from("usuarios")
-            .select("*")
-            .eq("id_usuario", idUser)
-            .single()
-
-            if (error) throw error;
-
-            setNomeUsuario(data.nome_usuario)
-        }
-        catch (error){
-            console.error(error)
-            alert(error.message)
-        }
+    if (botao == "jogar") {
+      navigate("/lobby");
     }
-
-    const escolherCaminho = (botao)=>{
-        const autorizacao = confirm("Deseja enviar seus dados para o Rankig Global?")
-        if (autorizacao){
-            guardarResultado()
-        }
-
-        if (botao == "jogar"){
-            navigate("/lobby")
-        }
-        if (botao == "menu"){
-            navigate("/menu")
-        }
+    if (botao == "menu") {
+      navigate("/menu");
     }
-
-    const guardarResultado = async ()=>{
-        try{
-            const {error} = await supabase
-            .from("resultados")
-            .insert({
-                usuario_id_resultado: idUser,
-                pontuacao_resultado: pontos,
-                tempo_resultado: `${tempoMin}:${tempoSeg}`,
-                acertos_resultado: acertos
-            })
-
-            if (error) throw error
-        }catch(error){
-            console.error(error)
-            alert(error.message)
-        }finally{
-            removeStates()
-        }
+    if (botao == "grafico") {
+      alert("graficos em manutenção");
     }
+  };
 
-    const removeStates = ()=>{
-        localStorage.removeItem("pontos")
-        localStorage.removeItem("acertos")
-        localStorage.removeItem("tempoMin")
-        localStorage.removeItem("tempoSeg")
-        localStorage.removeItem("inicioQuiz")
+  const guardarResultado = async () => {
+    try {
+      const { error } = await supabase.from("resultados").insert({
+        usuario_id_resultado: idUser,
+        pontuacao_resultado: pontos,
+        tempo_resultado: `${tempoMin}:${tempoSeg}`,
+        acertos_resultado: acertos,
+      });
+
+      if (error) throw error;
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    } finally {
+      removeStates();
     }
+  };
+
+  const removeStates = () => {
+    localStorage.removeItem("pontos");
+    localStorage.removeItem("acertos");
+    localStorage.removeItem("tempoMin");
+    localStorage.removeItem("tempoSeg");
+    localStorage.removeItem("inicioQuiz");
+  };
 
   return (
     <div id={styles.container}>
@@ -146,4 +131,5 @@ function TelaFinal() {
         </div>
   )
 }
-export default TelaFinal
+
+export default TelaFinal;

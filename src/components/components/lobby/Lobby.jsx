@@ -8,7 +8,6 @@ function Lobby() {
   const [listaGeneros, setListaGeneros] = React.useState({});
   const [temasSelecionados, setTemasSelecionados] = React.useState([]);
   const [tamanhoSelecionado, setTamanhoSelecionado] = React.useState(null);
-  const [perguntas, setPerguntas] = React.useState([]);
   const [clickedButtonFacil, setClickedButtonFacil] = React.useState(false);
   const [clickedButtonMedio, setClickedButtonMedio] = React.useState(false);
   const [clickedButtonExpert, setClickedButtonExpert] = React.useState(false);
@@ -17,7 +16,6 @@ function Lobby() {
   const id = localStorage.getItem("userId");
 
   const navigate = useNavigate();
-  const tamanho = [10, 20, 30];
 
   React.useEffect(() => {
     fetchLista();
@@ -28,7 +26,7 @@ function Lobby() {
       const { data, error } = await supabase.from("temas").select("*");
 
       setListaGeneros(data);
-      console.log(data);
+      // console.log(data);
 
       if (error) throw error;
     } catch {
@@ -37,17 +35,17 @@ function Lobby() {
   };
 
   const RandomThemes = () => {
-    console.log("-----------------sorteando temas-----------------");
+    // console.log("-----------------sorteando temas-----------------");
     setRandomClicked(true);
     const temasRandom = [];
-    console.log(listaGeneros.length);
+    // console.log(listaGeneros.length)
     for (let i = 0; i < listaGeneros.length; i++) {
       temasRandom.push(i + 1);
     }
     temasRandom.sort(() => Math.random() - 0.5);
     const temasSelecionadosRandom = temasRandom.slice(0, 5);
     setTemasSelecionados(temasSelecionadosRandom);
-    console.log("temas selecionados randomicos:", temasSelecionadosRandom);
+    // console.log("temas selecionados randomicos:", temasSelecionadosRandom);
     // for (let i = 0; i < 5; i++) {
     //   const randomIndex = Math.floor(Math.random() * listaGeneros.length) + 1;
     //   if (temasRandom.includes(randomIndex)) {
@@ -71,66 +69,43 @@ function Lobby() {
   };
 
   const BuscarPerguntas = async () => {
-    setPerguntas([]);
+    if(tamanhoSelecionado === null || temasSelecionados.length === 0){
+      return;
+    }
+
+    const perguntasTemp = [];
     console.log("buscando perguntas");
-    // console.log(temasSelecionados);
-
-    // console.log(tamanhoSelecionado);
-    // // const { data, error } = await supabase
-    // //   .from("perguntas")
-    // //   .select("tema_pergunta")
-    // //   .in("tema_pergunta", temasSelecionados)
-    // //   .limit(tamanhoSelecionado)
-    // // console.log(data);
-
-    // for (let i = 0; i < temasSelecionados.length; i++) {
-    //   const { data, error } = await supabase
-    //     .from("perguntas")
-    //     .select("tema_pergunta,enunciado_pergunta")
-    //     .eq("tema_pergunta", temasSelecionados[i])
-    //     .limit(Math.ceil(tamanhoSelecionado / temasSelecionados.length));
-    //   console.log(data);
-    //   setPerguntas((prevPerguntas) => [...prevPerguntas, ...data]);
-
-    //   if (error) {
-    //     console.error("Erro ao buscar perguntas:", error);
-    //   }
-
-    //   for (let i = 0; i < data.length; i++) {
-    //     console.log(data[i].tema_pergunta);
-
-    // }
-    //     setTemasSelecionados((prev)=> prev.slice(0,tamanhoSelecionado));
-    // }
 
     for (let i = 0; i < temasSelecionados.length; i++) {
       const { data, error } = await supabase
         .from("perguntas")
-        .select("tema_pergunta,enunciado_pergunta")
+        .select("tema_pergunta,enunciado_pergunta,id_pergunta")
         .eq("tema_pergunta", temasSelecionados[i]);
-      console.log(
-        data
+      // console.log(
+      //   data
+      //     .sort(() => Math.random() - 0.5)
+      //     .slice(0, Math.ceil(tamanhoSelecionado / temasSelecionados.length))
+      // );
+      // // 
+      perguntasTemp.push(
+        ...data
           .sort(() => Math.random() - 0.5)
           .slice(0, Math.ceil(tamanhoSelecionado / temasSelecionados.length))
       );
-      setPerguntas((prevPerguntas) => [
-        ...prevPerguntas,
-        ...data
-          .sort(() => Math.random() - 0.5)
-          .slice(0, Math.ceil(tamanhoSelecionado / temasSelecionados.length)),
-      ]);
     }
+    const arrayPerguntasIds = perguntasTemp.map((item)=>item.id_pergunta);
 
-    const arrayAleatorio = [];
-    for (let i = 0; i < tamanhoSelecionado; i++) {
-      arrayAleatorio.push(i);
-    }
-    arrayAleatorio.sort(() => Math.random() - 0.5);
+    localStorage.setItem("tamanhoSelecionado", JSON.stringify(tamanhoSelecionado));
+    localStorage.setItem("perguntasSelecionadas", JSON.stringify(arrayPerguntasIds));
 
-    console.log("Array aleatorio:", arrayAleatorio);
+    console.log("perguntas selecionadas:", perguntasTemp);
+    console.log("ids perguntas selecionadas:", arrayPerguntasIds);
+    console.log("tamanho selecionado salvo no localStorage:", tamanhoSelecionado);
+
+    iniciarQuiz(arrayPerguntasIds);
   };
 
-  const iniciarQuiz = () => {
+  const iniciarQuiz = (arrayPerguntasIds) => {
     if (tamanhoSelecionado === null) {
       alert("Por favor, selecione a quantidade de perguntas.");
       return;
@@ -140,7 +115,7 @@ function Lobby() {
     } else {
       const inicio = Date.now();
       localStorage.setItem("inicioQuiz", inicio);
-      navigate(`/jogar/${Math.floor(Math.random() * 40 + 1)}`);
+      navigate(`/jogar/${arrayPerguntasIds[0]}`); //modificar depois
     }
   };
 
