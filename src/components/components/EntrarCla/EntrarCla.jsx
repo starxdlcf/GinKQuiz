@@ -49,29 +49,55 @@ export const EntrarCla = () => {
   }, [clas, buscarClaId]);
 
   const enterCla = async (idCla) => {
-    console.log(idCla);
-    const { error } = await supabase
-      .from("usuarios")
-      .update({ cla_usuario: idCla })
-      .eq("id_usuario", id);
-    // console.log(data);
+    try {
+      // buscar informações do clã e do usuário
+      const [{ data: claData, error: claError }, { data: userData, error: userError }] = await Promise.all([
+        supabase.from("cla").select("*").eq("id_cla", idCla).single(),
+        supabase.from("usuarios").select("pontuacao_usuario").eq("id_usuario", id).single(),
+      ]);
 
-    
-    if (error) {
+      if (claError) throw claError;
+      if (userError) throw userError;
+
+      const cla = claData;
+      const usuario = userData;
+
+      // verifica se o clã está cheio
+      if (Number(cla.quantidade_atual_cla) >= Number(cla.quantidade_limite_cla)) {
+        alert("Este clã já atingiu o número máximo de membros.");
+        return;
+      }
+
+      // verifica requisito de pontos (usuário deve ter >= pontuacao_cla)
+      const reqPontos = Number(cla.pontuacao_cla || 0);
+      const pontosUser = Number(usuario.pontuacao_usuario || 0);
+      if (pontosUser < reqPontos) {
+        alert(`Você precisa de pelo menos ${reqPontos} pontos para entrar neste clã. Você tem ${pontosUser}.`);
+        return;
+      }
+
+      // atualiza o usuário para entrar no clã
+      const { error: updateError } = await supabase
+        .from("usuarios")
+        .update({ cla_usuario: idCla })
+        .eq("id_usuario", id);
+
+      if (updateError) throw updateError;
+
+      // incrementa contador de membros do clã
+      const { error: incError } = await supabase
+        .from("cla")
+        .update({ quantidade_atual_cla: Number(cla.quantidade_atual_cla || 0) + 1 })
+        .eq("id_cla", idCla);
+
+      if (incError) throw incError;
+
+      alert("Você entrou no Clã com sucesso!");
+      window.location.reload();
+    } catch (error) {
       console.error(error);
-      return;
+      alert(error.message || "Erro ao entrar no clã");
     }
-    
-    alert("Você entrou no Clã com sucesso!");
-    
-    window.location.reload()
-    const { data } = await supabase
-      .from("cla")
-      .select("*")
-      .eq("id_cla", idCla)
-      .single();
-
-    data.quantidade_atual_cla += 1;
   };
 
   return (
