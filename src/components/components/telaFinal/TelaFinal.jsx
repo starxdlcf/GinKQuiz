@@ -32,8 +32,6 @@ function TelaFinal() {
         catch (error){
             console.error(error)
             alert(error.message)
-        }finally{
-            removeStates()
         }
     }
 
@@ -67,6 +65,8 @@ function TelaFinal() {
         }catch(error){
             console.error(error)
             alert(error.message)
+        }finally{
+            removeStates()
         }
     }
 

@@ -117,7 +117,7 @@ export const Jogar = () => {
 
     const acertos = localStorage.getItem("acertos")
 
-    const pontos = Math.floor((acertos/tempo)*10000)
+    const pontos = Math.floor((acertos/tempo)*1000)
 
     localStorage.setItem("pontos", pontos);
     localStorage.setItem("tempoMin", minutos);
