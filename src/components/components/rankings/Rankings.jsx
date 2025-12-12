@@ -108,13 +108,13 @@ export default function Rankings() {
   return (
     <div className={styles.rankingsContainer}>
       {/* remover esse botao depois */}
-      <button
+      {/* <button
         onClick={(e) => {
           e.preventDefault(), getUsersByPoints();
         }}
       >
         Mostrar Data
-      </button>
+      </button> */}
       <div className={styles.rankingsBody}>
         <div className={styles.cabecalho}>
           <h1>Rankings</h1>
@@ -191,7 +191,7 @@ export default function Rankings() {
                   <tr key={user.id_resultado || index}>
                     <td>{index + 1}</td>
                     <td>{user.usuarios?.nome_usuario || "N/A"}</td>
-                    <td>{`${user.acertos_resultado}/${user.perguntas_respondidas}`}</td>
+                    <td>{`${user.perguntas_respondidas}`}</td>
                     <td>{user.pontuacao_resultado}</td>
                   </tr>
                 ))}
