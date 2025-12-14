@@ -37,8 +37,9 @@ const PerguntaEdit = () => {
     console.log(data);
   };
 
-  const updateQuestion = async (e) => {
-
+  const updateQuestion = async (id, e) => {
+    e.preventDefault();
+    console.log("ID da pergunta a ser atualizada:", id);
     console.log("Atualizar pergunta");
     console.log(NovoEnunciado);
     console.log(NovaAlternativa1);
@@ -47,7 +48,7 @@ const PerguntaEdit = () => {
     console.log(NovaAlternativa4);
     console.log(NovaCorreta);
 
-    const { data, error } = await supabase
+    const { data: dataEdit, error:errorEdit } = await supabase
       .from("perguntas")
       .update({
         enunciado_pergunta: NovoEnunciado || dataPergunta.enunciado_pergunta,
@@ -58,9 +59,7 @@ const PerguntaEdit = () => {
         resposta_pergunta: NovaCorreta || dataPergunta.resposta_pergunta,
       })
       .eq("id_pergunta", id);
-
-      
-            if (error) {
+            if (errorEdit) {
               console.error("Erro ao atualizar a pergunta:", error);
               alert("Erro ao atualizar a pergunta.");
             } else {
@@ -88,13 +87,10 @@ if(insertError){
   console.log('deu erro na hora de fazer o insert de cada dica',insertError)
 }
       }
-
-        
-        console.log("Pergunta atualizada com sucesso:", data);
         alert("Pergunta atualizada com sucesso!");
-        navigate(-1)
+        
       }
- 
+ navigate('/gerenciamento')
     };
 
     const fetchDica = async(id)=>{
@@ -108,6 +104,8 @@ if(insertError){
       const elementos = data.map(element=> element.info_dica)
 
       setDica_array(elementos)
+
+      
     }
 
     const handleDeleteElementOnArray =(index)=>{
@@ -119,7 +117,7 @@ if(insertError){
       <>
         {dataPergunta ? (
           <div className={styles.form}>
-            <form action="" onSubmit={updateQuestion}>
+            <form action="" onSubmit={(e) => {e.preventDefault(),updateQuestion(id, e)}}>
               <input
                 className={styles.enunciado}
                 type="text"
@@ -136,7 +134,7 @@ if(insertError){
                     type="text"
                     value={NovaAlternativa1}
                     onChange={(e) => setNovaAlternativa1(e.target.value)}
-                    placeholder="Alternativa 1"
+                    placeholder={dataPergunta.alternativa1_pergunta}
                   />
                   <input
                     className={styles.checkboxes}
@@ -150,7 +148,7 @@ if(insertError){
                     type="text"
                     value={NovaAlternativa2}
                     onChange={(e) => setNovaAlternativa2(e.target.value)}
-                    placeholder="Alternativa 2"
+                    placeholder={dataPergunta.alternativa2_pergunta}
                   />
                   <input
                     className={styles.checkboxes}
@@ -164,7 +162,7 @@ if(insertError){
                     type="text"
                     value={NovaAlternativa3}
                     onChange={(e) => setNovaAlternativa3(e.target.value)}
-                    placeholder="Alternativa 3"
+                    placeholder={dataPergunta.alternativa3_pergunta}
                   />
                   <input
                     className={styles.checkboxes}
@@ -178,7 +176,7 @@ if(insertError){
                     type="text"
                     value={NovaAlternativa4}
                     onChange={(e) => setNovaAlternativa4(e.target.value)}
-                    placeholder="Alternativa 4"
+                    placeholder={dataPergunta.alternativa4_pergunta}
                   />
                   <input
                     className={styles.checkboxes}
@@ -206,8 +204,20 @@ if(insertError){
               </button>
               <button type="submit">Atualizar Pergunta</button>
             </form>
-            {dica_array && <>
-            <li className={styles.lista_dicas}>{dica_array}</li></>}
+            <div style={{display:'flex',flexDirection:'column',justifyContent:'start',alignItems:'flex-start',marginTop:'20px'}}>
+
+            {dica_array.map((element, index) => (
+              <div className={styles.lista_dicas} key={index}>
+                <div style={{display:'flex', gap:'10px'}}>
+
+                <p>{element}</p>
+                <button
+                  onClick={() => handleDeleteElementOnArray(index)}
+                  >Excluir</button>
+              </div>
+                  </div>
+            ))}
+            </div>
           </div>
         ) : (
           <p>Carregando...</p>
