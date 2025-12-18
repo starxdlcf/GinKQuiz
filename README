@@ -16,7 +16,7 @@ Este projeto pode ser executado utilizando Docker, sem necessidade de instalar N
       - Docker
       - Docker Compose (opcional, mas recomendado)
 
-    1.2 - Rodando o projeto com o Docker
+    1.2 - Rodando o projeto com o Docker (Manual)
 
 
     Passo 1:  Clone o repositório --------------------------------------------------------------------
@@ -41,3 +41,22 @@ Este projeto pode ser executado utilizando Docker, sem necessidade de instalar N
 
     Abra o navegador em: http://localhost:5173
     Ou clique ctrl+c no terminal no link mostrado depois de "Local: "
+
+
+2 - Rodando com Docker Compose (Método Padronizado)
+
+  Este método automatiza os passos acima e configura a rede entre serviços com um único comando.
+
+    Passo 1:  Configurar Variáveis de Ambiente (.env) -----------------------------------------------
+
+    1. Localize o arquivo ".env_exemplo" na raiz do projeto.
+    2. Crie uma cópia deste arquivo e renomeie a cópia para ".env".
+    3. O arquivo contém as variáveis necessárias para rodar o projeto.
+
+    Passo 2:  Subir o ambiente -----------------------------------------------------------------------
+
+    No terminal, na raiz do projeto, execute o comando:
+
+    docker compose up --build
+
+    Isso fará o build da imagem e iniciará o servidor automaticamente na porta 5173.
