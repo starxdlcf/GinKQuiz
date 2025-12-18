@@ -1,6 +1,6 @@
 import { supabase } from "../../../Supabase";
 import { useState, useEffect } from "react";
-import styles from "../criarCla/criarCla.module.css";
+import styles from "../criarCla/CriarCla.module.css";
 import { useNavigate } from "react-router-dom";
 
 const CriarCla = () => {
