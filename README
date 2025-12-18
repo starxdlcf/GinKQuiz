@@ -3,3 +3,41 @@ ginkquiz.vercel.app
 https://github.com/starxdlcf/GinKQuiz
 
 https://trello.com/b/YoiFBgSa/projeto-quiz-gincana-aps-dw2
+
+
+1 - Executando o projeto com Docker
+
+Este projeto pode ser executado utilizando Docker, sem necessidade de instalar Node.js ou dependências localmente.
+
+    1.1 - Pré-requisitos
+
+
+    Antes de começar, certifique-se de ter instalado:
+      - Docker
+      - Docker Compose (opcional, mas recomendado)
+
+    1.2 - Rodando o projeto com o Docker
+
+
+    Passo 1:  Clone o repositório --------------------------------------------------------------------
+
+    git clone https://github.com/seu-usuario/GinKQuiz.git
+    cd GinKQuiz
+
+
+    Passo 2:  Build da imagem Docker -----------------------------------------------------------------
+
+    Use o comando "docker build -t frontend-vite ." no seu terminal Git bash.
+
+    Atenção: Sempre que houver alterações no código, é necessário executar o build novamente!
+
+
+    Passo 3:  Execute o container --------------------------------------------------------------------------
+
+    Use o comando "docker run -p 5173:5173 frontend-vite" para rodar na porta 5173.
+
+
+    Passo 4:  Acesse a aplicação ---------------------------------------------------------------------------
+
+    Abra o navegador em: http://localhost:5173
+    Ou clique ctrl+c no terminal no link mostrado depois de "Local: "
