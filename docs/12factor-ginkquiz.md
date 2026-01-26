@@ -93,13 +93,19 @@ Poderíamos implementar um sistema de cache para as respostas para não depender
 
 ### Situação atual:
 
+Para carregar os dados, o GinKQuiz é rápido e objetivo, boa parte graças ao Vite, que impede o carregamento por infinitos segundos, em conjunto com o carregamento em etapas (componentes), que garante recarregar as partes necessárias do site e não a página por completo. Já quando acontece algum erro, por exemplo na rede (sem conexão), o site fica congelado e após a obtenção da rede novamente ele mostra o erro de não conseguir buscar no banco de dados a informação (como se a pergunta está certa ou errada).
+
 ### Oportunidades de melhoria:
+
+Para melhorar isso, podemos administrar esses erros de uma forma mais "bonita", induzindo o site a mostrar uma mensagem amigável automaticamente e não manter a site congelado para melhorar a experiência do usuário.
 
 
 
 ## X. Dev/prod parity
 
 ### Situação atual:
+
+Utiliza as mesmas variáveis de ambiente em ambas as formas de acessar o site (dev ou build), portanto mostra que tem uma alta paridade, o que é ótimo para a validação desse fator. Ademais, utilizamos o Docker, o que deixa o processo ainda mais certeiro e com garantia de funcionamento.
 
 ### Oportunidades de melhoria:
 
@@ -109,7 +115,11 @@ Poderíamos implementar um sistema de cache para as respostas para não depender
 
 ### Situação atual:
 
+O projeto se farta de muitos "console.log" e "console.error" para registrar os eventos ocorridos durante a utilização do programa pelo cliente, o que pode vazar informações importantes além de apenas aparecerem no console do cliente em sua máquina, não atingindo os desenvolvedores.
+
 ### Oportunidades de melhoria:
+
+Uma ótima solução seria implementar uma ferramenta de monitoramento de erros, o que nos faria remover todos os consoles e registrá-los em algum documento em que todos os devs tem acesso pleno. Isso também limparia a saída no console do usuário, deixando o projeto mais profissional e bem organizado.
 
 
 
@@ -117,4 +127,8 @@ Poderíamos implementar um sistema de cache para as respostas para não depender
 
 ### Situação atual:
 
+A população e criação de tabelas, colunas, etc. no banco de dados é feita diretamente no site do Supabase, sem ter nenhum script pronto para criar novamente todas as tabelas caso haja a perda do banco de dados atual. Isso é uma violação do fator 12.
+
 ### Oportunidades de melhoria:
+
+Criar um script de migração, que cria todas as tabelas e colunas automaticamente assim que é rodado. Juntamente a isso, criar um script de seed, que serve para alimentar a tabela com perguntas e respostas padrão, sem deixar que as tabelas criadas fiquem completamente vazias. Além disso, podemos utilizar o Supabase CLI para ajudar a rodar localmente essas mudanças. Dessa forma, qualquer desenvolvedor poderá configurar o ambiente com apenas um comando.
