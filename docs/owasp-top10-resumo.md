@@ -136,77 +136,124 @@ A03 - Falhas na Cadeia de Suprimentos (Software Supply Chain Failures)
 
     -> O que é?
 
+        Acontece quando dados não confiáveis enviados pelo usuário são interpretados pelo navegador ou banco de dados como comandos ou código a ser executado, e não como simples texto.
+
     -> Exemplo(s) citado(s) pelo OWASP
 
-    -> Risco no GinKQuiz é considerado **ALTO**
+        SQL Injection (inserir comandos SQL em campos de login para manipular o banco) e Cross-Site Scripting (XSS - inserir scripts maliciosos em campos de texto que são executados no navegador de outros usuários).
+
+    -> Risco no GinKQuiz é considerado **BAIXO**
 
     -> Justificativa da relevância do item para o projeto
 
+        O React protege nativamente contra XSS (ao escapar variáveis no JSX) e o cliente JS do Supabase previne SQL Injection automaticamente. O risco surge apenas se houver uso de funções manuais inseguras.
+
     -> Como posso verificar rapidamente a situação na aplicação?
+
+        Pesquise no código do projeto pelo uso de `dangerouslySetInnerHTML`. Se não estiver sendo usado, o risco de XSS é mínimo. Para SQL, evite escrever queries SQL puras concatenando strings manualmente.
 
 
 # A06 - Design Inseguro
 
     -> O que é?
 
+        Refere-se a falhas na arquitetura e na lógica de negócios antes mesmo da codificação. É um problema de "planejamento inseguro", onde o sistema funciona como programado, mas a lógica permite abusos.
+
     -> Exemplo(s) citado(s) pelo OWASP
 
-    -> Risco no GinKQuiz é considerado **ALTO**
+        Recuperação de senha baseada em "perguntas de segurança" cujas respostas são públicas (redes sociais), ou fluxos de e-commerce que confiam no preço enviado pelo front-end sem validação no back-end.
+
+    -> Risco no GinKQuiz é considerado **MODERADO**
 
     -> Justificativa da relevância do item para o projeto
 
+        Como é um Quiz, existe o risco de falhas lógicas onde usuários podem burlar a pontuação, como recarregar a página para evitar contabilizar um erro ou manipular o cronômetro no front-end.
+
     -> Como posso verificar rapidamente a situação na aplicação?
+
+        Tente "trapacear" no jogo: desligue a internet antes de errar uma questão ou recarregue a página no meio do quiz. Se o sistema permitir que você refaça sem penalidade, há uma falha de design.
 
 
 # A07 - Falhas de Autenticação
 
     -> O que é?
 
+        Falhas que permitem que atacantes comprometam senhas, chaves ou sessões de usuários. Ocorre quando o sistema não confirma a identidade do usuário de forma robusta.
+
     -> Exemplo(s) citado(s) pelo OWASP
 
-    -> Risco no GinKQuiz é considerado **ALTO**
+        Permitir o uso de senhas fracas e comuns (ex: "123456"), não bloquear o usuário após múltiplas tentativas falhas de login (força bruta) ou permitir que sessões permaneçam ativas indefinidamente.
+
+    -> Risco no GinKQuiz é considerado **BAIXO/MÉDIO**
 
     -> Justificativa da relevância do item para o projeto
 
+        Embora o Supabase Auth seja seguro, cabe ao desenvolvedor configurar regras como exigência de senha forte e verificação de e-mail para evitar contas falsas (spam).
+
     -> Como posso verificar rapidamente a situação na aplicação?
+
+        Tente criar um usuário com uma senha muito simples (ex: "123"). Se o sistema aceitar, a configuração de segurança está fraca. Verifique também se é possível fazer login sem confirmar o e-mail.
 
 
 # A08 - Falhas de Integridade de Software ou de Dados
 
     -> O que é?
 
+        Foca na proteção do código e da infraestrutura contra alterações não autorizadas, especialmente em processos de atualização automática e pipelines de deploy (CI/CD).
+
     -> Exemplo(s) citado(s) pelo OWASP
 
-    -> Risco no GinKQuiz é considerado **ALTO**
+        Um atacante invade o repositório de código e altera o fonte antes do deploy automático, ou o sistema aceita dados serializados inseguros de fontes não confiáveis que executam código no servidor.
+
+    -> Risco no GinKQuiz é considerado **BAIXO**
 
     -> Justificativa da relevância do item para o projeto
 
+        Como um projeto individual, o maior risco é o comprometimento da conta do GitHub ou Vercel/Netlify, o que permitiria a um atacante alterar o site publicado.
+
     -> Como posso verificar rapidamente a situação na aplicação?
 
+        Certifique-se de que a Autenticação de Dois Fatores (2FA) esteja ativada nas contas do GitHub, Supabase e na plataforma de hospedagem (Vercel/Netlify).
 
 # A09 - Falhas de Registro e Alerta
 
     -> O que é?
 
+        A ausência de registros (logs) adequados sobre eventos críticos de segurança, impedindo a detecção de ataques em andamento ou a análise posterior de incidentes.
+
     -> Exemplo(s) citado(s) pelo OWASP
 
-    -> Risco no GinKQuiz é considerado **ALTO**
+        Falhas de login, erros de acesso (403 Forbidden) ou erros de servidor (500) que não são registrados, ou logs que são armazenados apenas localmente e apagados rapidamente.
+
+    -> Risco no GinKQuiz é considerado **MODERADO**
 
     -> Justificativa da relevância do item para o projeto
 
+        Sem logs acessíveis, é impossível saber se alguém está tentando burlar o Quiz ou realizando ataques de força bruta contra contas de usuários.
+
     -> Como posso verificar rapidamente a situação na aplicação?
+
+        Acesse a seção "Reports" ou "Logs" no painel do Supabase. Verifique se é possível visualizar erros recentes e requisições falhas. Se você nunca olhou essa aba, a falha existe.
 
 
 # A10 - Manejo Incorreto de Condições Especiais
 
     -> O que é?
 
+        Ocorre quando o sistema falha de maneira insegura ("Fail Open") ou revela informações sensíveis ao usuário quando ocorre um erro. O sistema deve ser projetado para falhar de forma segura.
+
     -> Exemplo(s) citado(s) pelo OWASP
 
-    -> Risco no GinKQuiz é considerado **ALTO**
+        Exibir "Stack Traces" (caminho do erro no código) na tela do usuário, ou um sistema de permissão que, ao encontrar um erro, permite o acesso por padrão em vez de bloquear.
+
+    -> Risco no GinKQuiz é considerado **BAIXO**
 
     -> Justificativa da relevância do item para o projeto
 
+        O Supabase tende a falhar de forma segura (retornando arrays vazios em vez de erros de SQL). No Front-end, o React deve tratar erros para não "quebrar" a tela inteira de forma hostil ao usuário.
+
     -> Como posso verificar rapidamente a situação na aplicação?
+
+        Force um erro (como desconectar a internet ou tentar acessar uma rota inexistente) e observe a reação do site. Ele deve mostrar uma mensagem amigável, e não códigos de erro internos ou tela branca.
 
 
