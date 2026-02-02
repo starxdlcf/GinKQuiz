@@ -151,8 +151,8 @@ export const Jogar = () => {
   };
 
 
-  const finalizarQuiz = async () => {
-    // 1. Cálculos Locais
+const finalizarQuiz = async () => {
+    // 1. Cálculos da Rodada (Mantido igual)
     const fim = Date.now();
     const inicio = Number(localStorage.getItem("inicioQuiz"));
     const tempo = (fim - inicio) / 1000;
@@ -160,55 +160,55 @@ export const Jogar = () => {
     const minutos = Math.floor(tempo / 60);
     const segundos = Math.floor(tempo % 60);
     const acertos = Number(localStorage.getItem("acertos"));
-    
-    // Pontuação dessa rodada
     const pontosDaRodada = Math.floor((acertos / tempo) * 1000);
 
-    // Salva no LocalStorage para a tela final mostrar
+    // Salva no LocalStorage para exibição na tela final
     localStorage.setItem("pontos", pontosDaRodada);
     localStorage.setItem("tempoMin", minutos);
     localStorage.setItem("tempoSeg", segundos);
 
-    // 2. Lógica do Supabase (Soma de Pontos)
+    // 2. Atualização no Banco (Tabela usuarios)
     try {
       const userId = localStorage.getItem("userId");
-      
-      if (!userId) {
-        logEvent('QUIZ', 'Usuário não logado, pontuação não será salva no ranking.');
-        navigate("/final");
-        return;
+
+      if (userId) {
+        logEvent('QUIZ', 'Iniciando atualização de pontuação no perfil do usuário...');
+
+        // PASSO A: Buscar a pontuação ATUAL (Nome corrigido aqui)
+        const { data: usuario, error: erroBusca } = await supabase
+          .from("usuarios")
+          .select("pontuacao_usuario") // <--- ALTERADO
+          .eq("id_usuario", userId)
+          .single();
+
+        if (erroBusca) throw erroBusca;
+
+        // Se estiver null (primeira vez), considera 0 (Nome corrigido aqui)
+        const pontuacaoAtual = usuario.pontuacao_usuario || 0; // <--- ALTERADO
+        const novaPontuacaoTotal = pontuacaoAtual + pontosDaRodada;
+
+        logEvent('QUIZ', 'Cálculo de pontuação realizado', { 
+          anterior: pontuacaoAtual, 
+          ganho: pontosDaRodada, 
+          novoTotal: novaPontuacaoTotal 
+        });
+
+        // PASSO B: Atualizar com a SOMA (Nome corrigido aqui)
+        const { error: erroUpdate } = await supabase
+          .from("usuarios")
+          .update({ pontuacao_usuario: novaPontuacaoTotal }) // <--- ALTERADO
+          .eq("id_usuario", userId);
+
+        if (erroUpdate) throw erroUpdate;
+
+        logEvent('QUIZ', 'Pontuação total salva com sucesso!');
+      } else {
+        logEvent('QUIZ', 'Usuário não logado. Pontuação não salva no banco.');
       }
 
-      logEvent('QUIZ', 'Atualizando pontuação total no banco...', { pontosDaRodada });
-
-      // PASSO A: Buscar pontuação atual do usuário
-      const { data: dadosAtuais, error: erroBusca } = await supabase
-        .from("pontuacao") // Nome da sua tabela
-        .select("pontos")   // Nome da coluna de pontos acumulados
-        .eq("id_usuario", userId)
-        .maybeSingle(); // Usamos maybeSingle pois pode não existir ainda
-
-      if (erroBusca) throw erroBusca;
-
-      // Se o usuário não tiver registro ainda, começa com 0
-      const pontuacaoAntiga = dadosAtuais ? dadosAtuais.pontos : 0;
-      const novaPontuacaoTotal = pontuacaoAntiga + pontosDaRodada;
-
-      // PASSO B: Salvar a soma (Upsert cria se não existir, atualiza se existir)
-      const { error: erroSalvar } = await supabase
-        .from("pontuacao")
-        .upsert({ 
-          id_usuario: userId, 
-          pontos: novaPontuacaoTotal 
-        }, { onConflict: 'id_usuario' });
-
-      if (erroSalvar) throw erroSalvar;
-
-      logEvent('QUIZ', 'Ranking atualizado com sucesso', { total: novaPontuacaoTotal });
-
     } catch (error) {
-      logError('QUIZ', 'Erro ao salvar pontuação no ranking', error);
-      // Não damos alert aqui para não travar a experiência, o usuário vê a nota localmente na próxima tela
+      logError('QUIZ', 'Erro ao atualizar pontuação do usuário', error);
+      // O logError vai mostrar o erro no console, mas o usuário segue o fluxo
     }
 
     // 3. Navegação
