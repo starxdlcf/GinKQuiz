@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../../../Supabase";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from 'jwt-decode';
+import { logEvent, logError } from '../../../utils/loggers.js';
 
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
@@ -30,66 +31,90 @@ export const Login = () => {
   };
 
   const NavigateToMenu = async (email, senha) => {
-    try {
-        const { data, error } = await supabase.functions.invoke('login-usuario', {
-        body: {
-          email: email,
-          senha: senha,
-        },
-      });
-        if (error) throw error;
+  try {
+    // [LOG INÍCIO] Registra que alguém clicou no botão
+    logEvent('AUTH', 'Tentativa de login iniciada', { email });
+
+    const { data, error } = await supabase.functions.invoke('login-usuario', {
+      body: {
+        email: email,
+        senha: senha,
+      },
+    });
+
+    // Se a Edge Function der erro técnico (500, timeout), cai no catch lá embaixo
+    if (error) throw error;
+
+    const { userId } = data || {}; // Proteção caso data venha null
+
+    if (userId) {
+      // [LOG SUCESSO] O usuário existe e o ID veio
+      logEvent('AUTH', 'Login realizado com sucesso', { userId });
       
-      const { userId } = data;
-
-        if (userId) {
-        localStorage.setItem("userId", userId);
-          navigate("/menu");
-        }
-       else {
-        alert("email ou senha incorretos");
-      }
-
-      if (error) throw error;
-    } catch (error) {
-      console.log(error)
-      alert(error.message);
+      localStorage.setItem("userId", userId);
+      navigate("/menu");
+    } else {
+      // [LOG FALHA DE LÓGICA] A função rodou, mas não devolveu userId (senha errada?)
+      logEvent('AUTH', 'Falha de login: Credenciais inválidas ou usuário não encontrado');
+      
+      alert("email ou senha incorretos");
     }
-  };
 
-  const handleSucess = async (resposta)=>{
+  } catch (error) {
+    // [LOG ERRO TÉCNICO] Aqui pegamos erros de rede, servidor fora do ar, etc.
+    logError('AUTH', 'Erro crítico na requisição de login', error);
     
-    const credencial = resposta.credential
-
-    try{
-
-      const dadosUsuario = jwtDecode(credencial)
-
-        const userEmail = dadosUsuario.email;
-        const googleId = dadosUsuario.sub;
-
-      const { data, error } = await supabase
-        .from("usuarios")
-        .select("*")
-        .eq("email", userEmail)
-        .eq("google_id", googleId)
-
-        if (data && data.length > 0) {
-          localStorage.setItem("userId", data[0].id_usuario);
-          navigate("/menu");
-        }
-        else{
-          localStorage.setItem("googleId", googleId);
-          localStorage.setItem("email", userEmail);
-          navigate("/loginGoogle")
-        }
-      if (error) throw error;
-    }
-    catch(error){
-      console.log(error)
-      alert(error.message)
-    }
+    // Mantemos o alert para o usuário saber que deu ruim
+    alert(error.message || "Erro desconhecido ao tentar logar");
   }
+};
 
+
+const handleSucess = async (resposta) => {
+  const credencial = resposta.credential;
+
+  try {
+    // [LOG] 1. Recebemos o token do Google
+    logEvent('AUTH', 'Callback do Google recebido. Processando token...');
+
+    const dadosUsuario = jwtDecode(credencial);
+    const userEmail = dadosUsuario.email;
+    const googleId = dadosUsuario.sub;
+
+    // [LOG] 2. Sabemos quem é (sem logar senha ou token completo)
+    logEvent('AUTH', 'Verificando usuário Google no banco', { email: userEmail });
+
+    const { data, error } = await supabase
+      .from("usuarios")
+      .select("*")
+      .eq("email", userEmail)
+      .eq("google_id", googleId);
+    
+    // Boa prática: Verificar erro do banco antes de usar 'data'
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      // [LOG] 3A. Caminho Feliz: Usuário já existe
+      logEvent('AUTH', 'Login Google: Usuário encontrado', { userId: data[0].id_usuario });
+
+      localStorage.setItem("userId", data[0].id_usuario);
+      navigate("/menu");
+    } else {
+      // [LOG] 3B. Caminho de Cadastro: Usuário novo
+      logEvent('AUTH', 'Login Google: Usuário não cadastrado via Google. Redirecionando...');
+
+      localStorage.setItem("googleId", googleId);
+      localStorage.setItem("email", userEmail);
+      navigate("/loginGoogle");
+    }
+
+  } catch (error) {
+    // [LOG] 4. Erro
+    logError('AUTH', 'Erro no fluxo de login Google', error);
+    
+    alert(error.message || "Erro ao processar login com Google");
+  }
+}
   return (
     <>
       <div className={styles.pageContainer}>
