@@ -60,3 +60,25 @@ Este projeto pode ser executado utilizando Docker, sem necessidade de instalar N
     docker compose up --build
 
     Isso fará o build da imagem e iniciará o servidor automaticamente na porta 5173.
+
+
+3 - Segurança e Configuração
+
+  Esse projeto utiliza variávei de ambiente para gerenciar chaves e credenciais específicas e privadas ao público.
+
+  ## Instruções para a configuração do Ambiente Local
+
+  1. **Crie um arquivo chamado ".env" na raiz do projeto (obrigatoriamente)**. Esse arquivo nunca deve ser versionado, portanto, adicione ".env" no arquivo .gitignore.
+
+  2. **Utilize o arquivo ".env_exemplo" para configurar seu próprio ".env"**. Ele servirá de modelo para que você saiba quais são as chaves que devem ser adicionadas no arquivo real.
+
+  3. **Preencha o ".env" com as suas credenciais do Supabase e/ou outras APIs**.
+
+
+  ## Política de Segredos
+
+  1 --> **Nenhuma confiança no repositório:** Nenhuma senha, chave ou credencial de APIs ou banco de dados reais deve ser commitada para garantir a segurança das informações;
+
+  2 --> **Rotação de Chaves:** Caso haja suspeita de vazamento de tais chaves, como um commit acidental de alguma senha, as chaves devem ser imediatamente rotacionadas, ou seja, bloqueamento da chave antiga e criação de uma nova. Isso deve ser feito em conjunto, tanto na API/banco de dados quanto atualizadas no arquivo ".env";
+
+  3 --> **.env não versionado:** Em hipótese alguma deve-se commitar o arquivo ".env". Caso haja algum acidente em relação a isso, deve-se seguir a segunda etapa de imediato.
