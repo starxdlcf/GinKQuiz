@@ -82,3 +82,20 @@ Este projeto pode ser executado utilizando Docker, sem necessidade de instalar N
   2 --> **Rotação de Chaves:** Caso haja suspeita de vazamento de tais chaves, como um commit acidental de alguma senha, as chaves devem ser imediatamente rotacionadas, ou seja, bloqueamento da chave antiga e criação de uma nova. Isso deve ser feito em conjunto, tanto na API/banco de dados quanto atualizadas no arquivo ".env";
 
   3 --> **.env não versionado:** Em hipótese alguma deve-se commitar o arquivo ".env". Caso haja algum acidente em relação a isso, deve-se seguir a segunda etapa de imediato.
+
+  ## Sistema de Logs
+
+O projeto utiliza um sistema de logs padronizado para facilitar o debug em desenvolvimento.
+
+**Como usar:**
+Importar as funções utilitárias:
+`import { logEvent, logError } from './utils/loggers';`
+
+**Exemplos:**
+- Registra uma ação: `logEvent('AUTH', 'Usuário fez login', { id: 123 });`
+- Registra um erro: `logError('API', 'Falha ao buscar perguntas', erroCapturado);`
+
+**Prefixos Padrão:**
+- `[AUTH]`: Login, Cadastro, Logout.
+- `[NAV]`: Navegação entre páginas (Automático no App.jsx).
+- `[QUIZ]`: Ações do jogo (responder, pontuar).

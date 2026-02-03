@@ -1,7 +1,7 @@
 
 /**
  * Função de log padronizado
- * @param {'AUTH' | 'QUIZ' | 'API' | 'APP'} type - O tipo do log (Prefixo)
+ * @param {'AUTH' | 'QUIZ' | 'APP'} type - O tipo do log (Prefixo)
  * @param {string} message - A mensagem descritiva
  * @param {any} [data] - Dados opcionais (objeto de erro ou dados técnicos)
  */
