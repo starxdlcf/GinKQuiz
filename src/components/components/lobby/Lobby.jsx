@@ -3,6 +3,7 @@ import { supabase } from "../../../Supabase";
 import { useNavigate } from "react-router-dom";
 import styles from "./lobby.module.css";
 import Perfil from "../perfil/PerfilIcon";
+import { logEvent, logError } from '../../../utils/loggers';
 
 function Lobby() {
   const [listaGeneros, setListaGeneros] = React.useState({});
@@ -23,100 +24,111 @@ function Lobby() {
 
   const fetchLista = async () => {
     try {
+      // [LOG] Monitora fluxo do App
+      logEvent('QUIZ', 'Carregando lista de temas do Lobby');
+      
+      // [LOG API] Monitora Rede - Início
+      logEvent('API', 'REQ: Buscando lista de temas...');
+
       const { data, error } = await supabase.from("temas").select("*");
 
-      setListaGeneros(data);
-      // console.log(data);
+      if (error) {
+         // [LOG API] Monitora Rede - Erro
+         logError('API', 'ERR: Falha ao buscar temas', error);
+         throw error;
+      }
 
-      if (error) throw error;
-    } catch {
+      setListaGeneros(data);
+      
+      // [LOG API] Monitora Rede - Sucesso
+      logEvent('API', 'RES: Temas recebidos', { quantidade: data.length });
+
+    } catch (error) {
+      logError('QUIZ', 'Erro ao carregar temas', error);
       console.log("ouve um erro na requisição de temas", error);
     }
   };
 
   const RandomThemes = () => {
-    // console.log("-----------------sorteando temas-----------------");
     setRandomClicked(true);
     const temasRandom = [];
-    // console.log(listaGeneros.length)
     for (let i = 0; i < listaGeneros.length; i++) {
       temasRandom.push(i + 1);
     }
     temasRandom.sort(() => Math.random() - 0.5);
     const temasSelecionadosRandom = temasRandom.slice(0, 5);
     setTemasSelecionados(temasSelecionadosRandom);
-    // console.log("temas selecionados randomicos:", temasSelecionadosRandom);
-    // for (let i = 0; i < 5; i++) {
-    //   const randomIndex = Math.floor(Math.random() * listaGeneros.length) + 1;
-    //   if (temasRandom.includes(randomIndex)) {
-    //     console.log("tem repetido", randomIndex);
-    //     if (randomIndex === 10) {
-    //       const newRandomIndex = randomIndex - 1;
-    //       temasRandom.push(newRandomIndex);
-    //       console.log(temasRandom);
-    //       continue;
-    //     } else {
-    //       const newRandomIndex = randomIndex + 1;
-    //       temasRandom.push(newRandomIndex);
-    //       console.log(temasRandom);
-    //     }
-    //   } else {
-    //     temasRandom.push(randomIndex);
-    //     console.log(temasRandom);
-    //   }
-    //   setTemasSelecionados(temasRandom);
-    // }
   };
 
   const BuscarPerguntas = async () => {
-    if(tamanhoSelecionado === null || temasSelecionados.length === 0){
+    // Validação inicial
+    if (tamanhoSelecionado === null || temasSelecionados.length === 0) {
+      logEvent('QUIZ', 'Tentativa de início bloqueada: Configuração incompleta');
+      alert("Selecione a dificuldade e pelo menos um tema!");
       return;
     }
 
     const perguntasTemp = [];
-    console.log("buscando perguntas");
+    
+    logEvent('QUIZ', 'Iniciando busca de perguntas', { 
+      temas: temasSelecionados, 
+      dificuldade: tamanhoSelecionado 
+    });
 
-    for (let i = 0; i < temasSelecionados.length; i++) {
-      const { data, error } = await supabase
-        .from("perguntas")
-        .select("tema_pergunta,enunciado_pergunta,id_pergunta")
-        .eq("tema_pergunta", temasSelecionados[i]);
-      // console.log(
-      //   data
-      //     .sort(() => Math.random() - 0.5)
-      //     .slice(0, Math.ceil(tamanhoSelecionado / temasSelecionados.length))
-      // );
-      // // 
-      perguntasTemp.push(
-        ...data
-          .sort(() => Math.random() - 0.5)
-          .slice(0, Math.ceil(tamanhoSelecionado / temasSelecionados.length))
-      );
+    try {
+      for (let i = 0; i < temasSelecionados.length; i++) {
+        
+        // [LOG API] Monitora Rede - Loop de requisições
+        logEvent('API', `REQ: Buscando perguntas do tema ID ${temasSelecionados[i]}`);
+
+        const { data, error } = await supabase
+          .from("perguntas")
+          .select("tema_pergunta,enunciado_pergunta,id_pergunta")
+          .eq("tema_pergunta", temasSelecionados[i]);
+        
+        if (error) {
+            logError('API', `ERR: Erro no tema ${temasSelecionados[i]}`, error);
+            throw error;
+        }
+
+        // [LOG API] Sucesso parcial
+        logEvent('API', `RES: Perguntas recebidas do tema ${temasSelecionados[i]}`, { qtd: data.length });
+
+        perguntasTemp.push(
+          ...data
+            .sort(() => Math.random() - 0.5)
+            .slice(0, Math.ceil(tamanhoSelecionado / temasSelecionados.length))
+        );
+      }
+
+      const arrayPerguntasIds = perguntasTemp.map((item) => item.id_pergunta);
+
+      // Salva configurações
+      localStorage.setItem("tamanhoSelecionado", JSON.stringify(tamanhoSelecionado));
+      localStorage.setItem("perguntasSelecionadas", JSON.stringify(arrayPerguntasIds));
+
+      logEvent('QUIZ', 'Perguntas selecionadas e preparadas', { total: arrayPerguntasIds.length });
+
+      iniciarQuiz(arrayPerguntasIds);
+
+    } catch (error) {
+      logError('QUIZ', 'Erro ao buscar/filtrar perguntas', error);
     }
-    const arrayPerguntasIds = perguntasTemp.map((item)=>item.id_pergunta);
-
-    localStorage.setItem("tamanhoSelecionado", JSON.stringify(tamanhoSelecionado));
-    localStorage.setItem("perguntasSelecionadas", JSON.stringify(arrayPerguntasIds));
-
-    console.log("perguntas selecionadas:", perguntasTemp);
-    console.log("ids perguntas selecionadas:", arrayPerguntasIds);
-    console.log("tamanho selecionado salvo no localStorage:", tamanhoSelecionado);
-
-    iniciarQuiz(arrayPerguntasIds);
   };
 
   const iniciarQuiz = (arrayPerguntasIds) => {
-    if (tamanhoSelecionado === null) {
-      alert("Por favor, selecione a quantidade de perguntas.");
+    if (!arrayPerguntasIds || arrayPerguntasIds.length === 0) {
+      logError('QUIZ', 'Erro crítico: Array de perguntas vazio ao tentar iniciar');
+      alert("Não foi possível encontrar perguntas para os temas selecionados.");
       return;
-    } else if (temasSelecionados.length === 0) {
-      alert("Por favor, selecione pelo menos um tema.");
-      return;
-    } else {
-      const inicio = Date.now();
-      localStorage.setItem("inicioQuiz", inicio);
-      navigate(`/jogar/${arrayPerguntasIds[0]}`); //modificar depois
     }
+
+    const inicio = Date.now();
+    localStorage.setItem("inicioQuiz", inicio);
+
+    logEvent('QUIZ', 'Navegando para a tela de jogo', { primeiraPergunta: arrayPerguntasIds[0] });
+
+    navigate(`/jogar/${arrayPerguntasIds[0]}`);
   };
 
   return (
@@ -141,12 +153,10 @@ function Lobby() {
                               ...prev,
                               genero.id_tema,
                             ]);
-                            console.log(temasSelecionados);
                           } else {
                             setTemasSelecionados((prev) =>
                               prev.filter((id) => id !== genero.id_tema)
                             );
-                            console.log(temasSelecionados);
                           }
                         }}
                       />
@@ -166,7 +176,6 @@ function Lobby() {
                         } else {
                           setTemasSelecionados([]);
                         }
-                        console.log(temasSelecionados);
                       }}
                     />
                   </div>
@@ -189,46 +198,8 @@ function Lobby() {
               </div>
             </div>
             <div>
-              {/* <h3>Temas Selecionados:</h3> */}
-              {/* daria pa coloca os temas selecionados com um destaque, nn precisa nem ser aqui pode ser direto nas checkboxs, tendeu? */}
-              {/* <ul> */}
-              {/* {temasSelecionados.map((temaId) => {
-                  const tema = listaGeneros.find((t) => t.id_tema === temaId);
-                  return (
-                    <li key={temaId}>
-                      {tema ? tema.nome_tema : "Tema não encontrado"}
-                    </li>
-                  );
-                })} */}
-              {/* </ul> */}
             </div>
             <div id={styles.divQuantiaPerguntas}>
-              {/* <h3>Tamanhos Disponíveis:</h3> */}
-              {/* <select
-                name=""
-                id={styles.selectquantasperguntas}
-                value={tamanhoSelecionado}
-                onChange={(e) => {
-                  // e.preventDefault(), handleLengthChange(e);
-                  e.preventDefault();
-                  setTamanhoSelecionado(parseInt(e.target.value));
-                  typeof tamanhoSelecionado === "string"
-                    ? console.log(
-                        "Tamanho selecionado:",
-                        parseInt(tamanhoSelecionado)
-                      )
-                    : console.log("Tamanho selecionado:", tamanhoSelecionado);
-                }}
-              >
-                {tamanho.map((tamanhoOption) => (
-                  <option key={tamanhoOption} value={tamanhoOption}>
-                    {tamanhoOption}
-                  </option>
-                ))}
-              </select> */}
-
-              {/* A PARTIR DAQUI A ANNA QUE FEZ */}
-
               <button
                 className={`${styles.buttons} ${
                   clickedButtonFacil ? styles.buttonActive : ""
@@ -238,13 +209,11 @@ function Lobby() {
                   if (clickedButtonFacil) {
                     setClickedButtonFacil(false);
                     setTamanhoSelecionado(null);
-                    console.log("Fácil desativado, voltando ao padrão");
                   } else {
                     setTamanhoSelecionado(10);
                     setClickedButtonFacil(true);
                     setClickedButtonMedio(false);
                     setClickedButtonExpert(false);
-                    console.log("Tamanho selecionado:", 10);
                   }
                 }}
               >
@@ -259,13 +228,11 @@ function Lobby() {
                   if (clickedButtonMedio) {
                     setClickedButtonMedio(false);
                     setTamanhoSelecionado(null);
-                    console.log("Médio desativado, voltando ao padrão");
                   } else {
                     setTamanhoSelecionado(20);
                     setClickedButtonFacil(false);
                     setClickedButtonMedio(true);
                     setClickedButtonExpert(false);
-                    console.log("Tamanho selecionado:", 20);
                   }
                 }}
               >
@@ -280,13 +247,11 @@ function Lobby() {
                   if (clickedButtonExpert) {
                     setClickedButtonExpert(false);
                     setTamanhoSelecionado(null);
-                    console.log("Expert desativado, voltando ao padrão");
                   } else {
                     setTamanhoSelecionado(30);
                     setClickedButtonFacil(false);
                     setClickedButtonMedio(false);
                     setClickedButtonExpert(true);
-                    console.log("Tamanho selecionado:", 30);
                   }
                 }}
               >
@@ -298,7 +263,7 @@ function Lobby() {
             <button
               className={styles.jogarbutton}
               onClick={(e) => {
-                e.preventDefault(), BuscarPerguntas(), iniciarQuiz(); //modificar depois
+                e.preventDefault(), BuscarPerguntas(); 
               }}
             >
               Iniciar

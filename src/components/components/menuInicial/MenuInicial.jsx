@@ -75,7 +75,7 @@ export const MenuInicial = () => {
         .single();
 
         if (error) return error;
-        console.log("Dados do usuário para verificação de clã:", data);
+        // console.log("Dados do usuário para verificação de clã:", data);
         if (data.adm == true) {
           setIsAdmin(true);
         }
